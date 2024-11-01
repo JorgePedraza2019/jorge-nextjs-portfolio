@@ -1,0 +1,8 @@
+services:
+  app:  # Define the 'app' service
+    build: .  # Build the Docker image using the Dockerfile in the current directory
+    ports:
+      - '3000:3000'  # Map port 3000 on the host to port 3000 in the container
+    environment:
+      - NODE_ENV=production  # Set the environment variable to 'production'
+    command: npm start  # Command to start the application in production mode

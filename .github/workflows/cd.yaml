@@ -1,0 +1,26 @@
+# name: CD
+
+# # This workflow will run after the CI workflow completes
+# on:
+#   workflow_run:
+#     workflows: ["CI"]
+#     types:
+#       - completed  # Run this workflow when the CI workflow completes
+
+# jobs:
+#   deploy:
+#     runs-on: ubuntu-latest  # Use the latest version of Ubuntu for the deployment job
+#     if: ${{ github.event.workflow_run.conclusion == 'success' && github.ref == 'refs/heads/main' }}  # Only run if CI was successful and on main branch
+#     steps:
+#       - name: Check out code
+#         uses: actions/checkout@v2  # Checkout the repository code
+#       - name: Login to Docker Hub
+#         uses: docker/login-action@v1  # Use Docker login action
+#         with:
+#           username: ${{ secrets.DOCKER_USERNAME }}  # Docker Hub username from secrets
+#           password: ${{ secrets.DOCKER_PASSWORD }}  # Docker Hub password from secrets
+#       - name: Push Docker image
+#         run: docker push jorge-nextjs-portfolio:latest  # Push the built Docker image to Docker Hub
+#       - name: Deploy to EC2  #  Deploy the Docker image to an EC2 instance
+#         run: |
+#           ssh -o StrictHostKeyChecking=no -i ${{ secrets.EC2_KEY }} user@your-ec2-instance "docker pull jorge-nextjs-portfolio:latest && docker-compose -f docker-compose.prod.yml up -d --build"
