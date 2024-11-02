@@ -1,6 +1,8 @@
 services:
   app:  # Define the 'app' service
-    build: .  # Build the Docker image using the Dockerfile in the current directory
+    build:  # Build the Docker image using the Dockerfile in the current directory
+      context: .
+      dockerfile: Dockerfile
     ports:
       - '3000:3000'  # Map port 3000 on the host to port 3000 in the container
     environment:

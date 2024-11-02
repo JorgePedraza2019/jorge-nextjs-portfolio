@@ -1,5 +1,11 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-# Run ESLint, Jest tests, and Playwright tests before committing
-npm run lint && npm test && npx playwright test
+# Run ESLint before committing
+docker-compose -f docker-compose.local.yml exec -T app npm run lint
+
+# Run Jest tests before committing
+docker-compose -f docker-compose.local.yml exec -T app npm test
+
+# Run Playwright tests before committing
+docker-compose -f docker-compose.local.yml exec -T app npx playwright test
