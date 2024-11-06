@@ -7,19 +7,19 @@ BRANCH_NAME="$(git rev-parse --abbrev-ref HEAD)"
 # Set environment file and Docker Compose file based on the branch
 if [ "$BRANCH_NAME" = "dev" ]; then
   ENV_FILE="./env/dev/.env.dev.local"
-  DOCKER_COMPOSE_FILE="docker/docker-compose.dev.yaml"
+  DOCKER_COMPOSE_FILE="docker/dev/docker-compose.dev.yaml"
   PROJECT_NAME="jorge-nextjs-portfolio-dev-local"
 elif [ "$BRANCH_NAME" = "qa" ]; then
   ENV_FILE="./env/qa/.env.qa.local"
-  DOCKER_COMPOSE_FILE="docker/docker-compose.qa.yaml"
+  DOCKER_COMPOSE_FILE="docker/qa/docker-compose.qa.yaml"
   PROJECT_NAME="jorge-nextjs-portfolio-qa-local"
 elif [ "$BRANCH_NAME" = "main" ]; then
   ENV_FILE="./env/prod/.env.prod.local"
-  DOCKER_COMPOSE_FILE="docker/docker-compose.prod.yaml"
+  DOCKER_COMPOSE_FILE="docker/prod/docker-compose.prod.yaml"
   PROJECT_NAME="jorge-nextjs-portfolio-prod-local"
 elif [[ "$BRANCH_NAME" =~ ^feature/ ]]; then
   ENV_FILE="./env/feature/.env.feature.local"
-  DOCKER_COMPOSE_FILE="docker/docker-compose.feature.yaml"
+  DOCKER_COMPOSE_FILE="docker/feature/docker-compose.feature.yaml"
   PROJECT_NAME="jorge-nextjs-portfolio-feature-local"
 else
   echo "Skipping on branch $BRANCH_NAME"  # Skip if branch is not recognized

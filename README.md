@@ -32,7 +32,7 @@ make feature-local-up  # Build the Docker image and start the application in a c
 ```
 
 ## Usage
-Open your browser and navigate to http://localhost:3000 to view the portfolio.
+Open your browser and navigate to http://localhost:3000 to view the portfolio in feature branch.
 
 ## Status
 This project is currently under development. Check back for updates as I continue to add features and projects!

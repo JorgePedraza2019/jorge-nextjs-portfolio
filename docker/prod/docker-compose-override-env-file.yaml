@@ -1,0 +1,4 @@
+services:
+  app:
+    env_file:
+      - ../../env/prod/${ENV_FILE_NAME}  # Here the .env file is loaded into the container locally
