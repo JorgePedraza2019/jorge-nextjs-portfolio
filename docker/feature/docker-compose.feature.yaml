@@ -1,0 +1,19 @@
+services:
+  app:  # Define the 'app' service for the Next.js application
+    container_name: ${NEXT_CONTAINER_NAME}  # Set the container name using the environment variable NEXT_CONTAINER_NAME
+    build:  # Build the Docker image using the specified Dockerfile
+      context: ../..  # Set the build context to the parent directory to access the Dockerfile in the root directory
+      dockerfile: ./Dockerfile.nextjs  # Specify the Dockerfile to use for building the image
+      args:
+        NODE_ENV: ${NODE_ENV}  # Pass the value of NODE_ENV as a build argument to the Dockerfile
+        INSTALL_PLAYWRIGHT: ${INSTALL_PLAYWRIGHT}  # Pass the value of INSTALL_PLAYWRIGHT as a build argument to the Dockerfile
+        INSTALL_DEV_LIBRARIES: ${INSTALL_DEV_LIBRARIES}
+    environment:
+      - NODE_ENV=${NODE_ENV}  # Add NODE_ENV as an environment variable
+      - PORT=${NEXT_PORT}  # Port used by Next.js inside the container
+    ports:
+      - "${HOST_PORT}:${NEXT_PORT}"  # Map external port (host) to the internal port (Next.js)
+    volumes:
+      - ../..:/usr/src/app  # Mount the parent directory into the container at /usr/src/app
+      - /usr/src/app/node_modules  # Create an anonymous volume for node_modules to persist dependencies
+    command: npm run dev  # Command to start the application in development mode (using npm run dev)
