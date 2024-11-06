@@ -4,102 +4,109 @@ name: CI
 on:
   push:
     branches:
-      - dev               # Trigger on pushes to the dev branch
-      - qa                # Trigger on pushes to the qa branch
-      - main              # Trigger on pushes to the main branch
-      - feature/**        # Trigger on pushes to any feature branch
+      - dev # Trigger on pushes to the dev branch
+      - qa # Trigger on pushes to the qa branch
+      - main # Trigger on pushes to the main branch
+      - feature/** # Trigger on pushes to any feature branch
 
 jobs:
-  setup:
-    runs-on: ubuntu-latest  # Use the latest version of Ubuntu for the job
+  build:
+    runs-on: ubuntu-latest
     steps:
       - name: Check out code
-        uses: actions/checkout@v2  # Check out the repository code
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1  # Set up Docker Buildx for building images
+        uses: actions/checkout@v2 # Check out the repository code
       - name: Install Docker Compose
         run: |
           sudo apt-get update
-          sudo apt-get install -y docker-compose  # Install Docker Compose
-
-  build:
-    runs-on: ubuntu-latest
-    needs: setup  # Ensure setup job runs first
-    steps:
-      - name: Check out code
-        uses: actions/checkout@v2  # Check out the repository code
-        
-      - name: Build and start app in Docker
+          sudo apt-get install -y docker-compose  # Add Docker Compose installation
+      - name: Set environment variables based on branch
         run: |
-          # Use different docker-compose files depending on the branch
           if [[ "${{ github.ref }}" == "refs/heads/dev" ]]; then
-            docker-compose -f docker/docker-compose.dev.yaml up -d --build
+            echo "NODE_ENV=${{ secrets.NODE_ENV_DEV }}" >> .env
+            echo "NEXT_PORT=${{ secrets.NEXT_PORT_DEV }}" >> .env
+            echo "HOST_PORT=${{ secrets.HOST_PORT_DEV }}" >> .env
+            echo "NEXT_CONTAINER_NAME=${{ secrets.NEXT_CONTAINER_NAME_DEV }}" >> .env
+            echo "INSTALL_PLAYWRIGHT=${{ secrets.INSTALL_PLAYWRIGHT_DEV }}" >> .env
           elif [[ "${{ github.ref }}" == "refs/heads/qa" ]]; then
-            docker-compose -f docker/docker-compose.qa.yaml up -d --build
+            echo "NODE_ENV=${{ secrets.NODE_ENV_QA }}" >> .env
+            echo "NEXT_PORT=${{ secrets.NEXT_PORT_QA }}" >> .env
+            echo "HOST_PORT=${{ secrets.HOST_PORT_QA }}" >> .env
+            echo "NEXT_CONTAINER_NAME=${{ secrets.NEXT_CONTAINER_NAME_QA }}" >> .env
+            echo "INSTALL_PLAYWRIGHT=${{ secrets.INSTALL_PLAYWRIGHT_QA }}" >> .env
           elif [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
-            docker-compose -f docker/docker-compose.prod.yaml up -d --build
+            echo "NODE_ENV=${{ secrets.NODE_ENV_PROD }}" >> .env
+            echo "NEXT_PORT=${{ secrets.NEXT_PORT_PROD }}" >> .env
+            echo "HOST_PORT=${{ secrets.HOST_PORT_PROD }}" >> .env
+            echo "NEXT_CONTAINER_NAME=${{ secrets.NEXT_CONTAINER_NAME_PROD }}" >> .env
+            echo "INSTALL_PLAYWRIGHT=${{ secrets.INSTALL_PLAYWRIGHT_PROD }}" >> .env
           else
-            docker-compose -f docker/docker-compose.feature.yaml up -d --build
+            echo "NODE_ENV=${{ secrets.NODE_ENV_FEATURE }}" >> .env
+            echo "NEXT_PORT=${{ secrets.NEXT_PORT_FEATURE }}" >> .env
+            echo "HOST_PORT=${{ secrets.HOST_PORT_FEATURE }}" >> .env
+            echo "NEXT_CONTAINER_NAME=${{ secrets.NEXT_CONTAINER_NAME_FEATURE }}" >> .env
+            echo "INSTALL_PLAYWRIGHT=${{ secrets.INSTALL_PLAYWRIGHT_FEATURE }}" >> .env
           fi
-
-  eslint:
-    runs-on: ubuntu-latest
-    needs: build  # Run after the build job
-    if: startsWith(github.ref, 'refs/heads/feature/') || github.ref == 'refs/heads/dev'  # Run on dev and feature branches
-    steps:
-      - name: Check out code
-        uses: actions/checkout@v2  # Check out the repository code
-
+      - name: Set up Docker Compose and run container
+        run: |
+          echo "Branch: ${{ github.ref }}"  # Print the current GitHub reference (branch) to verify its value
+          if [[ "${{ github.ref }}" == "refs/heads/dev" ]]; then  # If the branch is 'dev'
+            docker-compose --env-file .env -p jorge-nextjs-portfolio-dev-server -f docker/dev/docker-compose.dev.yaml -f docker/dev/docker-compose-override-port.yaml up -d --build  # Use the dev Docker Compose file to start the container
+          elif [[ "${{ github.ref }}" == "refs/heads/qa" ]]; then  # If the branch is 'qa'
+            docker-compose --env-file .env -p jorge-nextjs-portfolio-qa-server -f docker/qa/docker-compose.qa.yaml -f docker/qa/docker-compose-override-port.yaml up -d --build  # Use the qa Docker Compose file to start the container
+          elif [[ "${{ github.ref }}" == "refs/heads/main" ]]; then  # If the branch is 'main'
+            docker-compose --env-file .env -p jorge-nextjs-portfolio-prod-server -f docker/prod/docker-compose.prod.yaml -f docker/prod/docker-compose-override-port.yaml up -d --build  # Use the prod Docker Compose file to start the container
+          else  # If it's a feature branch or any other branch
+            docker-compose --env-file .env -p jorge-nextjs-portfolio-feature-local -f docker/feature/docker-compose.feature.yaml up -d --build  # Use the feature Docker Compose file to start the container
+          fi
+      - name: Install dependencies in Docker container
+        run: |
+          if [[ "${{ github.ref }}" == "refs/heads/dev" ]]; then
+            docker-compose --env-file .env -p jorge-nextjs-portfolio-dev-server -f docker/dev/docker-compose.dev.yaml exec -T app sh -c 'export NODE_ENV=development && npm install --only=dev --legacy-peer-deps'
+          elif [[ "${{ github.ref }}" == "refs/heads/qa" ]]; then
+            docker-compose --env-file .env -p jorge-nextjs-portfolio-qa-server -f docker/qa/docker-compose.qa.yaml exec -T app sh -c 'export NODE_ENV=development && npm install --only=dev --legacy-peer-deps'
+          elif [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
+            docker-compose --env-file .env -p jorge-nextjs-portfolio-prod-server -f docker/prod/docker-compose.prod.yaml exec -T app sh -c 'export NODE_ENV=development'
+          else
+            echo "Skipping installation in non-dev, non-qa, and non-prod branches."
+          fi
       - name: Run ESLint in Docker
+        # Use dev or local docker-compose file depending on the branch
         run: |
-          # Use dev or local docker-compose file depending on the branch
-          if [[ "${{ github.ref }}" == "refs/heads/dev" ]]; then
-            docker-compose -f docker/docker-compose.dev.yaml exec app npm run lint
+          if [[ "${{ github.ref }}" == "refs/heads/dev" || "${{ github.ref }}" =~ refs/heads/feature/.* ]]; then
+            # If the branch is dev or feature/*
+            if [[ "${{ github.ref }}" == "refs/heads/dev" ]]; then
+              docker-compose --env-file .env -p jorge-nextjs-portfolio-dev-server -f docker/dev/docker-compose.dev.yaml exec -T app npm run lint
+            else
+              docker-compose --env-file .env -p jorge-nextjs-portfolio-feature-local -f docker/feature/docker-compose.feature.yaml exec -T app npm run lint
+            fi
           else
-            docker-compose -f docker/docker-compose.feature.yaml exec app npm run lint
+            echo "Skipping ESLint in non-dev and non-feature branches."
           fi
-
-  jest:
-    runs-on: ubuntu-latest
-    needs: [build, eslint]  # Run after build and eslint jobs
-    if: github.ref == 'refs/heads/dev'  # Run only on dev branch
-    steps:
-      - name: Check out code
-        uses: actions/checkout@v2  # Check out the repository code
-
-      - name: Run Jest tests in Docker
-        run: docker-compose -f docker/docker-compose.dev.yaml exec app npm test  # Run Jest tests in the Docker container
-
-  playwright:
-    runs-on: ubuntu-latest
-    needs: [build, eslint]  # Run after build and eslint jobs
-    if: github.ref == 'refs/heads/dev' || github.ref == 'refs/heads/qa'  # Run on dev and qa branches
-    steps:
-      - name: Check out code
-        uses: actions/checkout@v2  # Check out the repository code
-
-      - name: Run Playwright tests in Docker
+      - name: Run Jest in Docker
         run: |
-          # Use dev or qa docker-compose file depending on the branch
           if [[ "${{ github.ref }}" == "refs/heads/dev" ]]; then
-            docker-compose -f docker/docker-compose.dev.yaml exec app npx playwright test
+            docker-compose --env-file .env -p jorge-nextjs-portfolio-dev-server -f docker/dev/docker-compose.dev.yaml exec -T app npm test
           else
-            docker-compose -f docker/docker-compose.qa.yaml exec app npx playwright test
+            echo "Skipping Jest tests for branch ${{ github.ref }} as tests are only run on the 'dev' branch"
           fi
-
-  cleanup:
-    runs-on: ubuntu-latest
-    needs: [eslint, jest, playwright]  # Run after all test jobs
-    steps:
+      - name: Run Playwright in Docker
+        run: |
+          if [[ "${{ github.ref }}" == "refs/heads/dev" ]]; then
+            docker-compose --env-file .env -p jorge-nextjs-portfolio-dev-server -f docker/dev/docker-compose.dev.yaml exec -T app npx playwright test
+          elif [[ "${{ github.ref }}" == "refs/heads/qa" ]]; then
+            docker-compose --env-file .env -p jorge-nextjs-portfolio-qa-server -f docker/qa/docker-compose.qa.yaml exec -T app npx playwright test
+          else
+            echo "Skipping Playwright tests for branch ${{ github.ref }} as tests are only run on the 'dev' and 'qa' branch."
+          fi
       - name: Stop and Remove Docker Containers
         run: |
           # Stop and remove containers based on the branch
           if [[ "${{ github.ref }}" == "refs/heads/dev" ]]; then
-            docker-compose -f docker/docker-compose.dev.yaml down
+            docker-compose --env-file .env -f docker/dev/docker-compose.dev.yaml down
           elif [[ "${{ github.ref }}" == "refs/heads/qa" ]]; then
-            docker-compose -f docker/docker-compose.qa.yaml down
+            docker-compose --env-file .env -f docker/qa/docker-compose.qa.yaml down
           elif [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
-            docker-compose -f docker/docker-compose.prod.yaml down
+            docker-compose --env-file .env -f docker/prod/docker-compose.prod.yaml down
           else
-            docker-compose -f docker/docker-compose.feature.yaml down
+            docker-compose --env-file .env -f docker/feature/docker-compose.feature.yaml down
           fi

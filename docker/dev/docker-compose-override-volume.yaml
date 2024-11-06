@@ -1,5 +1,5 @@
 services:
   app:
     volumes:
-      - ..:/usr/src/app  # Mount the local code into the container only in development (the parent directory to the container directory)
+      - ../..:/usr/src/app  # Mount the local code into the container only in development (the parent directory to the container directory)
       - /usr/src/app/node_modules  # Create an anonymous volume for the node_modules directory to persist dependencies
