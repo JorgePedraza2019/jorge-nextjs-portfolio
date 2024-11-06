@@ -1,0 +1,12 @@
+# Use the latest version of the Nginx image as the base
+FROM nginx:latest
+
+# Declare build arguments for the Nginx configuration file and SSL certificates directory
+ARG NGINX_CONF
+ARG CERTS_DIR
+
+# Copy the Nginx configuration file from the build context into the container's Nginx configuration directory
+COPY ${NGINX_CONF} /etc/nginx/nginx.conf
+
+# Copy the SSL certificates from the build context into the container's SSL certificates directory
+COPY ${CERTS_DIR}/ /etc/ssl/certs/

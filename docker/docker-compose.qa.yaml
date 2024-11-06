@@ -1,0 +1,27 @@
+services:
+  app:  # Define the 'app' service for the Next.js application
+    container_name: ${CONTAINER_NAME}  # Name of the container for the 'app' service
+    build:  # Build the Docker image using the specified Dockerfile
+      context: ..  # Set context to the parent directory to access the Dockerfile
+      dockerfile: Dockerfile.nextjs  # Specify the Dockerfile to use for building the image
+      args:
+        NODE_ENV: ${NODE_ENV}  # Pass the NODE_ENV variable as a build argument to Docker
+    ports:
+      - ${PORT}  # Map a port on the host to a port inside the container
+    env_file:
+      - ${ENV_FILE}  # Load environment variables from the specified environment file
+    command: npm start  # Command to run the application in production mode (start the app)
+
+  # nginx:  # Define the Nginx service (currently commented out)
+  #   image: nginx:latest  # Use the latest official Nginx image
+  #   container_name: jorge-nextjs-portfolio-nginx-qa  # Name of the Nginx container
+  #   build:
+  #     context: ./nginx/  # Set the build context to the 'nginx' directory (adjust path if needed)
+  #     dockerfile: Dockerfile.nginx  # Specify the Nginx Dockerfile to use for building the image
+  #   ports:
+  #     - ${NGINX_PORT}  # Map port 443 on the host to port 443 inside the container for HTTPS
+  #   volumes:
+  #     - ./nginx/nginx.qa.conf:/etc/nginx/nginx.conf  # Mount the custom Nginx configuration file
+  #     - ./docker/certs/qa:/etc/ssl/certs  # Mount the directory containing SSL certificates
+  #   depends_on:
+  #     - app  # Ensure Nginx starts after the Next.js app service is up and running

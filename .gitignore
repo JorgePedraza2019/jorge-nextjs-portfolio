@@ -41,3 +41,6 @@ next-env.d.ts
 
 # playwright test results
 .last-run.json
+
+# Ignore SSL certificates and keys
+docker/certs/

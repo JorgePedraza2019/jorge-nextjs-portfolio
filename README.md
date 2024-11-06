@@ -28,7 +28,7 @@ npm run dev  # Start the application
 
 To run the project using Docker, use the following command:
 ```bash
-docker-compose -f docker-compose.local.yml up --build  # Build the Docker image and start the application in a container
+make feature-local-up  # Build the Docker image and start the application in a container
 ```
 
 ## Usage

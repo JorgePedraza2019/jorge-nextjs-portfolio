@@ -1,11 +1,48 @@
 #!/usr/bin/env sh
-. "$(dirname -- "$0")/_/husky.sh"
+. "$(dirname -- "$0")/_/husky.sh"  # Load Husky environment variables
 
-# Run ESLint before committing
-docker-compose -f docker-compose.local.yml exec -T app npm run lint
+# Get the current branch name
+BRANCH_NAME="$(git rev-parse --abbrev-ref HEAD)"
 
-# Run Jest tests before committing
-docker-compose -f docker-compose.local.yml exec -T app npm test
+# Set environment file and Docker Compose file based on the branch
+if [ "$BRANCH_NAME" = "dev" ]; then
+  ENV_FILE="./env/dev/.env.dev.local"
+  DOCKER_COMPOSE_FILE="docker/docker-compose.dev.yaml"
+  PROJECT_NAME="jorge-nextjs-portfolio-dev-local"
+elif [ "$BRANCH_NAME" = "qa" ]; then
+  ENV_FILE="./env/qa/.env.qa.local"
+  DOCKER_COMPOSE_FILE="docker/docker-compose.qa.yaml"
+  PROJECT_NAME="jorge-nextjs-portfolio-qa-local"
+elif [ "$BRANCH_NAME" = "main" ]; then
+  ENV_FILE="./env/prod/.env.prod.local"
+  DOCKER_COMPOSE_FILE="docker/docker-compose.prod.yaml"
+  PROJECT_NAME="jorge-nextjs-portfolio-prod-local"
+elif [[ "$BRANCH_NAME" =~ ^feature/ ]]; then
+  ENV_FILE="./env/feature/.env.feature.local"
+  DOCKER_COMPOSE_FILE="docker/docker-compose.feature.yaml"
+  PROJECT_NAME="jorge-nextjs-portfolio-feature-local"
+else
+  echo "Skipping on branch $BRANCH_NAME"  # Skip if branch is not recognized
+  exit 0
+fi
 
-# Run Playwright tests before committing
-docker-compose -f docker-compose.local.yml exec -T app npx playwright test
+# Run ESLint on 'feature' and 'dev' branches
+if [ "$BRANCH_NAME" = "dev" ] || [[ "$BRANCH_NAME" =~ ^feature/ ]]; then
+  docker-compose --env-file "$ENV_FILE" -p "$PROJECT_NAME" -f "$DOCKER_COMPOSE_FILE" exec -T app npm run lint
+else
+  echo "Skipping ESLint on branch $BRANCH_NAME"
+fi
+
+# Run Jest tests on the 'dev' branch
+if [ "$BRANCH_NAME" = "dev" ]; then
+  docker-compose --env-file "$ENV_FILE" -p "$PROJECT_NAME" -f "$DOCKER_COMPOSE_FILE" exec -T app npm test
+else
+  echo "Skipping Jest tests on branch $BRANCH_NAME"
+fi
+
+# Run Playwright tests on the 'qa' branch
+if [ "$BRANCH_NAME" = "qa" ]; then
+  docker-compose --env-file "$ENV_FILE" -p "$PROJECT_NAME" -f "$DOCKER_COMPOSE_FILE" exec -T app npx playwright test
+else
+  echo "Skipping Playwright tests on branch $BRANCH_NAME"
+fi

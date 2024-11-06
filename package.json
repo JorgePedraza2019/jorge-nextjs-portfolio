@@ -8,8 +8,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "test": "jest",
-    "prepare": "husky install"
+    "test": "jest"
   },
   "dependencies": {
     "react": "19.0.0-rc-69d4b800-20241021",

@@ -10,56 +10,96 @@ on:
       - feature/**        # Trigger on pushes to any feature branch
 
 jobs:
-  build:
+  setup:
     runs-on: ubuntu-latest  # Use the latest version of Ubuntu for the job
     steps:
       - name: Check out code
-        uses: actions/checkout@v2  # Checkout the repository code
+        uses: actions/checkout@v2  # Check out the repository code
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1  # Set up Docker Buildx for building images
       - name: Install Docker Compose
         run: |
           sudo apt-get update
           sudo apt-get install -y docker-compose  # Install Docker Compose
-      - name: Build and start app in Docker
-        run: docker-compose -f docker-compose.prod.yml up -d --build  # Build and start the Docker image using the production docker-compose file
 
-  eslint:
-    runs-on: ubuntu-latest  # Use the latest version of Ubuntu for the job
-    needs: build
+  build:
+    runs-on: ubuntu-latest
+    needs: setup  # Ensure setup job runs first
     steps:
       - name: Check out code
-        uses: actions/checkout@v2  # Checkout the repository code
-      - name: Wait for app container to be ready
+        uses: actions/checkout@v2  # Check out the repository code
+        
+      - name: Build and start app in Docker
         run: |
-          until docker-compose -f docker-compose.prod.yml exec app sh -c "curl -s http://localhost:3000 > /dev/null"; do
-            echo "Waiting for the app to be ready..."
-            sleep 5
-          done
-      - name: Run ESLint in Docker  # Run ESLint to check for code quality issues in Docker
-        run: docker-compose -f docker-compose.prod.yml exec app npm run lint  # Run the linter in the app container
+          # Use different docker-compose files depending on the branch
+          if [[ "${{ github.ref }}" == "refs/heads/dev" ]]; then
+            docker-compose -f docker/docker-compose.dev.yaml up -d --build
+          elif [[ "${{ github.ref }}" == "refs/heads/qa" ]]; then
+            docker-compose -f docker/docker-compose.qa.yaml up -d --build
+          elif [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
+            docker-compose -f docker/docker-compose.prod.yaml up -d --build
+          else
+            docker-compose -f docker/docker-compose.feature.yaml up -d --build
+          fi
+
+  eslint:
+    runs-on: ubuntu-latest
+    needs: build  # Run after the build job
+    if: startsWith(github.ref, 'refs/heads/feature/') || github.ref == 'refs/heads/dev'  # Run on dev and feature branches
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2  # Check out the repository code
+
+      - name: Run ESLint in Docker
+        run: |
+          # Use dev or local docker-compose file depending on the branch
+          if [[ "${{ github.ref }}" == "refs/heads/dev" ]]; then
+            docker-compose -f docker/docker-compose.dev.yaml exec app npm run lint
+          else
+            docker-compose -f docker/docker-compose.feature.yaml exec app npm run lint
+          fi
 
   jest:
     runs-on: ubuntu-latest
-    needs: [build, eslint]
+    needs: [build, eslint]  # Run after build and eslint jobs
+    if: github.ref == 'refs/heads/dev'  # Run only on dev branch
     steps:
       - name: Check out code
-        uses: actions/checkout@v2  # Checkout the repository code
+        uses: actions/checkout@v2  # Check out the repository code
+
       - name: Run Jest tests in Docker
-        run: docker-compose -f docker-compose.prod.yml exec app npm test  # Run unit or integration tests in the app container
+        run: docker-compose -f docker/docker-compose.dev.yaml exec app npm test  # Run Jest tests in the Docker container
 
   playwright:
     runs-on: ubuntu-latest
-    needs: [build, eslint]
+    needs: [build, eslint]  # Run after build and eslint jobs
+    if: github.ref == 'refs/heads/dev' || github.ref == 'refs/heads/qa'  # Run on dev and qa branches
     steps:
       - name: Check out code
-        uses: actions/checkout@v2  # Checkout the repository code
+        uses: actions/checkout@v2  # Check out the repository code
+
       - name: Run Playwright tests in Docker
-        run: docker-compose -f docker-compose.prod.yml exec app npx playwright test  # Run Playwright tests in the app container
+        run: |
+          # Use dev or qa docker-compose file depending on the branch
+          if [[ "${{ github.ref }}" == "refs/heads/dev" ]]; then
+            docker-compose -f docker/docker-compose.dev.yaml exec app npx playwright test
+          else
+            docker-compose -f docker/docker-compose.qa.yaml exec app npx playwright test
+          fi
 
   cleanup:
     runs-on: ubuntu-latest
-    needs: [eslint, jest, playwright]  # Only runs after all other jobs
+    needs: [eslint, jest, playwright]  # Run after all test jobs
     steps:
       - name: Stop and Remove Docker Containers
-        run: docker-compose -f docker-compose.prod.yml down  # Detiene y elimina los contenedores
+        run: |
+          # Stop and remove containers based on the branch
+          if [[ "${{ github.ref }}" == "refs/heads/dev" ]]; then
+            docker-compose -f docker/docker-compose.dev.yaml down
+          elif [[ "${{ github.ref }}" == "refs/heads/qa" ]]; then
+            docker-compose -f docker/docker-compose.qa.yaml down
+          elif [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
+            docker-compose -f docker/docker-compose.prod.yaml down
+          else
+            docker-compose -f docker/docker-compose.feature.yaml down
+          fi
