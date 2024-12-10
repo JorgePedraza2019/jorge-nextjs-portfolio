@@ -4,7 +4,7 @@
         prod-local-up prod-local-down prod-server-up prod-server-down
 
 # Project name for Docker Compose
-PROJECT_NAME=jorge-nextjs-portfolio
+PROJECT_NAME=jorge-portfolio-frontend
 
 # Environment variable files for different environments (local, dev, qa, prod)
 ENV_FEATURE_LOCAL = ./env/feature/.env.feature.local
@@ -15,32 +15,53 @@ ENV_QA_SERVER = ./env/qa/.env.qa.server
 ENV_PROD_LOCAL = ./env/prod/.env.prod.local
 ENV_PROD_SERVER = ./env/prod/.env.prod.server
 
-# Local environment setup
+feature-local-build-up:
+	docker-compose --env-file ${ENV_FEATURE_LOCAL} -p $(PROJECT_NAME)-feature-local -f docker/docker-compose.yaml -f docker/docker-compose-override-feature.yaml up --build
 feature-local-up:
-	# Set the environment file for the local feature environment and start the container
-	docker-compose --env-file ${ENV_FEATURE_LOCAL} -p $(PROJECT_NAME)-feature-local -f docker/feature/docker-compose.feature.yaml -f docker/feature/docker-compose-override-env-file.yaml up --build
-
+	docker-compose --env-file ${ENV_FEATURE_LOCAL} -p $(PROJECT_NAME)-feature-local -f docker/docker-compose.yaml -f docker/docker-compose-override-feature.yaml up
 feature-local-down:
-	# Stop and remove the local feature environment container
-	docker-compose --env-file ${ENV_FEATURE_LOCAL} -p $(PROJECT_NAME)-local -f docker/feature/docker-compose.feature.yaml down
+	docker-compose --env-file ${ENV_FEATURE_LOCAL} -p $(PROJECT_NAME)-feature-local -f docker/docker-compose.yaml down -v
+
+dev-local-build-up:
+	docker-compose --env-file ${ENV_DEV_LOCAL} -p $(PROJECT_NAME)-dev-local -f docker/docker-compose.yaml -f docker/docker-compose-override-dev.yaml -f docker/docker-compose-nginx.yaml up --build
+dev-local-up:
+	docker-compose --env-file ${ENV_DEV_LOCAL} -p $(PROJECT_NAME)-dev-local -f docker/docker-compose.yaml -f docker/docker-compose-override-dev.yaml -f docker/docker-compose-nginx.yaml up
+dev-local-down:
+	docker-compose --env-file ${ENV_DEV_LOCAL} -p $(PROJECT_NAME)-dev-local -f docker/docker-compose.yaml -f docker/docker-compose-nginx.yaml down -v
+
+dev-server-build-up:
+	docker-compose --env-file ${ENV_DEV_SERVER} -p $(PROJECT_NAME)-dev-server -f docker/docker-compose.yaml -f docker/docker-compose-nginx.yaml up --build
+dev-server-up:
+	docker-compose --env-file ${ENV_DEV_SERVER} -p $(PROJECT_NAME)-dev-server -f docker/docker-compose.yaml -f docker/docker-compose-nginx.yaml up
+dev-server-down:
+	docker-compose --env-file ${ENV_DEV_SERVER} -p $(PROJECT_NAME)-dev-server -f docker/docker-compose.yaml -f docker/docker-compose-nginx.yaml down -v
+
+# Local environment setup
+# feature-local-up:
+# 	# Set the environment file for the local feature environment and start the container
+# 	docker-compose --env-file ${ENV_FEATURE_LOCAL} -p $(PROJECT_NAME)-feature-local -f docker/feature/docker-compose.feature.yaml -f docker/feature/docker-compose-override-env-file.yaml up --build
+
+# feature-local-down:
+# 	# Stop and remove the local feature environment container
+# 	docker-compose --env-file ${ENV_FEATURE_LOCAL} -p $(PROJECT_NAME)-feature-local -f docker/feature/docker-compose.feature.yaml down
 
 # Development environment in local mode
-dev-local-up:
-	# Set environment file for the local development environment and start the container
-	docker-compose --env-file ${ENV_DEV_LOCAL} -p $(PROJECT_NAME)-dev-local -f docker/dev/docker-compose.dev.yaml -f docker/dev/docker-compose-override-volume.yaml -f docker/dev/docker-compose-override-env-file.yaml -f docker/dev/docker-compose.nginx.yaml up --build
+# dev-local-up:
+# 	# Set environment file for the local development environment and start the container
+# 	docker-compose --env-file ${ENV_DEV_LOCAL} -p $(PROJECT_NAME)-dev-local -f docker/dev/docker-compose.dev.yaml -f docker/dev/docker-compose-override-volume.yaml -f docker/dev/docker-compose-override-env-file.yaml -f docker/dev/docker-compose.nginx.yaml up --build
 
-dev-local-down:
-	# Stop and remove the local development environment container
-	docker-compose --env-file ${ENV_DEV_LOCAL} -p $(PROJECT_NAME)-dev-local -f docker/dev/docker-compose.dev.yaml -f docker/dev/docker-compose-override-volume.yaml -f docker/dev/docker-compose.nginx.yaml down
+# dev-local-down:
+# 	# Stop and remove the local development environment container
+# 	docker-compose --env-file ${ENV_DEV_LOCAL} -p $(PROJECT_NAME)-dev-local -f docker/dev/docker-compose.dev.yaml -f docker/dev/docker-compose-override-volume.yaml -f docker/dev/docker-compose.nginx.yaml down
 
-# Development environment in server mode
-dev-server-up:
-	# Set environment file for the development server environment and start the container
-	docker-compose --env-file ${ENV_DEV_SERVER} -p $(PROJECT_NAME)-dev-server -f docker/dev/docker-compose.dev.yaml -f docker/dev/docker-compose-override-env-file.yaml -f docker/dev/docker-compose.nginx.yaml up --build
+# # Development environment in server mode
+# dev-server-up:
+# 	# Set environment file for the development server environment and start the container
+# 	docker-compose --env-file ${ENV_DEV_SERVER} -p $(PROJECT_NAME)-dev-server -f docker/dev/docker-compose.dev.yaml -f docker/dev/docker-compose-override-env-file.yaml -f docker/dev/docker-compose.nginx.yaml up --build
 
-dev-server-down:
-	# Stop and remove the development server container
-	docker-compose --env-file ${ENV_DEV_SERVER} -p $(PROJECT_NAME)-dev-server -f docker/dev/docker-compose.dev.yaml -f docker/dev/docker-compose.nginx.yaml down
+# dev-server-down:
+# 	# Stop and remove the development server container
+# 	docker-compose --env-file ${ENV_DEV_SERVER} -p $(PROJECT_NAME)-dev-server -f docker/dev/docker-compose.dev.yaml -f docker/dev/docker-compose.nginx.yaml down
 
 # QA environment in local mode
 qa-local-up:

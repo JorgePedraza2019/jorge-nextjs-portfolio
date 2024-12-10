@@ -1,0 +1,7 @@
+services:
+  frontend:  # Define the 'app' service for the Next.js application
+    ports:
+      - ${USE_PORTS:-}  # If USE_PORTS is empty, this will resolve to an empty value and be ignored
+    volumes:
+      - ${USE_VOLUMES}  # Mount the volumes using USE_VOLUMES from the .env file
+      - ${USE_VOLUMES_NODE_MODULES}  # Optionally, mount node_modules as a separate volume
