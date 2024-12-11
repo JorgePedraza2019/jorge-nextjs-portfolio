@@ -85,7 +85,7 @@ jobs:
           elif [[ "${{ github.ref }}" == "refs/heads/main" ]]; then  # If the branch is 'main'
             docker-compose --env-file .env -p jorge-portfolio-frontend-prod-server -f docker/docker-compose.yaml -f docker/prod/docker-compose-override-port.yaml up -d --build  # Use the prod Docker Compose file to start the container
           else  # If it's a feature branch or any other branch
-            docker-compose --env-file .env -p jorge-portfolio-frontend-feature-local -f docker/docker-compose.yaml -f docker/docker-compose-override-feature.yaml up -d --build  # Use the feature Docker Compose file to start the container
+            docker-compose --env-file env/feature/.env.feature.local -p jorge-portfolio-frontend-feature-local -f docker/docker-compose.yaml -f docker/docker-compose-override-feature.yaml up -d --build  # Use the feature Docker Compose file to start the container
           fi
       - name: Install dependencies in Docker container
         run: |
@@ -106,7 +106,7 @@ jobs:
             if [[ "${{ github.ref }}" == "refs/heads/dev" ]]; then
               docker-compose --env-file .env -p jorge-portfolio-frontend-dev-server -f docker/docker-compose.yaml exec -T frontend npm run lint
             else
-              docker-compose --env-file .env -p jorge-portfolio-frontend-feature-local -f docker/docker-compose.yaml exec -T frontend npm run lint
+              docker-compose --env-file env/feature/.env.feature.local -p jorge-portfolio-frontend-feature-local -f docker/docker-compose.yaml exec -T frontend npm run lint
             fi
           else
             echo "Skipping ESLint in non-dev and non-feature branches."
@@ -137,5 +137,5 @@ jobs:
           elif [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
             docker-compose --env-file .env -f docker/prod/docker-compose.prod.yaml down
           else
-            docker-compose --env-file .env -f docker/docker-compose.yaml down
+            docker-compose --env-file env/feature/.env.feature.local -f docker/docker-compose.yaml down
           fi
