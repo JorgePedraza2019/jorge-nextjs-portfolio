@@ -90,11 +90,11 @@ jobs:
       - name: Install dependencies in Docker container
         run: |
           if [[ "${{ github.ref }}" == "refs/heads/dev" ]]; then
-            docker-compose --env-file .env -p jorge-portfolio-frontend-dev-server -f docker/docker-compose.yaml exec -T frontend sh -c 'export NODE_ENV=development && npm install --only=dev --legacy-peer-deps'
+            docker-compose --env-file env/dev/.env.dev.server -p jorge-portfolio-frontend-dev-server -f docker/docker-compose.yaml exec -T frontend sh -c 'export NODE_ENV=development && npm install --only=dev --legacy-peer-deps'
           elif [[ "${{ github.ref }}" == "refs/heads/qa" ]]; then
-            docker-compose --env-file .env -p jorge-portfolio-frontend-qa-server -f docker/qa/docker-compose.qa.yaml exec -T frontend sh -c 'export NODE_ENV=development && npm install --only=dev --legacy-peer-deps'
+            docker-compose --env-file env/qa/.env.qa.server -p jorge-portfolio-frontend-qa-server -f docker/docker-compose.yaml exec -T frontend sh -c 'export NODE_ENV=development && npm install --only=dev --legacy-peer-deps'
           elif [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
-            docker-compose --env-file .env -p jorge-portfolio-frontend-prod-server -f docker/prod/docker-compose.prod.yaml exec -T frontend sh -c 'export NODE_ENV=development'
+            docker-compose --env-file env/prod/.env.prod.server -p jorge-portfolio-frontend-prod-server -f docker/docker-compose.yaml exec -T frontend sh -c 'export NODE_ENV=development'
           else
             echo "Skipping installation in non-dev, non-qa, and non-prod branches."
           fi
@@ -104,7 +104,7 @@ jobs:
           if [[ "${{ github.ref }}" == "refs/heads/dev" || "${{ github.ref }}" =~ refs/heads/feature/.* ]]; then
             # If the branch is dev or feature/*
             if [[ "${{ github.ref }}" == "refs/heads/dev" ]]; then
-              docker-compose --env-file .env -p jorge-portfolio-frontend-dev-server -f docker/docker-compose.yaml exec -T frontend npm run lint
+              docker-compose --env-file env/dev/.env.dev.server -p jorge-portfolio-frontend-dev-server -f docker/docker-compose.yaml exec -T frontend npm run lint
             else
               docker-compose --env-file env/feature/.env.feature.local -p jorge-portfolio-frontend-feature-local -f docker/docker-compose.yaml exec -T frontend npm run lint
             fi
@@ -114,16 +114,16 @@ jobs:
       - name: Run Jest in Docker
         run: |
           if [[ "${{ github.ref }}" == "refs/heads/dev" ]]; then
-            docker-compose --env-file .env -p jorge-nextjs-portfolio-dev-server -f docker/docker-compose.yaml exec -T frontend npm test
+            docker-compose --env-file env/dev/.env.dev.server -p jorge-nextjs-portfolio-dev-server -f docker/docker-compose.yaml exec -T frontend npm test
           else
             echo "Skipping Jest tests for branch ${{ github.ref }} as tests are only run on the 'dev' branch"
           fi
       - name: Run Playwright in Docker
         run: |
           if [[ "${{ github.ref }}" == "refs/heads/dev" ]]; then
-            docker-compose --env-file .env -p jorge-nextjs-portfolio-dev-server -f docker/docker-compose.yaml exec -T frontend npx playwright test
+            docker-compose --env-file env/dev/.env.dev.server -p jorge-nextjs-portfolio-dev-server -f docker/docker-compose.yaml exec -T frontend npx playwright test
           elif [[ "${{ github.ref }}" == "refs/heads/qa" ]]; then
-            docker-compose --env-file .env -p jorge-nextjs-portfolio-qa-server -f docker/qa/docker-compose.qa.yaml exec -T frontend npx playwright test
+            docker-compose --env-file env/qa/.env.qa.server -p jorge-nextjs-portfolio-qa-server -f docker/docker-compose.yaml exec -T frontend npx playwright test
           else
             echo "Skipping Playwright tests for branch ${{ github.ref }} as tests are only run on the 'dev' and 'qa' branch."
           fi
@@ -131,11 +131,11 @@ jobs:
         run: |
           # Stop and remove containers based on the branch
           if [[ "${{ github.ref }}" == "refs/heads/dev" ]]; then
-            docker-compose --env-file .env -f docker/docker-compose.yaml down
+            docker-compose --env-file env/dev/.env.dev.server -f docker/docker-compose.yaml down
           elif [[ "${{ github.ref }}" == "refs/heads/qa" ]]; then
-            docker-compose --env-file .env -f docker/qa/docker-compose.qa.yaml down
+            docker-compose --env-file env/qa/.env.qa.server -f docker/docker-compose.qa.yaml down
           elif [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
-            docker-compose --env-file .env -f docker/prod/docker-compose.prod.yaml down
+            docker-compose --env-file env/prod/.env.prod.server -f docker/docker-compose.prod.yaml down
           else
             docker-compose --env-file env/feature/.env.feature.local -f docker/docker-compose.yaml down
           fi
