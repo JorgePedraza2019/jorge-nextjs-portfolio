@@ -33,6 +33,7 @@ jobs:
             echo "START_COMMAND=${{ secrets.START_COMMAND_DEV }}" >> .env
             echo "USE_VOLUMES=${{ secrets.USE_VOLUMES_DEV }}" >> .env
             echo "USE_VOLUMES_NODE_MODULES=${{ secrets.USE_VOLUMES_NODE_MODULES_DEV }}" >> .env
+            echo "USE_PORTS=${{ secrets.USE_PORTS_DEV }}" >> .env
           elif [[ "${{ github.ref }}" == "refs/heads/qa" ]]; then
             echo "NODE_ENV=${{ secrets.NODE_ENV_QA }}" >> .env
             echo "NEXT_PORT=${{ secrets.NEXT_PORT_QA }}" >> .env
@@ -45,7 +46,7 @@ jobs:
             echo "START_COMMAND=${{ secrets.START_COMMAND_QA }}" >> .env
             echo "USE_VOLUMES=${{ secrets.USE_VOLUMES_QA }}" >> .env
             echo "USE_VOLUMES_NODE_MODULES=${{ secrets.USE_VOLUMES_NODE_MODULES_QA }}" >> .env
-  
+            echo "USE_PORTS=${{ secrets.USE_PORTS_QA }}" >> .env
           elif [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
             echo "NODE_ENV=${{ secrets.NODE_ENV_PROD }}" >> .env
             echo "NEXT_PORT=${{ secrets.NEXT_PORT_PROD }}" >> .env
@@ -58,7 +59,7 @@ jobs:
             echo "START_COMMAND=${{ secrets.START_COMMAND_PROD }}" >> .env
             echo "USE_VOLUMES=${{ secrets.USE_VOLUMES_PROD }}" >> .env
             echo "USE_VOLUMES_NODE_MODULES=${{ secrets.USE_VOLUMES_NODE_MODULES_PROD }}" >> .env
-  
+            echo "USE_PORTS=${{ secrets.USE_PORTS_PROD }}" >> .env
           else
             echo "NODE_ENV=${{ secrets.NODE_ENV_FEATURE }}" >> .env
             echo "NEXT_PORT=${{ secrets.NEXT_PORT_FEATURE }}" >> .env
@@ -71,6 +72,7 @@ jobs:
             echo "START_COMMAND=${{ secrets.START_COMMAND_FEATURE }}" >> .env
             echo "USE_VOLUMES=${{ secrets.USE_VOLUMES_FEATURE }}" >> .env
             echo "USE_VOLUMES_NODE_MODULES=${{ secrets.USE_VOLUMES_NODE_MODULES_FEATURE }}" >> .env
+            echo "USE_PORTS=${{ secrets.USE_PORTS_FEATURE }}" >> .env
           fi
       - name: Set up Docker Compose and run container
         run: |
