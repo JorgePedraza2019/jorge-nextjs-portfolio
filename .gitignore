@@ -43,11 +43,7 @@ next-env.d.ts
 .last-run.json
 
 # Ignore SSL certificates and keys
-docker/certs/
+docker/nginx/local/certs/
 
 # Ignore nginx local config files
-# These files are not ignored in this case to demonstrate my knowledge with nginx configuration
-# and SSL handling for local environments with self-signed certificates and dynamic variables.
-# docker/nginx/nginx.dev.conf
-# docker/nginx/nginx.qa.conf
-# docker/nginx/nginx.prod.conf
+docker/nginx/local/config/
