@@ -1,95 +1,173 @@
-name: CD
+name: Deploy to Server
 
 on:
-  workflow_dispatch:  # Allows manual triggering of this workflow
-  
-  # Note: The CD configuration is not yet fully set up, and as such, this feature is currently inactive.
-  # workflow_run:
-  #   workflows: ["CI"]
-  #   types:
-  #     - completed  # Trigger CD only after CI completes successfully
+  push:
+    branches:
+      - dev
+      - qa
+      - main
 
 jobs:
-  deploy_dev:
-    if: github.ref == 'refs/heads/dev'  # Only run for the dev branch
-    runs-on: ubuntu-latest
+  deploy:
+    runs-on: ubuntu-latest  # O el runner que prefieras
+
     steps:
-      - name: Check out code
-        uses: actions/checkout@v2
-
-      - name: Login to Docker Hub
-        uses: docker/login-action@v1
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-
-      - name: Push Docker image
-        run: docker push jorge-nextjs-portfolio:latest
-
-      - name: Deploy to Dev Server
-        env:
-          EC2_HOST: ${{ secrets.EC2_DEV_HOST }}  # Dev server hostname or IP
-          EC2_USER: ${{ secrets.EC2_USER }}      # SSH user for Dev server
-          EC2_KEY: ${{ secrets.EC2_KEY }}        # SSH key for Dev server
+      # Paso 1: Hacer SSH en el servidor
+      - name: Determine server variables
+        id: server-vars
         run: |
-          ssh -o StrictHostKeyChecking=no -i $EC2_KEY $EC2_USER@$EC2_HOST << EOF
-            docker pull jorge-nextjs-portfolio:latest
-            cd /path/to/dev/docker-compose-directory
-            docker-compose -f docker-compose.dev.yaml up -d --build
-          EOF
+          if [[ "${{ github.ref }}" == "refs/heads/dev" ]]; then
+            echo "SERVER_IP=${{ secrets.SERVER_IP_DEV }}" >> $GITHUB_ENV
+            echo "SERVER_USER=${{ secrets.SERVER_USER_DEV }}" >> $GITHUB_ENV
+            echo "SERVER_SSH_KEY=${{ secrets.SERVER_SSH_KEY_DEV }}" >> $GITHUB_ENV
+          elif [[ "${{ github.ref }}" == "refs/heads/qa" ]]; then
+            echo "SERVER_IP=${{ secrets.SERVER_IP_QA }}" >> $GITHUB_ENV
+            echo "SERVER_USER=${{ secrets.SERVER_USER_QA }}" >> $GITHUB_ENV
+            echo "SERVER_SSH_KEY=${{ secrets.SERVER_SSH_KEY_QA }}" >> $GITHUB_ENV
+          elif [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
+            echo "SERVER_IP=${{ secrets.SERVER_IP_PROD }}" >> $GITHUB_ENV
+            echo "SERVER_USER=${{ secrets.SERVER_USER_PROD }}" >> $GITHUB_ENV
+            echo "SERVER_SSH_KEY=${{ secrets.SERVER_SSH_KEY_PROD }}" >> $GITHUB_ENV
+          else
+            echo "Unsupported branch: ${{ github.ref }}"
+            exit 1
+          fi
 
-  deploy_qa:
-    if: github.ref == 'refs/heads/qa'  # Only run for the QA branch
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check out code
-        uses: actions/checkout@v2
-
-      - name: Login to Docker Hub
-        uses: docker/login-action@v1
+      # Paso 2: Hacer SSH en el servidor
+      - name: SSH into server
+        uses: appleboy/ssh-action@v0.1.5
         with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
+          host: ${{ env.SERVER_IP }}
+          username: ${{ env.SERVER_USER }}
+          key: ${{ env.SERVER_SSH_KEY }}
+          port: 22
 
-      - name: Push Docker image
-        run: docker push jorge-nextjs-portfolio:latest
-
-      - name: Deploy to QA Server
-        env:
-          EC2_HOST: ${{ secrets.EC2_QA_HOST }}   # QA server hostname or IP
-          EC2_USER: ${{ secrets.EC2_USER }}      # SSH user for QA server
-          EC2_KEY: ${{ secrets.EC2_KEY }}        # SSH key for QA server
+      # Paso 2: Descargar el código del repositorio desde GitHub y generar archivo .env
+      - name: Pull latest code and generate .env file
         run: |
-          ssh -o StrictHostKeyChecking=no -i $EC2_KEY $EC2_USER@$EC2_HOST << EOF
-            docker pull jorge-nextjs-portfolio:latest
-            cd /path/to/qa/docker-compose-directory
-            docker-compose -f docker-compose.qa.yaml up -d --build
-          EOF
+          # Definir variables según la rama
+          if [[ "${{ github.ref }}" == "refs/heads/dev" ]]; then
+            BRANCH="dev"
+            ENV_FILE=".env.dev.server"
+            NODE_ENV="${{ secrets.NODE_ENV_DEV }}"
+            INSTALL_PLAYWRIGHT="${{ secrets.INSTALL_PLAYWRIGHT_DEV }}"
+            INSTALL_DEV_LIBRARIES="${{ secrets.INSTALL_DEV_LIBRARIES_DEV }}"
+            IMAGE_NAME="${{ secrets.IMAGE_NAME_DEV }}"
+            NEXT_PORT="${{ secrets.NEXT_PORT_DEV }}"
+            HOST_PORT="${{ secrets.HOST_PORT_DEV }}"
+            ENV_FILE_NAME="${{ secrets.ENV_FILE_NAME_DEV }}"
+            START_COMMAND="${{ secrets.START_COMMAND_DEV }}"
+            NEXT_CONTAINER_NAME="${{ secrets.NEXT_CONTAINER_NAME_DEV }}"
+            ENV_TYPE="${{ secrets.ENV_TYPE_DEV }}"
+            NGINX_CONF_DIR="${{ secrets.NGINX_CONF_DIR_DEV }}"
+            NGINX_CERTS_DIR="${{ secrets.NGINX_CERTS_DIR_DEV }}"
+            NGINX_IMAGE_NAME="${{ secrets.NGINX_IMAGE_NAME_DEV }}"
+            NGINX_PORT="${{ secrets.NGINX_PORT_DEV }}"
+          elif [[ "${{ github.ref }}" == "refs/heads/qa" ]]; then
+            BRANCH="qa"
+            ENV_FILE=".env.qa.server"
+            NODE_ENV="${{ secrets.NODE_ENV_QA }}"
+            INSTALL_PLAYWRIGHT="${{ secrets.INSTALL_PLAYWRIGHT_QA }}"
+            INSTALL_DEV_LIBRARIES="${{ secrets.INSTALL_DEV_LIBRARIES_QA }}"
+            IMAGE_NAME="${{ secrets.IMAGE_NAME_QA }}"
+            NEXT_PORT="${{ secrets.NEXT_PORT_QA }}"
+            HOST_PORT="${{ secrets.HOST_PORT_QA }}"
+            ENV_FILE_NAME="${{ secrets.ENV_FILE_NAME_QA }}"
+            START_COMMAND="${{ secrets.START_COMMAND_QA }}"
+            NEXT_CONTAINER_NAME="${{ secrets.NEXT_CONTAINER_NAME_QA }}"
+            ENV_TYPE="${{ secrets.ENV_TYPE_QA }}"
+            NGINX_CONF_DIR="${{ secrets.NGINX_CONF_DIR_QA }}"
+            NGINX_CERTS_DIR="${{ secrets.NGINX_CERTS_DIR_QA }}"
+            NGINX_IMAGE_NAME="${{ secrets.NGINX_IMAGE_NAME_QA }}"
+            NGINX_PORT="${{ secrets.NGINX_PORT_QA }}"
+          elif [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
+            BRANCH="main"
+            ENV_FILE=".env.prod.server"
+            NODE_ENV="${{ secrets.NODE_ENV_PROD }}"
+            INSTALL_PLAYWRIGHT="${{ secrets.INSTALL_PLAYWRIGHT_PROD }}"
+            INSTALL_DEV_LIBRARIES="${{ secrets.INSTALL_DEV_LIBRARIES_PROD }}"
+            IMAGE_NAME="${{ secrets.IMAGE_NAME_PROD }}"
+            NEXT_PORT="${{ secrets.NEXT_PORT_PROD }}"
+            HOST_PORT="${{ secrets.HOST_PORT_PROD }}"
+            ENV_FILE_NAME="${{ secrets.ENV_FILE_NAME_PROD }}"
+            START_COMMAND="${{ secrets.START_COMMAND_PROD }}"
+            NEXT_CONTAINER_NAME="${{ secrets.NEXT_CONTAINER_NAME_PROD }}"
+            ENV_TYPE="${{ secrets.ENV_TYPE_PROD }}"
+            NGINX_CONF_DIR="${{ secrets.NGINX_CONF_DIR_PROD }}"
+            NGINX_CERTS_DIR="${{ secrets.NGINX_CERTS_DIR_PROD }}"
+            NGINX_IMAGE_NAME="${{ secrets.NGINX_IMAGE_NAME_PROD }}"
+            NGINX_PORT="${{ secrets.NGINX_PORT_PROD }}"
+          else
+            echo "Unsupported branch: ${{ github.ref }}"
+            exit 1
+          fi
 
-  deploy_prod:
-    if: github.ref == 'refs/heads/main'  # Only run for the main branch
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check out code
-        uses: actions/checkout@v2
+          # Navegar al directorio donde está el proyecto
+          cd /var/www/jorge-nextjs-portfolio/
 
-      - name: Login to Docker Hub
-        uses: docker/login-action@v1
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
+          # Ejecutar git pull para obtener los últimos cambios de la rama correcta
+          git pull origin $BRANCH
 
-      - name: Push Docker image
-        run: docker push jorge-nextjs-portfolio:latest
+          # Crear el archivo .env en la ubicación correcta
+          mkdir -p env/$BRANCH
+          echo "NODE_ENV=$NODE_ENV" > env/$BRANCH/$ENV_FILE
+          echo "INSTALL_PLAYWRIGHT=$INSTALL_PLAYWRIGHT" >> env/$BRANCH/$ENV_FILE
+          echo "INSTALL_DEV_LIBRARIES=$INSTALL_DEV_LIBRARIES" >> env/$BRANCH/$ENV_FILE
+          echo "IMAGE_NAME=$IMAGE_NAME" >> env/$BRANCH/$ENV_FILE
+          echo "NEXT_PORT=$NEXT_PORT" >> env/$BRANCH/$ENV_FILE
+          echo "HOST_PORT=$HOST_PORT" >> env/$BRANCH/$ENV_FILE
+          echo "ENV_FILE_NAME=$ENV_FILE_NAME" >> env/$BRANCH/$ENV_FILE
+          echo "START_COMMAND=$START_COMMAND" >> env/$BRANCH/$ENV_FILE
+          echo "NEXT_CONTAINER_NAME=$NEXT_CONTAINER_NAME" >> env/$BRANCH/$ENV_FILE
+          echo "ENV_TYPE=$ENV_TYPE" >> env/$BRANCH/$ENV_FILE
+          echo "NGINX_CONF_DIR=$NGINX_CONF_DIR" >> env/$BRANCH/$ENV_FILE
+          echo "NGINX_CERTS_DIR=$NGINX_CERTS_DIR" >> env/$BRANCH/$ENV_FILE
+          echo "NGINX_IMAGE_NAME=$NGINX_IMAGE_NAME" >> env/$BRANCH/$ENV_FILE
+          echo "NGINX_PORT=$NGINX_PORT" >> env/$BRANCH/$ENV_FILE
 
-      - name: Deploy to Production Server
-        env:
-          EC2_HOST: ${{ secrets.EC2_PROD_HOST }}  # Production server hostname or IP
-          EC2_USER: ${{ secrets.EC2_USER }}       # SSH user for production server
-          EC2_KEY: ${{ secrets.EC2_KEY }}         # SSH key for production server
+      # Paso 3: Construir la imagen de frontend en el servidor
+      - name: Build frontend image
         run: |
-          ssh -o StrictHostKeyChecking=no -i $EC2_KEY $EC2_USER@$EC2_HOST << EOF
-            docker pull jorge-nextjs-portfolio:latest
-            cd /path/to/prod/docker-compose-directory
-            docker-compose -f docker-compose.prod.yaml up -d --build
-          EOF
+          if [[ "${GITHUB_REF}" == "refs/heads/main" ]]; then
+            # Para la rama main, construye y hace push a Docker Hub
+            docker build --build-arg NODE_ENV=${{ secrets.NODE_ENV_PROD }} --build-arg INSTALL_PLAYWRIGHT=${{ secrets.INSTALL_PLAYWRIGHT_PROD }} --build-arg INSTALL_DEV_LIBRARIES=${{ secrets.INSTALL_DEV_LIBRARIES_PROD }} -t ${{ secrets.DOCKER_USERNAME }}/jorge-portfolio-frontend-app-prod-server-image:latest -f Dockerfile.nextjs .
+            docker push ${{ secrets.DOCKER_USERNAME }}/jorge-portfolio-frontend-app-prod-server-image:latest
+          elif [[ "${GITHUB_REF}" == "refs/heads/dev" ]]; then
+            # Para la rama dev, construye la imagen localmente sin hacer push
+            docker build --build-arg NODE_ENV=${{ secrets.NODE_ENV_DEV }} --build-arg INSTALL_PLAYWRIGHT=${{ secrets.INSTALL_PLAYWRIGHT_DEV }} --build-arg INSTALL_DEV_LIBRARIES=${{ secrets.INSTALL_DEV_LIBRARIES_DEV }} -t jorge-portfolio-frontend-app-dev-server-image:latest -f Dockerfile.nextjs .
+          elif [[ "${GITHUB_REF}" == "refs/heads/qa" ]]; then
+            # Para la rama qa, construye la imagen localmente sin hacer push
+            docker build --build-arg NODE_ENV=${{ secrets.NODE_ENV_QA }} --build-arg INSTALL_PLAYWRIGHT=${{ secrets.INSTALL_PLAYWRIGHT_QA }} --build-arg INSTALL_DEV_LIBRARIES=${{ secrets.INSTALL_DEV_LIBRARIES_QA }} -t jorge-portfolio-frontend-app-qa-server-image:latest -f Dockerfile.nextjs .
+          fi
+        if: ${{ github.ref == 'refs/heads/main' || github.ref == 'refs/heads/dev' || github.ref == 'refs/heads/qa' }}  # Asegura que el paso se ejecute en estas ramas
+        
+      # Paso 4: Construir la imagen de Nginx en el servidor
+      - name: Build and push Nginx image
+        run: |
+          if [[ "${GITHUB_REF}" == "refs/heads/main" ]]; then
+            # Para la rama main, construye y hace push a Docker Hub
+            docker build --build-arg NGINX_CONF_DIR=${{ secrets.NGINX_CONF_DIR_PROD }} --build-arg NGINX_CERTS_DIR=${{ secrets.NGINX_CERTS_DIR_PROD }} --build-arg ENV_TYPE=${{secrets.ENV_TYPE_PROD}} -t ${{ secrets.DOCKER_USERNAME }}/jorge-portfolio-frontend-nginx-prod-server-image:latest -f docker/nginx/Dockerfile.nginx .
+            docker push ${{ secrets.DOCKER_USERNAME }}/jorge-portfolio-frontend-nginx-prod-server-image:latest
+          elif [[ "${GITHUB_REF}" == "refs/heads/dev" ]]; then
+            # Para dev, solo construye la imagen localmente (sin hacer push)
+            docker build --build-arg NGINX_CONF_DIR=${{ secrets.NGINX_CONF_DIR_DEV }} --build-arg NGINX_CERTS_DIR=${{ secrets.NGINX_CERTS_DIR_DEV}} --build-arg ENV_TYPE=${{secrets.ENV_TYPE_DEV}} -t jorge-portfolio-frontend-nginx-dev-server-image:latest -f docker/nginx/Dockerfile.nginx .
+          elif [[ "${GITHUB_REF}" == "refs/heads/qa" ]]; then
+            # Para qa, solo construye la imagen localmente (sin hacer push)
+            docker build --build-arg NGINX_CONF_DIR=${{ secrets.NGINX_CONF_DIR_QA }} --build-arg NGINX_CERTS_DIR=${{ secrets.NGINX_CERTS_DIR_QA}} --build-arg ENV_TYPE=${{secrets.ENV_TYPE_QA}} -t jorge-portfolio-frontend-nginx-qa-server-image:latest -f docker/nginx/Dockerfile.nginx .
+          fi
+        if: ${{ github.ref == 'refs/heads/main' || github.ref == 'refs/heads/dev' || github.ref == 'refs/heads/qa' }}  # Asegura que el paso se ejecute en estas ramas
+
+      # Paso 5: Levantar los contenedores con Docker Compose
+      - name: Deploy containers using Docker Compose
+        run: |
+          if [[ "${GITHUB_REF}" == "refs/heads/prod" ]]; then
+            # Para la rama main, despliega con las configuraciones correspondientes a producción
+            docker-compose --env-file ./env/prod/.env.prod.server -p jorge-portfolio-frontend-prod-server -f docker/docker-compose.yaml -f docker/docker-compose-nginx.yaml up --build -d
+          elif [[ "${GITHUB_REF}" == "refs/heads/dev" ]]; then
+            # Para dev, despliega con las configuraciones correspondientes a los entornos de prueba
+            docker-compose --env-file ./env/dev/.env.dev.server -p jorge-portfolio-frontend-dev-server -f docker/docker-compose.yaml -f docker/docker-compose-nginx.yaml up --build -d
+          elif [[ "${GITHUB_REF}" == "refs/heads/qa" ]]; then
+            # Para qa, despliega con las configuraciones correspondientes a los entornos de prueba
+            docker-compose --env-file ./env/qa/.env.qa.server -p jorge-portfolio-frontend-qa-server -f docker/docker-compose.yaml -f docker/docker-compose-nginx.yaml up --build -d
+          fi
+        if: ${{ github.ref == 'refs/heads/main' || github.ref == 'refs/heads/dev' || github.ref == 'refs/heads/qa' }}  # Asegura que el paso se ejecute en estas ramas
