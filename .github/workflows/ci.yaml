@@ -1,4 +1,4 @@
-name: CI
+name: CI Workflow
 
 # Trigger the workflow on push events to the specified branches
 on:
