@@ -27,24 +27,50 @@ jobs:
             echo "HOST_PORT=${{ secrets.HOST_PORT_DEV }}" >> .env
             echo "NEXT_CONTAINER_NAME=${{ secrets.NEXT_CONTAINER_NAME_DEV }}" >> .env
             echo "INSTALL_PLAYWRIGHT=${{ secrets.INSTALL_PLAYWRIGHT_DEV }}" >> .env
+            echo "INSTALL_DEV_LIBRARIES=${{ secrets.INSTALL_DEV_LIBRARIES_DEV }}" >> .env
+            echo "IMAGE_NAME=${{ secrets.IMAGE_NAME_DEV }}" >> .env
+            echo "ENV_FILE_NAME=${{ secrets.ENV_FILE_NAME_DEV }}" >> .env
+            echo "START_COMMAND=${{ secrets.START_COMMAND_DEV }}" >> .env
+            echo "USE_VOLUMES=${{ secrets.USE_VOLUMES_DEV }}" >> .env
+            echo "USE_VOLUMES_NODE_MODULES=${{ secrets.USE_VOLUMES_NODE_MODULES_DEV }}" >> .env
           elif [[ "${{ github.ref }}" == "refs/heads/qa" ]]; then
             echo "NODE_ENV=${{ secrets.NODE_ENV_QA }}" >> .env
             echo "NEXT_PORT=${{ secrets.NEXT_PORT_QA }}" >> .env
             echo "HOST_PORT=${{ secrets.HOST_PORT_QA }}" >> .env
             echo "NEXT_CONTAINER_NAME=${{ secrets.NEXT_CONTAINER_NAME_QA }}" >> .env
             echo "INSTALL_PLAYWRIGHT=${{ secrets.INSTALL_PLAYWRIGHT_QA }}" >> .env
+            echo "INSTALL_DEV_LIBRARIES=${{ secrets.INSTALL_DEV_LIBRARIES_QA }}" >> .env
+            echo "IMAGE_NAME=${{ secrets.IMAGE_NAME_QA }}" >> .env
+            echo "ENV_FILE_NAME=${{ secrets.ENV_FILE_NAME_QA }}" >> .env
+            echo "START_COMMAND=${{ secrets.START_COMMAND_QA }}" >> .env
+            echo "USE_VOLUMES=${{ secrets.USE_VOLUMES_QA }}" >> .env
+            echo "USE_VOLUMES_NODE_MODULES=${{ secrets.USE_VOLUMES_NODE_MODULES_QA }}" >> .env
+  
           elif [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
             echo "NODE_ENV=${{ secrets.NODE_ENV_PROD }}" >> .env
             echo "NEXT_PORT=${{ secrets.NEXT_PORT_PROD }}" >> .env
             echo "HOST_PORT=${{ secrets.HOST_PORT_PROD }}" >> .env
             echo "NEXT_CONTAINER_NAME=${{ secrets.NEXT_CONTAINER_NAME_PROD }}" >> .env
             echo "INSTALL_PLAYWRIGHT=${{ secrets.INSTALL_PLAYWRIGHT_PROD }}" >> .env
+            echo "INSTALL_DEV_LIBRARIES=${{ secrets.INSTALL_DEV_LIBRARIES_PROD }}" >> .env
+            echo "IMAGE_NAME=${{ secrets.IMAGE_NAME_PROD }}" >> .env
+            echo "ENV_FILE_NAME=${{ secrets.ENV_FILE_NAME_PROD }}" >> .env
+            echo "START_COMMAND=${{ secrets.START_COMMAND_PROD }}" >> .env
+            echo "USE_VOLUMES=${{ secrets.USE_VOLUMES_PROD }}" >> .env
+            echo "USE_VOLUMES_NODE_MODULES=${{ secrets.USE_VOLUMES_NODE_MODULES_PROD }}" >> .env
+  
           else
             echo "NODE_ENV=${{ secrets.NODE_ENV_FEATURE }}" >> .env
             echo "NEXT_PORT=${{ secrets.NEXT_PORT_FEATURE }}" >> .env
             echo "HOST_PORT=${{ secrets.HOST_PORT_FEATURE }}" >> .env
             echo "NEXT_CONTAINER_NAME=${{ secrets.NEXT_CONTAINER_NAME_FEATURE }}" >> .env
             echo "INSTALL_PLAYWRIGHT=${{ secrets.INSTALL_PLAYWRIGHT_FEATURE }}" >> .env
+            echo "INSTALL_DEV_LIBRARIES=${{ secrets.INSTALL_DEV_LIBRARIES_FEATURE }}" >> .env
+            echo "IMAGE_NAME=${{ secrets.IMAGE_NAME_FEATURE }}" >> .env
+            echo "ENV_FILE_NAME=${{ secrets.ENV_FILE_NAME_FEATURE }}" >> .env
+            echo "START_COMMAND=${{ secrets.START_COMMAND_FEATURE }}" >> .env
+            echo "USE_VOLUMES=${{ secrets.USE_VOLUMES_FEATURE }}" >> .env
+            echo "USE_VOLUMES_NODE_MODULES=${{ secrets.USE_VOLUMES_NODE_MODULES_FEATURE }}" >> .env
           fi
       - name: Set up Docker Compose and run container
         run: |
@@ -56,7 +82,6 @@ jobs:
           elif [[ "${{ github.ref }}" == "refs/heads/main" ]]; then  # If the branch is 'main'
             docker-compose --env-file .env -p jorge-portfolio-frontend-prod-server -f docker/docker-compose.yaml -f docker/prod/docker-compose-override-port.yaml up -d --build  # Use the prod Docker Compose file to start the container
           else  # If it's a feature branch or any other branch
-            echo "Feature Branch"  # Imprime un mensaje para confirmar
             docker-compose --env-file .env -p jorge-portfolio-frontend-feature-local -f docker/docker-compose.yaml -f docker/docker-compose-override-feature.yaml up -d --build  # Use the feature Docker Compose file to start the container
           fi
       - name: Install dependencies in Docker container
