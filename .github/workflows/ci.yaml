@@ -79,11 +79,11 @@ jobs:
         run: |
           echo "Branch: ${{ github.ref }}"  # Print the current GitHub reference (branch) to verify its value
           if [[ "${{ github.ref }}" == "refs/heads/dev" ]]; then  # If the branch is 'dev'
-            docker-compose --env-file env/feature/.env.dev.server -p jorge-portfolio-frontend-dev-server -f docker/docker-compose.yaml -f docker/docker-compose-override-port.yaml up -d --build  # Use the dev Docker Compose file to start the container
+            docker-compose --env-file env/dev/.env.dev.server -p jorge-portfolio-frontend-dev-server -f docker/docker-compose.yaml -f docker/docker-compose-override-port.yaml up -d --build  # Use the dev Docker Compose file to start the container
           elif [[ "${{ github.ref }}" == "refs/heads/qa" ]]; then  # If the branch is 'qa'
-            docker-compose --env-file env/feature/.env.qa.server -p jorge-portfolio-frontend-qa-server -f docker/docker-compose.yaml -f docker/qa/docker-compose-override-port.yaml up -d --build  # Use the qa Docker Compose file to start the container
+            docker-compose --env-file env/qa/.env.qa.server -p jorge-portfolio-frontend-qa-server -f docker/docker-compose.yaml -f docker/qa/docker-compose-override-port.yaml up -d --build  # Use the qa Docker Compose file to start the container
           elif [[ "${{ github.ref }}" == "refs/heads/main" ]]; then  # If the branch is 'main'
-            docker-compose --env-file env/feature/.env.prod.server -p jorge-portfolio-frontend-prod-server -f docker/docker-compose.yaml -f docker/prod/docker-compose-override-port.yaml up -d --build  # Use the prod Docker Compose file to start the container
+            docker-compose --env-file env/prod/.env.prod.server -p jorge-portfolio-frontend-prod-server -f docker/docker-compose.yaml -f docker/prod/docker-compose-override-port.yaml up -d --build  # Use the prod Docker Compose file to start the container
           else  # If it's a feature branch or any other branch
             docker-compose --env-file env/feature/.env.feature.local -p jorge-portfolio-frontend-feature-local -f docker/docker-compose.yaml -f docker/docker-compose-override-feature.yaml up -d --build  # Use the feature Docker Compose file to start the container
           fi
