@@ -5,16 +5,11 @@ on:
     workflows: ["CI Workflow"]
     types:
       - completed
-  push:
-    branches:
-      - dev
-      - qa
-      - main
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest  # O el runner que prefieras
-
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/qa' || github.ref == 'refs/heads/dev'
     steps:
       # Paso 1: Hacer SSH en el servidor
       - name: Determine server variables
