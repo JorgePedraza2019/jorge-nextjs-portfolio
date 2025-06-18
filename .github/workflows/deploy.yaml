@@ -1,4 +1,4 @@
-name: CD-Workflow
+name: Deploy-Workflow
 
 # Trigger the workflow on push events to the specified branches
 on:
