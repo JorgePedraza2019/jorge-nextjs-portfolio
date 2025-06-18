@@ -7,6 +7,7 @@ WORKDIR /usr/src/app
 # Declare the NODE_ENV, and INSTALL_PLAYWRIGHT argument with a default value
 ARG NODE_ENV
 ARG INSTALL_PLAYWRIGHT
+# ARG INSTALL_DEV_LIBRARIES
 
 # Copy package.json and package-lock.json
 COPY package*.json ./
