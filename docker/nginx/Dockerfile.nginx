@@ -1,10 +1,29 @@
 # Dockerfile for Nginx
 FROM nginx:latest
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> qa
 ARG ENV_TYPE
 
 # Copy the configuration file to the container based on the environment type
 COPY ./docker/nginx/nginx.${ENV_TYPE}.conf /etc/nginx/conf.d/default.conf
 
 # Copy the corresponding certificates to the container
+<<<<<<< HEAD
 COPY ./docker/certs/${ENV_TYPE} /etc/nginx/certs/${ENV_TYPE}
+=======
+COPY ./docker/certs/${ENV_TYPE} /etc/nginx/certs/${ENV_TYPE}
+=======
+ARG NGINX_CONF_DIR
+ARG NGINX_CERTS_DIR
+ARG ENV_TYPE
+
+# Copy the configuration file to the container based on the environment type
+COPY ${NGINX_CONF_DIR} /etc/nginx/conf.d/default.conf
+
+# Copy the corresponding certificates to the container
+COPY ${NGINX_CERTS_DIR} /etc/nginx/certs/${ENV_TYPE}
+>>>>>>> dev
+>>>>>>> qa

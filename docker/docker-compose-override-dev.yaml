@@ -1,0 +1,5 @@
+services:
+  frontend:
+    volumes:
+      - ${USE_VOLUMES}  # Mount the volumes using USE_VOLUMES from the .env file
+      - ${USE_VOLUMES_NODE_MODULES}  # Optionally, mount node_modules as a separate volume

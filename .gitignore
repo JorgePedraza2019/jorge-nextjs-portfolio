@@ -43,6 +43,7 @@ next-env.d.ts
 .last-run.json
 
 # Ignore SSL certificates and keys
+<<<<<<< HEAD
 docker/certs/
 
 # Ignore nginx local config files
@@ -51,3 +52,9 @@ docker/certs/
 # docker/nginx/nginx.dev.conf
 # docker/nginx/nginx.qa.conf
 # docker/nginx/nginx.prod.conf
+=======
+docker/nginx/local/certs/
+
+# Ignore nginx local config files
+docker/nginx/local/config/
+>>>>>>> qa
