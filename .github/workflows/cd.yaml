@@ -6,6 +6,117 @@ on:
       deploy_branch:
         required: true
         type: string
+    secrets:
+      SERVER_IP_DEV:
+        required: true
+      SERVER_USER_DEV:
+        required: true
+      SERVER_SSH_KEY_DEV:
+        required: true
+
+      SERVER_IP_QA:
+        required: true
+      SERVER_USER_QA:
+        required: true
+      SERVER_SSH_KEY_QA:
+        required: true
+
+      SERVER_IP_PROD:
+        required: true
+      SERVER_USER_PROD:
+        required: true
+      SERVER_SSH_KEY_PROD:
+        required: true
+
+      NODE_ENV_DEV:
+        required: true
+      INSTALL_PLAYWRIGHT_DEV:
+        required: true
+      INSTALL_DEV_LIBRARIES_DEV:
+        required: true
+      IMAGE_NAME_DEV:
+        required: true
+      NEXT_PORT_DEV:
+        required: true
+      HOST_PORT_DEV:
+        required: true
+      ENV_FILE_NAME_DEV:
+        required: true
+      START_COMMAND_DEV:
+        required: true
+      NEXT_CONTAINER_NAME_DEV:
+        required: true
+      ENV_TYPE_DEV:
+        required: true
+      NGINX_CONF_DIR_DEV:
+        required: true
+      NGINX_CERTS_DIR_DEV:
+        required: true
+      NGINX_IMAGE_NAME_DEV:
+        required: true
+      NGINX_PORT_DEV:
+        required: true
+
+      NODE_ENV_QA:
+        required: true
+      INSTALL_PLAYWRIGHT_QA:
+        required: true
+      INSTALL_DEV_LIBRARIES_QA:
+        required: true
+      IMAGE_NAME_QA:
+        required: true
+      NEXT_PORT_QA:
+        required: true
+      HOST_PORT_QA:
+        required: true
+      ENV_FILE_NAME_QA:
+        required: true
+      START_COMMAND_QA:
+        required: true
+      NEXT_CONTAINER_NAME_QA:
+        required: true
+      ENV_TYPE_QA:
+        required: true
+      NGINX_CONF_DIR_QA:
+        required: true
+      NGINX_CERTS_DIR_QA:
+        required: true
+      NGINX_IMAGE_NAME_QA:
+        required: true
+      NGINX_PORT_QA:
+        required: true
+
+      NODE_ENV_PROD:
+        required: true
+      INSTALL_PLAYWRIGHT_PROD:
+        required: true
+      INSTALL_DEV_LIBRARIES_PROD:
+        required: true
+      IMAGE_NAME_PROD:
+        required: true
+      NEXT_PORT_PROD:
+        required: true
+      HOST_PORT_PROD:
+        required: true
+      ENV_FILE_NAME_PROD:
+        required: true
+      START_COMMAND_PROD:
+        required: true
+      NEXT_CONTAINER_NAME_PROD:
+        required: true
+      ENV_TYPE_PROD:
+        required: true
+      NGINX_CONF_DIR_PROD:
+        required: true
+      NGINX_CERTS_DIR_PROD:
+        required: true
+      NGINX_IMAGE_NAME_PROD:
+        required: true
+      NGINX_PORT_PROD:
+        required: true
+
+      DOCKER_USERNAME:
+        required: true
 
 jobs:
   deploy:
