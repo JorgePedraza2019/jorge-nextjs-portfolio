@@ -29,6 +29,81 @@ on:
       USE_PORTS_FEATURE:
         required: true
 
+      NODE_ENV_DEV:
+        required: true
+      NEXT_PORT_DEV:
+        required: true
+      HOST_PORT_DEV:
+        required: true
+      NEXT_CONTAINER_NAME_DEV:
+        required: true
+      INSTALL_PLAYWRIGHT_DEV:
+        required: true
+      INSTALL_DEV_LIBRARIES_DEV:
+        required: true
+      IMAGE_NAME_DEV:
+        required: true
+      ENV_FILE_NAME_DEV:
+        required: true
+      START_COMMAND_DEV:
+        required: true
+      USE_VOLUMES_DEV:
+        required: true
+      USE_VOLUMES_NODE_MODULES_DEV:
+        required: true
+      USE_PORTS_DEV:
+        required: true
+
+      NODE_ENV_QA:
+        required: true
+      NEXT_PORT_QA:
+        required: true
+      HOST_PORT_QA:
+        required: true
+      NEXT_CONTAINER_NAME_QA:
+        required: true
+      INSTALL_PLAYWRIGHT_QA:
+        required: true
+      INSTALL_DEV_LIBRARIES_QA:
+        required: true
+      IMAGE_NAME_QA:
+        required: true
+      ENV_FILE_NAME_QA:
+        required: true
+      START_COMMAND_QA:
+        required: true
+      USE_VOLUMES_QA:
+        required: true
+      USE_VOLUMES_NODE_MODULES_QA:
+        required: true
+      USE_PORTS_QA:
+        required: true
+
+      NODE_ENV_PROD:
+        required: true
+      NEXT_PORT_PROD:
+        required: true
+      HOST_PORT_PROD:
+        required: true
+      NEXT_CONTAINER_NAME_PROD:
+        required: true
+      INSTALL_PLAYWRIGHT_PROD:
+        required: true
+      INSTALL_DEV_LIBRARIES_PROD:
+        required: true
+      IMAGE_NAME_PROD:
+        required: true
+      ENV_FILE_NAME_PROD:
+        required: true
+      START_COMMAND_PROD:
+        required: true
+      USE_VOLUMES_PROD:
+        required: true
+      USE_VOLUMES_NODE_MODULES_PROD:
+        required: true
+      USE_PORTS_PROD:
+        required: true
+
 jobs:
   build:
     runs-on: ubuntu-latest
