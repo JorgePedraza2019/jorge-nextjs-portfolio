@@ -143,7 +143,7 @@ jobs:
             exit 1
           fi
 
-      - name: SSH into server
+      - name: Pull latest code and create .env file in remote server
         uses: appleboy/ssh-action@v0.1.5
         with:
           host: ${{ env.SERVER_IP }}
@@ -152,77 +152,121 @@ jobs:
                   inputs.deploy_branch == 'qa' && secrets.SERVER_SSH_KEY_QA || 
                   inputs.deploy_branch == 'main' && secrets.SERVER_SSH_KEY_PROD }}
           port: 22
+          script: |
+            cd /var/www/jorge-nextjs-portfolio/
+            git pull origin $DEPLOY_BRANCH
 
-      - name: Pull latest code and create .env file
-        run: |
-          cd /var/www/jorge-nextjs-portfolio/
-          git pull origin $DEPLOY_BRANCH
+            if [[ "$DEPLOY_BRANCH" == "dev" ]]; then
+              ENV_FILE=".env.dev.server"
+              NODE_ENV="$NODE_ENV_DEV"
+              INSTALL_PLAYWRIGHT="$INSTALL_PLAYWRIGHT_DEV"
+              INSTALL_DEV_LIBRARIES="$INSTALL_DEV_LIBRARIES_DEV"
+              IMAGE_NAME="$IMAGE_NAME_DEV"
+              NEXT_PORT="$NEXT_PORT_DEV"
+              HOST_PORT="$HOST_PORT_DEV"
+              ENV_FILE_NAME="$ENV_FILE_NAME_DEV"
+              START_COMMAND="$START_COMMAND_DEV"
+              NEXT_CONTAINER_NAME="$NEXT_CONTAINER_NAME_DEV"
+              ENV_TYPE="$ENV_TYPE_DEV"
+              NGINX_CONF_DIR="$NGINX_CONF_DIR_DEV"
+              NGINX_CERTS_DIR="$NGINX_CERTS_DIR_DEV"
+              NGINX_IMAGE_NAME="$NGINX_IMAGE_NAME_DEV"
+              NGINX_PORT="$NGINX_PORT_DEV"
+            elif [[ "$DEPLOY_BRANCH" == "qa" ]]; then
+              ENV_FILE=".env.qa.server"
+              NODE_ENV="$NODE_ENV_QA"
+              INSTALL_PLAYWRIGHT="$INSTALL_PLAYWRIGHT_QA"
+              INSTALL_DEV_LIBRARIES="$INSTALL_DEV_LIBRARIES_QA"
+              IMAGE_NAME="$IMAGE_NAME_QA"
+              NEXT_PORT="$NEXT_PORT_QA"
+              HOST_PORT="$HOST_PORT_QA"
+              ENV_FILE_NAME="$ENV_FILE_NAME_QA"
+              START_COMMAND="$START_COMMAND_QA"
+              NEXT_CONTAINER_NAME="$NEXT_CONTAINER_NAME_QA"
+              ENV_TYPE="$ENV_TYPE_QA"
+              NGINX_CONF_DIR="$NGINX_CONF_DIR_QA"
+              NGINX_CERTS_DIR="$NGINX_CERTS_DIR_QA"
+              NGINX_IMAGE_NAME="$NGINX_IMAGE_NAME_QA"
+              NGINX_PORT="$NGINX_PORT_QA"
+            elif [[ "$DEPLOY_BRANCH" == "main" ]]; then
+              ENV_FILE=".env.prod.server"
+              NODE_ENV="$NODE_ENV_PROD"
+              INSTALL_PLAYWRIGHT="$INSTALL_PLAYWRIGHT_PROD"
+              INSTALL_DEV_LIBRARIES="$INSTALL_DEV_LIBRARIES_PROD"
+              IMAGE_NAME="$IMAGE_NAME_PROD"
+              NEXT_PORT="$NEXT_PORT_PROD"
+              HOST_PORT="$HOST_PORT_PROD"
+              ENV_FILE_NAME="$ENV_FILE_NAME_PROD"
+              START_COMMAND="$START_COMMAND_PROD"
+              NEXT_CONTAINER_NAME="$NEXT_CONTAINER_NAME_PROD"
+              ENV_TYPE="$ENV_TYPE_PROD"
+              NGINX_CONF_DIR="$NGINX_CONF_DIR_PROD"
+              NGINX_CERTS_DIR="$NGINX_CERTS_DIR_PROD"
+              NGINX_IMAGE_NAME="$NGINX_IMAGE_NAME_PROD"
+              NGINX_PORT="$NGINX_PORT_PROD"
+            fi
 
-          if [[ "$DEPLOY_BRANCH" == "dev" ]]; then
-            ENV_FILE=".env.dev.server"
-            NODE_ENV="${{ secrets.NODE_ENV_DEV }}"
-            INSTALL_PLAYWRIGHT="${{ secrets.INSTALL_PLAYWRIGHT_DEV }}"
-            INSTALL_DEV_LIBRARIES="${{ secrets.INSTALL_DEV_LIBRARIES_DEV }}"
-            IMAGE_NAME="${{ secrets.IMAGE_NAME_DEV }}"
-            NEXT_PORT="${{ secrets.NEXT_PORT_DEV }}"
-            HOST_PORT="${{ secrets.HOST_PORT_DEV }}"
-            ENV_FILE_NAME="${{ secrets.ENV_FILE_NAME_DEV }}"
-            START_COMMAND="${{ secrets.START_COMMAND_DEV }}"
-            NEXT_CONTAINER_NAME="${{ secrets.NEXT_CONTAINER_NAME_DEV }}"
-            ENV_TYPE="${{ secrets.ENV_TYPE_DEV }}"
-            NGINX_CONF_DIR="${{ secrets.NGINX_CONF_DIR_DEV }}"
-            NGINX_CERTS_DIR="${{ secrets.NGINX_CERTS_DIR_DEV }}"
-            NGINX_IMAGE_NAME="${{ secrets.NGINX_IMAGE_NAME_DEV }}"
-            NGINX_PORT="${{ secrets.NGINX_PORT_DEV }}"
-          elif [[ "$DEPLOY_BRANCH" == "qa" ]]; then
-            ENV_FILE=".env.qa.server"
-            NODE_ENV="${{ secrets.NODE_ENV_QA }}"
-            INSTALL_PLAYWRIGHT="${{ secrets.INSTALL_PLAYWRIGHT_QA }}"
-            INSTALL_DEV_LIBRARIES="${{ secrets.INSTALL_DEV_LIBRARIES_QA }}"
-            IMAGE_NAME="${{ secrets.IMAGE_NAME_QA }}"
-            NEXT_PORT="${{ secrets.NEXT_PORT_QA }}"
-            HOST_PORT="${{ secrets.HOST_PORT_QA }}"
-            ENV_FILE_NAME="${{ secrets.ENV_FILE_NAME_QA }}"
-            START_COMMAND="${{ secrets.START_COMMAND_QA }}"
-            NEXT_CONTAINER_NAME="${{ secrets.NEXT_CONTAINER_NAME_QA }}"
-            ENV_TYPE="${{ secrets.ENV_TYPE_QA }}"
-            NGINX_CONF_DIR="${{ secrets.NGINX_CONF_DIR_QA }}"
-            NGINX_CERTS_DIR="${{ secrets.NGINX_CERTS_DIR_QA }}"
-            NGINX_IMAGE_NAME="${{ secrets.NGINX_IMAGE_NAME_QA }}"
-            NGINX_PORT="${{ secrets.NGINX_PORT_QA }}"
-          elif [[ "$DEPLOY_BRANCH" == "main" ]]; then
-            ENV_FILE=".env.prod.server"
-            NODE_ENV="${{ secrets.NODE_ENV_PROD }}"
-            INSTALL_PLAYWRIGHT="${{ secrets.INSTALL_PLAYWRIGHT_PROD }}"
-            INSTALL_DEV_LIBRARIES="${{ secrets.INSTALL_DEV_LIBRARIES_PROD }}"
-            IMAGE_NAME="${{ secrets.IMAGE_NAME_PROD }}"
-            NEXT_PORT="${{ secrets.NEXT_PORT_PROD }}"
-            HOST_PORT="${{ secrets.HOST_PORT_PROD }}"
-            ENV_FILE_NAME="${{ secrets.ENV_FILE_NAME_PROD }}"
-            START_COMMAND="${{ secrets.START_COMMAND_PROD }}"
-            NEXT_CONTAINER_NAME="${{ secrets.NEXT_CONTAINER_NAME_PROD }}"
-            ENV_TYPE="${{ secrets.ENV_TYPE_PROD }}"
-            NGINX_CONF_DIR="${{ secrets.NGINX_CONF_DIR_PROD }}"
-            NGINX_CERTS_DIR="${{ secrets.NGINX_CERTS_DIR_PROD }}"
-            NGINX_IMAGE_NAME="${{ secrets.NGINX_IMAGE_NAME_PROD }}"
-            NGINX_PORT="${{ secrets.NGINX_PORT_PROD }}"
-          fi
+            mkdir -p env/$DEPLOY_BRANCH
+            echo "NODE_ENV=$NODE_ENV" > env/$DEPLOY_BRANCH/$ENV_FILE
+            echo "INSTALL_PLAYWRIGHT=$INSTALL_PLAYWRIGHT" >> env/$DEPLOY_BRANCH/$ENV_FILE
+            echo "INSTALL_DEV_LIBRARIES=$INSTALL_DEV_LIBRARIES" >> env/$DEPLOY_BRANCH/$ENV_FILE
+            echo "IMAGE_NAME=$IMAGE_NAME" >> env/$DEPLOY_BRANCH/$ENV_FILE
+            echo "NEXT_PORT=$NEXT_PORT" >> env/$DEPLOY_BRANCH/$ENV_FILE
+            echo "HOST_PORT=$HOST_PORT" >> env/$DEPLOY_BRANCH/$ENV_FILE
+            echo "ENV_FILE_NAME=$ENV_FILE_NAME" >> env/$DEPLOY_BRANCH/$ENV_FILE
+            echo "START_COMMAND=$START_COMMAND" >> env/$DEPLOY_BRANCH/$ENV_FILE
+            echo "NEXT_CONTAINER_NAME=$NEXT_CONTAINER_NAME" >> env/$DEPLOY_BRANCH/$ENV_FILE
+            echo "ENV_TYPE=$ENV_TYPE" >> env/$DEPLOY_BRANCH/$ENV_FILE
+            echo "NGINX_CONF_DIR=$NGINX_CONF_DIR" >> env/$DEPLOY_BRANCH/$ENV_FILE
+            echo "NGINX_CERTS_DIR=$NGINX_CERTS_DIR" >> env/$DEPLOY_BRANCH/$ENV_FILE
+            echo "NGINX_IMAGE_NAME=$NGINX_IMAGE_NAME" >> env/$DEPLOY_BRANCH/$ENV_FILE
+            echo "NGINX_PORT=$NGINX_PORT" >> env/$DEPLOY_BRANCH/$ENV_FILE
+        env:
+          DEPLOY_BRANCH: ${{ env.DEPLOY_BRANCH }}
+          NODE_ENV_DEV: ${{ secrets.NODE_ENV_DEV }}
+          INSTALL_PLAYWRIGHT_DEV: ${{ secrets.INSTALL_PLAYWRIGHT_DEV }}
+          INSTALL_DEV_LIBRARIES_DEV: ${{ secrets.INSTALL_DEV_LIBRARIES_DEV }}
+          IMAGE_NAME_DEV: ${{ secrets.IMAGE_NAME_DEV }}
+          NEXT_PORT_DEV: ${{ secrets.NEXT_PORT_DEV }}
+          HOST_PORT_DEV: ${{ secrets.HOST_PORT_DEV }}
+          ENV_FILE_NAME_DEV: ${{ secrets.ENV_FILE_NAME_DEV }}
+          START_COMMAND_DEV: ${{ secrets.START_COMMAND_DEV }}
+          NEXT_CONTAINER_NAME_DEV: ${{ secrets.NEXT_CONTAINER_NAME_DEV }}
+          ENV_TYPE_DEV: ${{ secrets.ENV_TYPE_DEV }}
+          NGINX_CONF_DIR_DEV: ${{ secrets.NGINX_CONF_DIR_DEV }}
+          NGINX_CERTS_DIR_DEV: ${{ secrets.NGINX_CERTS_DIR_DEV }}
+          NGINX_IMAGE_NAME_DEV: ${{ secrets.NGINX_IMAGE_NAME_DEV }}
+          NGINX_PORT_DEV: ${{ secrets.NGINX_PORT_DEV }}
 
-          mkdir -p env/$DEPLOY_BRANCH
-          echo "NODE_ENV=$NODE_ENV" > env/$DEPLOY_BRANCH/$ENV_FILE
-          echo "INSTALL_PLAYWRIGHT=$INSTALL_PLAYWRIGHT" >> env/$DEPLOY_BRANCH/$ENV_FILE
-          echo "INSTALL_DEV_LIBRARIES=$INSTALL_DEV_LIBRARIES" >> env/$DEPLOY_BRANCH/$ENV_FILE
-          echo "IMAGE_NAME=$IMAGE_NAME" >> env/$DEPLOY_BRANCH/$ENV_FILE
-          echo "NEXT_PORT=$NEXT_PORT" >> env/$DEPLOY_BRANCH/$ENV_FILE
-          echo "HOST_PORT=$HOST_PORT" >> env/$DEPLOY_BRANCH/$ENV_FILE
-          echo "ENV_FILE_NAME=$ENV_FILE_NAME" >> env/$DEPLOY_BRANCH/$ENV_FILE
-          echo "START_COMMAND=$START_COMMAND" >> env/$DEPLOY_BRANCH/$ENV_FILE
-          echo "NEXT_CONTAINER_NAME=$NEXT_CONTAINER_NAME" >> env/$DEPLOY_BRANCH/$ENV_FILE
-          echo "ENV_TYPE=$ENV_TYPE" >> env/$DEPLOY_BRANCH/$ENV_FILE
-          echo "NGINX_CONF_DIR=$NGINX_CONF_DIR" >> env/$DEPLOY_BRANCH/$ENV_FILE
-          echo "NGINX_CERTS_DIR=$NGINX_CERTS_DIR" >> env/$DEPLOY_BRANCH/$ENV_FILE
-          echo "NGINX_IMAGE_NAME=$NGINX_IMAGE_NAME" >> env/$DEPLOY_BRANCH/$ENV_FILE
-          echo "NGINX_PORT=$NGINX_PORT" >> env/$DEPLOY_BRANCH/$ENV_FILE
+          NODE_ENV_QA: ${{ secrets.NODE_ENV_QA }}
+          INSTALL_PLAYWRIGHT_QA: ${{ secrets.INSTALL_PLAYWRIGHT_QA }}
+          INSTALL_DEV_LIBRARIES_QA: ${{ secrets.INSTALL_DEV_LIBRARIES_QA }}
+          IMAGE_NAME_QA: ${{ secrets.IMAGE_NAME_QA }}
+          NEXT_PORT_QA: ${{ secrets.NEXT_PORT_QA }}
+          HOST_PORT_QA: ${{ secrets.HOST_PORT_QA }}
+          ENV_FILE_NAME_QA: ${{ secrets.ENV_FILE_NAME_QA }}
+          START_COMMAND_QA: ${{ secrets.START_COMMAND_QA }}
+          NEXT_CONTAINER_NAME_QA: ${{ secrets.NEXT_CONTAINER_NAME_QA }}
+          ENV_TYPE_QA: ${{ secrets.ENV_TYPE_QA }}
+          NGINX_CONF_DIR_QA: ${{ secrets.NGINX_CONF_DIR_QA }}
+          NGINX_CERTS_DIR_QA: ${{ secrets.NGINX_CERTS_DIR_QA }}
+          NGINX_IMAGE_NAME_QA: ${{ secrets.NGINX_IMAGE_NAME_QA }}
+          NGINX_PORT_QA: ${{ secrets.NGINX_PORT_QA }}
+
+          NODE_ENV_PROD: ${{ secrets.NODE_ENV_PROD }}
+          INSTALL_PLAYWRIGHT_PROD: ${{ secrets.INSTALL_PLAYWRIGHT_PROD }}
+          INSTALL_DEV_LIBRARIES_PROD: ${{ secrets.INSTALL_DEV_LIBRARIES_PROD }}
+          IMAGE_NAME_PROD: ${{ secrets.IMAGE_NAME_PROD }}
+          NEXT_PORT_PROD: ${{ secrets.NEXT_PORT_PROD }}
+          HOST_PORT_PROD: ${{ secrets.HOST_PORT_PROD }}
+          ENV_FILE_NAME_PROD: ${{ secrets.ENV_FILE_NAME_PROD }}
+          START_COMMAND_PROD: ${{ secrets.START_COMMAND_PROD }}
+          NEXT_CONTAINER_NAME_PROD: ${{ secrets.NEXT_CONTAINER_NAME_PROD }}
+          ENV_TYPE_PROD: ${{ secrets.ENV_TYPE_PROD }}
+          NGINX_CONF_DIR_PROD: ${{ secrets.NGINX_CONF_DIR_PROD }}
+          NGINX_CERTS_DIR_PROD: ${{ secrets.NGINX_CERTS_DIR_PROD }}
+          NGINX_IMAGE_NAME_PROD: ${{ secrets.NGINX_IMAGE_NAME_PROD }}
+          NGINX_PORT_PROD: ${{ secrets.NGINX_PORT_PROD }}
 
       - name: Build frontend image
         run: |
