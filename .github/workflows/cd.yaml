@@ -14,7 +14,8 @@ jobs:
       - name: Set branch and server variables
         id: vars
         run: |
-          BRANCH="${{ github.event.workflow_run.head_branch }}"
+          echo "Deploy branch input: $BRANCH"
+          BRANCH="${{ inputs.deploy_branch }}"
           echo "DEPLOY_BRANCH=$BRANCH" >> $GITHUB_ENV
 
           if [[ "$BRANCH" == "dev" ]]; then
