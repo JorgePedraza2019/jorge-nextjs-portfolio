@@ -132,29 +132,25 @@ jobs:
           if [[ "$BRANCH" == "dev" ]]; then
             echo "SERVER_IP=${{ secrets.SERVER_IP_DEV }}" >> $GITHUB_ENV
             echo "SERVER_USER=${{ secrets.SERVER_USER_DEV }}" >> $GITHUB_ENV
-            echo "${{ secrets.SERVER_SSH_KEY_DEV }}" > $HOME/.ssh/id_rsa
           elif [[ "$BRANCH" == "qa" ]]; then
             echo "SERVER_IP=${{ secrets.SERVER_IP_QA }}" >> $GITHUB_ENV
             echo "SERVER_USER=${{ secrets.SERVER_USER_QA }}" >> $GITHUB_ENV
-            echo "${{ secrets.SERVER_SSH_KEY_QA }}" > $HOME/.ssh/id_rsa
           elif [[ "$BRANCH" == "main" ]]; then
             echo "SERVER_IP=${{ secrets.SERVER_IP_PROD }}" >> $GITHUB_ENV
             echo "SERVER_USER=${{ secrets.SERVER_USER_PROD }}" >> $GITHUB_ENV
-            echo "${{ secrets.SERVER_SSH_KEY_PROD }}" > $HOME/.ssh/id_rsa
           else
             echo "Unsupported branch: $BRANCH"
             exit 1
           fi
-
-          chmod 600 $HOME/.ssh/id_rsa
-          echo "SERVER_SSH_KEY_PATH=$HOME/.ssh/id_rsa" >> $GITHUB_ENV
 
       - name: SSH into server
         uses: appleboy/ssh-action@v0.1.5
         with:
           host: ${{ env.SERVER_IP }}
           username: ${{ env.SERVER_USER }}
-          key: ${{ env.SERVER_SSH_KEY_PATH }}
+          key: ${{ inputs.deploy_branch == 'dev' && secrets.SERVER_SSH_KEY_DEV || 
+                  inputs.deploy_branch == 'qa' && secrets.SERVER_SSH_KEY_QA || 
+                  inputs.deploy_branch == 'main' && secrets.SERVER_SSH_KEY_PROD }}
           port: 22
 
       - name: Pull latest code and create .env file
