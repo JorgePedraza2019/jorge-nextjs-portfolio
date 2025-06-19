@@ -139,3 +139,9 @@ jobs:
           else
             docker-compose --env-file env/feature/.env.feature.local -f docker/docker-compose.yaml down
           fi
+  call-deploy:
+    needs: build
+    if: ${{ github.ref == 'refs/heads/dev' || github.ref == 'refs/heads/main' || github.ref == 'refs/heads/qa' }}
+    uses: ./.github/workflows/cd.yaml
+    with:
+      deploy_branch: ${{ github.ref_name }}
