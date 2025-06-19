@@ -12,7 +12,7 @@ jobs:
   call-ci:
     uses: ./.github/workflows/ci.yaml
     secrets:
-      si: ${{ secrets.NODE_ENV_FEATURE }}
+      NODE_ENV_FEATURE: ${{ secrets.NODE_ENV_FEATURE }}
       NEXT_PORT_FEATURE: ${{ secrets.NEXT_PORT_FEATURE }}
       HOST_PORT_FEATURE: ${{ secrets.HOST_PORT_FEATURE }}
       NEXT_CONTAINER_NAME_FEATURE: ${{ secrets.NEXT_CONTAINER_NAME_FEATURE }}
