@@ -125,7 +125,6 @@ jobs:
       - name: Set branch and server variables
         id: vars
         run: |
-          echo "Deploy branch input: $BRANCH"
           BRANCH="${{ inputs.deploy_branch }}"
           echo "DEPLOY_BRANCH=$BRANCH" >> $GITHUB_ENV
 
