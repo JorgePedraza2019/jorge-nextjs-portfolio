@@ -8,6 +8,7 @@ on:
       - qa # Trigger on pushes to the qa branch
       - main # Trigger on pushes to the main branch
       - feature/** # Trigger on pushes to any feature branch
+  workflow_call:   
 
 jobs:
   build:
