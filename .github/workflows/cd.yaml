@@ -171,6 +171,7 @@ jobs:
               ENV_TYPE="${{ secrets.ENV_TYPE_DEV }}"
               NGINX_CONF_DIR="${{ secrets.NGINX_CONF_DIR_DEV }}"
               NGINX_CERTS_DIR="${{ secrets.NGINX_CERTS_DIR_DEV }}"
+              NGINX_CONTAINER_NAME="${{ secrets.NGINX_CONTAINER_NAME_DEV }}"
               NGINX_IMAGE_NAME="${{ secrets.NGINX_IMAGE_NAME_DEV }}"
               NGINX_PORT="${{ secrets.NGINX_PORT_DEV }}"
             elif [[ "$DEPLOY_BRANCH" == "qa" ]]; then
@@ -187,6 +188,7 @@ jobs:
               ENV_TYPE="${{ secrets.ENV_TYPE_QA }}"
               NGINX_CONF_DIR="${{ secrets.NGINX_CONF_DIR_QA }}"
               NGINX_CERTS_DIR="${{ secrets.NGINX_CERTS_DIR_QA }}"
+              NGINX_CONTAINER_NAME="${{ secrets.NGINX_CONTAINER_NAME_QA }}"
               NGINX_IMAGE_NAME="${{ secrets.NGINX_IMAGE_NAME_QA }}"
               NGINX_PORT="${{ secrets.NGINX_PORT_QA }}"
             elif [[ "$DEPLOY_BRANCH" == "main" ]]; then
@@ -203,6 +205,7 @@ jobs:
               ENV_TYPE="${{ secrets.ENV_TYPE_PROD }}"
               NGINX_CONF_DIR="${{ secrets.NGINX_CONF_DIR_PROD }}"
               NGINX_CERTS_DIR="${{ secrets.NGINX_CERTS_DIR_PROD }}"
+              NGINX_CONTAINER_NAME="${{ secrets.NGINX_CONTAINER_NAME_PROD }}"
               NGINX_IMAGE_NAME="${{ secrets.NGINX_IMAGE_NAME_PROD }}"
               NGINX_PORT="${{ secrets.NGINX_PORT_PROD }}"
             fi
@@ -275,7 +278,8 @@ jobs:
             docker build --build-arg NODE_ENV=$NODE_ENV --build-arg INSTALL_PLAYWRIGHT=$INSTALL_PLAYWRIGHT --build-arg INSTALL_DEV_LIBRARIES=$INSTALL_DEV_LIBRARIES -t ${{ secrets.DOCKER_USERNAME }}/jorge-portfolio-frontend-app-prod-server-image:latest -f Dockerfile.nextjs .
             docker push ${{ secrets.DOCKER_USERNAME }}/jorge-portfolio-frontend-app-prod-server-image:latest
           elif [[ "$DEPLOY_BRANCH" == "dev" ]]; then
-            make dev-server-build-up
+            cd /var/www/jorge-nextjs-portfolio/
+            make ${DEPLOY_BRANCH}-server-build-up
           else
             docker build --build-arg NODE_ENV=$NODE_ENV --build-arg INSTALL_PLAYWRIGHT=$INSTALL_PLAYWRIGHT --build-arg INSTALL_DEV_LIBRARIES=$INSTALL_DEV_LIBRARIES -t jorge-portfolio-frontend-app-${DEPLOY_BRANCH}-server-image:latest -f Dockerfile.nextjs .
           fi
