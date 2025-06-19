@@ -11,6 +11,19 @@ on:
 jobs:
   call-ci:
     uses: ./.github/workflows/ci.yaml
+    secrets:
+      NODE_ENV_FEATURE: ${{ secrets.NODE_ENV_FEATURE }}
+      NEXT_PORT_FEATURE: ${{ secrets.NEXT_PORT_FEATURE }}
+      HOST_PORT_FEATURE: ${{ secrets.HOST_PORT_FEATURE }}
+      NEXT_CONTAINER_NAME_FEATURE: ${{ secrets.NEXT_CONTAINER_NAME_FEATURE }}
+      INSTALL_PLAYWRIGHT_FEATURE: ${{ secrets.INSTALL_PLAYWRIGHT_FEATURE }}
+      INSTALL_DEV_LIBRARIES_FEATURE: ${{ secrets.INSTALL_DEV_LIBRARIES_FEATURE }}
+      IMAGE_NAME_FEATURE: ${{ secrets.IMAGE_NAME_FEATURE }}
+      ENV_FILE_NAME_FEATURE: ${{ secrets.ENV_FILE_NAME_FEATURE }}
+      START_COMMAND_FEATURE: ${{ secrets.START_COMMAND_FEATURE }}
+      USE_VOLUMES_FEATURE: ${{ secrets.USE_VOLUMES_FEATURE }}
+      USE_VOLUMES_NODE_MODULES_FEATURE: ${{ secrets.USE_VOLUMES_NODE_MODULES_FEATURE }}
+      USE_PORTS_FEATURE: ${{ secrets.USE_PORTS_FEATURE }}
 
   call-cd:
     needs: call-ci

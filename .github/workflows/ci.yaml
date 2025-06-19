@@ -3,6 +3,31 @@ name: CI-Workflow
 # Trigger the workflow on push events to the specified branches
 on:
   workflow_call:
+    secrets:
+      NODE_ENV_FEATURE:
+        required: true
+      NEXT_PORT_FEATURE:
+        required: true
+      HOST_PORT_FEATURE:
+        required: true
+      NEXT_CONTAINER_NAME_FEATURE:
+        required: true
+      INSTALL_PLAYWRIGHT_FEATURE:
+        required: true
+      INSTALL_DEV_LIBRARIES_FEATURE:
+        required: true
+      IMAGE_NAME_FEATURE:
+        required: true
+      ENV_FILE_NAME_FEATURE:
+        required: true
+      START_COMMAND_FEATURE:
+        required: true
+      USE_VOLUMES_FEATURE:
+        required: true
+      USE_VOLUMES_NODE_MODULES_FEATURE:
+        required: true
+      USE_PORTS_FEATURE:
+        required: true
 
 jobs:
   build:
