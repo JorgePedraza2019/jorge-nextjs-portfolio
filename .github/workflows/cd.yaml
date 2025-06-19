@@ -127,6 +127,7 @@ jobs:
         run: |
           BRANCH="${{ inputs.deploy_branch }}"
           echo "DEPLOY_BRANCH=$BRANCH" >> $GITHUB_ENV
+          mkdir -p $HOME/.ssh
 
           if [[ "$BRANCH" == "dev" ]]; then
             echo "SERVER_IP=${{ secrets.SERVER_IP_DEV }}" >> $GITHUB_ENV
