@@ -153,6 +153,7 @@ jobs:
                   inputs.deploy_branch == 'main' && secrets.SERVER_SSH_KEY_PROD }}
           port: 22
           script: |
+            DEPLOY_BRANCH="${{ inputs.deploy_branch }}"
             cd /var/www/jorge-nextjs-portfolio/
             git pull origin $DEPLOY_BRANCH
 
