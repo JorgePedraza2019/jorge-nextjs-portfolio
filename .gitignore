@@ -44,6 +44,8 @@ next-env.d.ts
 
 # Ignore SSL certificates and keys
 docker/nginx/local/certs/
+docker/nginx/server/certs/
 
-# Ignore nginx local config files
+# Ignore nginx local/server config files
 docker/nginx/local/config/
+docker/nginx/server/config/
