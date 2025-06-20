@@ -223,6 +223,7 @@ jobs:
             echo "ENV_TYPE=$ENV_TYPE" >> env/$DEPLOY_BRANCH/$ENV_FILE
             echo "NGINX_CONF_DIR=$NGINX_CONF_DIR" >> env/$DEPLOY_BRANCH/$ENV_FILE
             echo "NGINX_CERTS_DIR=$NGINX_CERTS_DIR" >> env/$DEPLOY_BRANCH/$ENV_FILE
+            echo "NGINX_CONTAINER_NAME=$NGINX_CONTAINER_NAME" >> env/$DEPLOY_BRANCH/$ENV_FILE
             echo "NGINX_IMAGE_NAME=$NGINX_IMAGE_NAME" >> env/$DEPLOY_BRANCH/$ENV_FILE
             echo "NGINX_PORT=$NGINX_PORT" >> env/$DEPLOY_BRANCH/$ENV_FILE
         env:
@@ -272,27 +273,41 @@ jobs:
           NGINX_IMAGE_NAME_PROD: ${{ secrets.NGINX_IMAGE_NAME_PROD }}
           NGINX_PORT_PROD: ${{ secrets.NGINX_PORT_PROD }}
 
-      - name: Build frontend image
-        run: |
-          if [[ "$DEPLOY_BRANCH" == "main" ]]; then
-            docker build --build-arg NODE_ENV=$NODE_ENV --build-arg INSTALL_PLAYWRIGHT=$INSTALL_PLAYWRIGHT --build-arg INSTALL_DEV_LIBRARIES=$INSTALL_DEV_LIBRARIES -t ${{ secrets.DOCKER_USERNAME }}/jorge-portfolio-frontend-app-prod-server-image:latest -f Dockerfile.nextjs .
-            docker push ${{ secrets.DOCKER_USERNAME }}/jorge-portfolio-frontend-app-prod-server-image:latest
-          elif [[ "$DEPLOY_BRANCH" == "dev" ]]; then
-            cd /var/www/jorge-nextjs-portfolio/
+      - name: Run Makefile to lift containers on remote
+        uses: appleboy/ssh-action@v0.1.5
+        with:
+          host: ${{ env.SERVER_IP }}
+          username: ${{ env.SERVER_USER }}
+          key: ${{ inputs.deploy_branch == 'dev' && secrets.SERVER_SSH_KEY_DEV || 
+                  inputs.deploy_branch == 'qa' && secrets.SERVER_SSH_KEY_QA || 
+                  inputs.deploy_branch == 'main' && secrets.SERVER_SSH_KEY_PROD }}
+          port: 22
+          script: |
+            DEPLOY_BRANCH="${{ inputs.deploy_branch }}"
+            cd /var/www/jorge-nextjs-portfolio
             make ${DEPLOY_BRANCH}-server-build-up
-          else
-            docker build --build-arg NODE_ENV=$NODE_ENV --build-arg INSTALL_PLAYWRIGHT=$INSTALL_PLAYWRIGHT --build-arg INSTALL_DEV_LIBRARIES=$INSTALL_DEV_LIBRARIES -t jorge-portfolio-frontend-app-${DEPLOY_BRANCH}-server-image:latest -f Dockerfile.nextjs .
-          fi
+              
+      # - name: Build frontend image
+      #   run: |
+      #     if [[ "$DEPLOY_BRANCH" == "main" ]]; then
+      #       docker build --build-arg NODE_ENV=$NODE_ENV --build-arg INSTALL_PLAYWRIGHT=$INSTALL_PLAYWRIGHT --build-arg INSTALL_DEV_LIBRARIES=$INSTALL_DEV_LIBRARIES -t ${{ secrets.DOCKER_USERNAME }}/jorge-portfolio-frontend-app-prod-server-image:latest -f Dockerfile.nextjs .
+      #       docker push ${{ secrets.DOCKER_USERNAME }}/jorge-portfolio-frontend-app-prod-server-image:latest
+      #     elif [[ "$DEPLOY_BRANCH" == "dev" ]]; then
+      #       cd /var/www/jorge-nextjs-portfolio/
+      #       make ${DEPLOY_BRANCH}-server-build-up
+      #     else
+      #       docker build --build-arg NODE_ENV=$NODE_ENV --build-arg INSTALL_PLAYWRIGHT=$INSTALL_PLAYWRIGHT --build-arg INSTALL_DEV_LIBRARIES=$INSTALL_DEV_LIBRARIES -t jorge-portfolio-frontend-app-${DEPLOY_BRANCH}-server-image:latest -f Dockerfile.nextjs .
+      #     fi
 
-      - name: Build and push Nginx image
-        run: |
-          if [[ "$DEPLOY_BRANCH" == "main" ]]; then
-            docker build --build-arg NGINX_CONF_DIR=$NGINX_CONF_DIR --build-arg NGINX_CERTS_DIR=$NGINX_CERTS_DIR --build-arg ENV_TYPE=$ENV_TYPE -t ${{ secrets.DOCKER_USERNAME }}/jorge-portfolio-frontend-nginx-prod-server-image:latest -f docker/nginx/Dockerfile.nginx .
-            docker push ${{ secrets.DOCKER_USERNAME }}/jorge-portfolio-frontend-nginx-prod-server-image:latest
-          else
-            docker build --build-arg NGINX_CONF_DIR=$NGINX_CONF_DIR --build-arg NGINX_CERTS_DIR=$NGINX_CERTS_DIR --build-arg ENV_TYPE=$ENV_TYPE -t jorge-portfolio-frontend-nginx-${DEPLOY_BRANCH}-server-image:latest -f docker/nginx/Dockerfile.nginx .
-          fi
+      # - name: Build and push Nginx image
+      #   run: |
+      #     if [[ "$DEPLOY_BRANCH" == "main" ]]; then
+      #       docker build --build-arg NGINX_CONF_DIR=$NGINX_CONF_DIR --build-arg NGINX_CERTS_DIR=$NGINX_CERTS_DIR --build-arg ENV_TYPE=$ENV_TYPE -t ${{ secrets.DOCKER_USERNAME }}/jorge-portfolio-frontend-nginx-prod-server-image:latest -f docker/nginx/Dockerfile.nginx .
+      #       docker push ${{ secrets.DOCKER_USERNAME }}/jorge-portfolio-frontend-nginx-prod-server-image:latest
+      #     else
+      #       docker build --build-arg NGINX_CONF_DIR=$NGINX_CONF_DIR --build-arg NGINX_CERTS_DIR=$NGINX_CERTS_DIR --build-arg ENV_TYPE=$ENV_TYPE -t jorge-portfolio-frontend-nginx-${DEPLOY_BRANCH}-server-image:latest -f docker/nginx/Dockerfile.nginx .
+      #     fi
 
-      - name: Deploy containers using Docker Compose
-        run: |
-          docker-compose --env-file ./env/$DEPLOY_BRANCH/$ENV_FILE -p jorge-portfolio-frontend-${DEPLOY_BRANCH}-server -f docker/docker-compose.yaml -f docker/docker-compose-nginx.yaml up --build -d
+      # - name: Deploy containers using Docker Compose
+      #   run: |
+      #     docker-compose --env-file ./env/$DEPLOY_BRANCH/$ENV_FILE -p jorge-portfolio-frontend-${DEPLOY_BRANCH}-server -f docker/docker-compose.yaml -f docker/docker-compose-nginx.yaml up --build -d
