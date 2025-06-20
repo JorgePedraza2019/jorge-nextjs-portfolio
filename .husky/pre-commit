@@ -28,21 +28,21 @@ fi
 
 # Run ESLint on 'feature' and 'dev' branches
 if [ "$BRANCH_NAME" = "dev" ] || [[ "$BRANCH_NAME" =~ ^feature/ ]]; then
-  # docker-compose --env-file "$ENV_FILE" -p "$PROJECT_NAME" -f "$DOCKER_COMPOSE_FILE" exec -T frontend npm run lint
+  docker-compose --env-file "$ENV_FILE" -p "$PROJECT_NAME" -f "$DOCKER_COMPOSE_FILE" exec -T frontend npm run lint
 else
   echo "Skipping ESLint on branch $BRANCH_NAME"
 fi
 
 # Run Jest tests on the 'dev' branch
 if [ "$BRANCH_NAME" = "dev" ]; then
-  # docker-compose --env-file "$ENV_FILE" -p "$PROJECT_NAME" -f "$DOCKER_COMPOSE_FILE" exec -T frontend npm test
+  docker-compose --env-file "$ENV_FILE" -p "$PROJECT_NAME" -f "$DOCKER_COMPOSE_FILE" exec -T frontend npm test
 else
   echo "Skipping Jest tests on branch $BRANCH_NAME"
 fi
 
 # Run Playwright tests on the 'qa' branch
 if [ "$BRANCH_NAME" = "qa" ]; then
-  # docker-compose --env-file "$ENV_FILE" -p "$PROJECT_NAME" -f "$DOCKER_COMPOSE_FILE" exec -T frontend npx playwright test
+  docker-compose --env-file "$ENV_FILE" -p "$PROJECT_NAME" -f "$DOCKER_COMPOSE_FILE" exec -T frontend npx playwright test
 else
   echo "Skipping Playwright tests on branch $BRANCH_NAME"
 fi
