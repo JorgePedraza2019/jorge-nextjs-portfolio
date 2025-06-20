@@ -1,4 +1,0 @@
-services:
-  frontend:
-    ports:
-      - "${HOST_PORT}:${NEXT_PORT}"  # Map external port (host) to internal port (Next.js)
