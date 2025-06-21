@@ -23,42 +23,42 @@ feature-local-down:
 	docker-compose --env-file ${ENV_FEATURE_LOCAL} -p $(PROJECT_NAME)-feature-local -f docker/docker-compose.yaml down -v
 
 dev-local-build-up:
-	docker-compose --env-file ${ENV_DEV_LOCAL} -p $(PROJECT_NAME)-dev-local -f docker/docker-compose.yaml -f docker/docker-compose-override-dev.yaml -f docker/docker-compose-nginx.yaml up --build
+	docker-compose --env-file ${ENV_DEV_LOCAL} -p $(PROJECT_NAME)-dev-local -f docker/docker-compose.yaml -f docker/docker-compose-override-dev.yaml -f docker/docker-compose-nginx-local.yaml up --build
 dev-local-up:
-	docker-compose --env-file ${ENV_DEV_LOCAL} -p $(PROJECT_NAME)-dev-local -f docker/docker-compose.yaml -f docker/docker-compose-override-dev.yaml -f docker/docker-compose-nginx.yaml up
+	docker-compose --env-file ${ENV_DEV_LOCAL} -p $(PROJECT_NAME)-dev-local -f docker/docker-compose.yaml -f docker/docker-compose-override-dev.yaml -f docker/docker-compose-nginx-local.yaml up
 dev-local-down:
-	docker-compose --env-file ${ENV_DEV_LOCAL} -p $(PROJECT_NAME)-dev-local -f docker/docker-compose.yaml -f docker/docker-compose-nginx.yaml down -v
+	docker-compose --env-file ${ENV_DEV_LOCAL} -p $(PROJECT_NAME)-dev-local -f docker/docker-compose.yaml -f docker/docker-compose-nginx-local.yaml down -v
 
 dev-server-build-up:
-	docker-compose --env-file ${ENV_DEV_SERVER} -p $(PROJECT_NAME)-dev-server -f docker/docker-compose.yaml -f docker/docker-compose-nginx-server.yaml up --build
+	docker-compose --env-file ${ENV_DEV_SERVER} -p $(PROJECT_NAME)-dev-server -f docker/docker-compose.yaml -f docker/docker-compose-nginx-server.yaml up --build -d
 dev-server-up:
 	docker-compose --env-file ${ENV_DEV_SERVER} -p $(PROJECT_NAME)-dev-server -f docker/docker-compose.yaml -f docker/docker-compose-nginx-server.yaml up
 dev-server-down:
 	docker-compose --env-file ${ENV_DEV_SERVER} -p $(PROJECT_NAME)-dev-server -f docker/docker-compose.yaml -f docker/docker-compose-nginx-server.yaml down -v
 
 qa-local-build-up:
-	docker-compose --env-file ${ENV_QA_LOCAL} -p $(PROJECT_NAME)-qa-local -f docker/docker-compose.yaml -f docker/docker-compose-nginx.yaml up --build
+	docker-compose --env-file ${ENV_QA_LOCAL} -p $(PROJECT_NAME)-qa-local -f docker/docker-compose.yaml -f docker/docker-compose-nginx-local.yaml up --build
 qa-local-up:
-	docker-compose --env-file ${ENV_QA_LOCAL} -p $(PROJECT_NAME)-qa-local -f docker/docker-compose.yaml -f docker/docker-compose-nginx.yaml up
+	docker-compose --env-file ${ENV_QA_LOCAL} -p $(PROJECT_NAME)-qa-local -f docker/docker-compose.yaml -f docker/docker-compose-nginx-local.yaml up
 qa-local-down:
-	docker-compose --env-file ${ENV_QA_LOCAL} -p $(PROJECT_NAME)-qa-local -f docker/docker-compose.yaml -f docker/docker-compose-nginx.yaml down -v
+	docker-compose --env-file ${ENV_QA_LOCAL} -p $(PROJECT_NAME)-qa-local -f docker/docker-compose.yaml -f docker/docker-compose-nginx-local.yaml down -v
 
 qa-server-build-up:
-	docker-compose --env-file ${ENV_QA_SERVER} -p $(PROJECT_NAME)-qa-server -f docker/docker-compose.yaml -f docker/docker-compose-nginx-server.yaml up --build
+	docker-compose --env-file ${ENV_QA_SERVER} -p $(PROJECT_NAME)-qa-server -f docker/docker-compose.yaml -f docker/docker-compose-nginx-server.yaml up --build -d
 qa-server-up:
 	docker-compose --env-file ${ENV_QA_SERVER} -p $(PROJECT_NAME)-qa-server -f docker/docker-compose.yaml -f docker/docker-compose-nginx-server.yaml up
 qa-server-down:
 	docker-compose --env-file ${ENV_QA_SERVER} -p $(PROJECT_NAME)-qa-server -f docker/docker-compose.yaml -f docker/docker-compose-nginx-server.yaml down -v
 
 prod-local-build-up:
-	docker-compose --env-file ${ENV_PROD_LOCAL} -p $(PROJECT_NAME)-prod-local -f docker/docker-compose.yaml -f docker/docker-compose-nginx.yaml up --build
+	docker-compose --env-file ${ENV_PROD_LOCAL} -p $(PROJECT_NAME)-prod-local -f docker/docker-compose.yaml -f docker/docker-compose-nginx-local.yaml up --build
 prod-local-up:
-	docker-compose --env-file ${ENV_PROD_LOCAL} -p $(PROJECT_NAME)-prod-local -f docker/docker-compose.yaml -f docker/docker-compose-nginx.yaml up
+	docker-compose --env-file ${ENV_PROD_LOCAL} -p $(PROJECT_NAME)-prod-local -f docker/docker-compose.yaml -f docker/docker-compose-nginx-local.yaml up
 prod-local-down:
-	docker-compose --env-file ${ENV_PROD_LOCAL} -p $(PROJECT_NAME)-prod-local -f docker/docker-compose.yaml -f docker/docker-compose-nginx.yaml down -v
+	docker-compose --env-file ${ENV_PROD_LOCAL} -p $(PROJECT_NAME)-prod-local -f docker/docker-compose.yaml -f docker/docker-compose-nginx-local.yaml down -v
 
 prod-server-build-up:
-	docker-compose --env-file ${ENV_PROD_SERVER} -p $(PROJECT_NAME)-prod-server -f docker/docker-compose.yaml -f docker/docker-compose-nginx-server.yaml up --build
+	docker-compose --env-file ${ENV_PROD_SERVER} -p $(PROJECT_NAME)-prod-server -f docker/docker-compose.yaml -f docker/docker-compose-nginx-server.yaml up --build -d
 prod-server-up:
 	docker-compose --env-file ${ENV_PROD_SERVER} -p $(PROJECT_NAME)-prod-server -f docker/docker-compose.yaml -f docker/docker-compose-nginx-server.yaml up
 prod-server-down:
