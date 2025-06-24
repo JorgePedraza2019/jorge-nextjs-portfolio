@@ -1,19 +1,10 @@
 #!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"  # Load Husky environment variables
 
-# ---------------------------------------------------
-# Load Husky environment (required for Git hooks)
-# ---------------------------------------------------
-. "$(dirname -- "$0")/_/husky.sh"
-
-# ---------------------------------------------------
-# Determine the current Git branch name
-# ---------------------------------------------------
+# Get the current branch name
 BRANCH_NAME="$(git rev-parse --abbrev-ref HEAD)"
 
-# ---------------------------------------------------
-# Set environment variables and compose file
-# based on the current Git branch
-# ---------------------------------------------------
+# Set environment file and Docker Compose file based on the branch
 if [ "$BRANCH_NAME" = "dev" ]; then
   ENV_FILE="./env/dev/.env.dev.local"
   DOCKER_COMPOSE_FILE="docker/docker-compose.dev.yaml"
@@ -31,36 +22,27 @@ elif [[ "$BRANCH_NAME" =~ ^feature/ ]]; then
   DOCKER_COMPOSE_FILE="docker/feature/docker-compose.feature.yaml"
   PROJECT_NAME="jorge-portfolio-frontend-feature-local"
 else
-  echo "Skipping hook: unsupported branch '$BRANCH_NAME'"
+  echo "Skipping on branch $BRANCH_NAME"  # Skip if branch is not recognized
   exit 0
 fi
 
-# ---------------------------------------------------
-# Run ESLint on 'dev' and 'feature/*' branches
-# ---------------------------------------------------
+# Run ESLint on 'feature' and 'dev' branches
 if [ "$BRANCH_NAME" = "dev" ] || [[ "$BRANCH_NAME" =~ ^feature/ ]]; then
-  echo "Running ESLint on branch '$BRANCH_NAME'..."
   docker-compose --env-file "$ENV_FILE" -p "$PROJECT_NAME" -f "$DOCKER_COMPOSE_FILE" exec -T frontend npm run lint
 else
-  echo "Skipping ESLint on branch '$BRANCH_NAME'"
+  echo "Skipping ESLint on branch $BRANCH_NAME"
 fi
 
-# ---------------------------------------------------
-# Run Jest unit tests on 'dev' branch
-# ---------------------------------------------------
+# Run Jest tests on the 'dev' branch
 if [ "$BRANCH_NAME" = "dev" ]; then
-  echo "Running Jest tests on branch '$BRANCH_NAME'..."
   docker-compose --env-file "$ENV_FILE" -p "$PROJECT_NAME" -f "$DOCKER_COMPOSE_FILE" exec -T frontend npm test
 else
-  echo "Skipping Jest tests on branch '$BRANCH_NAME'"
+  echo "Skipping Jest tests on branch $BRANCH_NAME"
 fi
 
-# ---------------------------------------------------
-# Run Playwright E2E tests on 'qa' branch
-# ---------------------------------------------------
+# Run Playwright tests on the 'qa' branch
 if [ "$BRANCH_NAME" = "qa" ]; then
-  echo "Running Playwright tests on branch '$BRANCH_NAME'..."
   docker-compose --env-file "$ENV_FILE" -p "$PROJECT_NAME" -f "$DOCKER_COMPOSE_FILE" exec -T frontend npx playwright test
 else
-  echo "Skipping Playwright tests on branch '$BRANCH_NAME'"
+  echo "Skipping Playwright tests on branch $BRANCH_NAME"
 fi

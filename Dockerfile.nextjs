@@ -12,6 +12,9 @@ ARG INSTALL_PLAYWRIGHT
 # Copy package.json and package-lock.json
 COPY package*.json ./
 
+RUN echo "INSTALL_PLAYWRIGHT is: $INSTALL_PLAYWRIGHT"
+RUN echo "INSTALL_DEV_LIBRARIES is: $INSTALL_DEV_LIBRARIES"
+
 # Install dependencies
 RUN if [ "${INSTALL_DEV_LIBRARIES}" = "true" ]; then \
       npm install --include=dev; \
