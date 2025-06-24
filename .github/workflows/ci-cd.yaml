@@ -1,17 +1,20 @@
 name: CI-CD Workflow
 
+# Trigger workflow on push events to specified branches
 on:
   push:
     branches:
-      - dev # Trigger on pushes to the dev branch
-      - qa # Trigger on pushes to the qa branch
-      - main # Trigger on pushes to the main branch
-      - feature/** # Trigger on pushes to any feature branch
+      - dev           # Run workflow on pushes to the 'dev' branch
+      - qa            # Run workflow on pushes to the 'qa' branch
+      - main          # Run workflow on pushes to the 'main' branch (production)
+      - feature/**    # Run workflow on pushes to any 'feature/*' branch
 
 jobs:
+  # Job for running the Continuous Integration pipeline
   call-ci:
-    uses: ./.github/workflows/ci.yaml
+    uses: ./.github/workflows/ci.yaml   # Reuse CI workflow defined in a separate file
     secrets:
+      # Environment variables and secrets for feature branches
       NODE_ENV_FEATURE: ${{ secrets.NODE_ENV_FEATURE }}
       NEXT_PORT_FEATURE: ${{ secrets.NEXT_PORT_FEATURE }}
       HOST_PORT_FEATURE: ${{ secrets.HOST_PORT_FEATURE }}
@@ -25,6 +28,7 @@ jobs:
       USE_VOLUMES_NODE_MODULES_FEATURE: ${{ secrets.USE_VOLUMES_NODE_MODULES_FEATURE }}
       USE_PORTS_FEATURE: ${{ secrets.USE_PORTS_FEATURE }}
 
+      # Environment variables and secrets for development environment
       NODE_ENV_DEV: ${{ secrets.NODE_ENV_DEV }}
       NEXT_PORT_DEV: ${{ secrets.NEXT_PORT_DEV }}
       HOST_PORT_DEV: ${{ secrets.HOST_PORT_DEV }}
@@ -38,6 +42,7 @@ jobs:
       USE_VOLUMES_NODE_MODULES_DEV: ${{ secrets.USE_VOLUMES_NODE_MODULES_DEV }}
       USE_PORTS_DEV: ${{ secrets.USE_PORTS_DEV }}
 
+      # Environment variables and secrets for QA environment
       NODE_ENV_QA: ${{ secrets.NODE_ENV_QA }}
       NEXT_PORT_QA: ${{ secrets.NEXT_PORT_QA }}
       HOST_PORT_QA: ${{ secrets.HOST_PORT_QA }}
@@ -51,6 +56,7 @@ jobs:
       USE_VOLUMES_NODE_MODULES_QA: ${{ secrets.USE_VOLUMES_NODE_MODULES_QA }}
       USE_PORTS_QA: ${{ secrets.USE_PORTS_QA }}
 
+      # Environment variables and secrets for production environment
       NODE_ENV_PROD: ${{ secrets.NODE_ENV_PROD }}
       NEXT_PORT_PROD: ${{ secrets.NEXT_PORT_PROD }}
       HOST_PORT_PROD: ${{ secrets.HOST_PORT_PROD }}
@@ -64,25 +70,30 @@ jobs:
       USE_VOLUMES_NODE_MODULES_PROD: ${{ secrets.USE_VOLUMES_NODE_MODULES_PROD }}
       USE_PORTS_PROD: ${{ secrets.USE_PORTS_PROD }}
 
+  # Job for running the Continuous Deployment pipeline
   call-cd:
-    needs: call-ci
-    if: ${{ github.ref == 'refs/heads/dev' || github.ref == 'refs/heads/qa' || github.ref == 'refs/heads/main' }}
-    uses: ./.github/workflows/cd.yaml
+    needs: call-ci   # This job depends on the successful completion of 'call-ci'
+    if: ${{ github.ref == 'refs/heads/dev' || github.ref == 'refs/heads/qa' || github.ref == 'refs/heads/main' }}  # Run only on dev, qa, or main branches
+    uses: ./.github/workflows/cd.yaml   # Reuse CD workflow defined in a separate file
     with:
-      deploy_branch: ${{ github.ref_name }}
+      deploy_branch: ${{ github.ref_name }}  # Pass the branch name to the CD workflow
     secrets:
+      # SSH access credentials for the Dev server
       SERVER_IP_DEV: ${{ secrets.SERVER_IP_DEV }}
       SERVER_USER_DEV: ${{ secrets.SERVER_USER_DEV }}
       SERVER_SSH_KEY_DEV: ${{ secrets.SERVER_SSH_KEY_DEV }}
 
+      # SSH access credentials for the QA server
       SERVER_IP_QA: ${{ secrets.SERVER_IP_QA }}
       SERVER_USER_QA: ${{ secrets.SERVER_USER_QA }}
       SERVER_SSH_KEY_QA: ${{ secrets.SERVER_SSH_KEY_QA }}
 
+      # SSH access credentials for the Production server
       SERVER_IP_PROD: ${{ secrets.SERVER_IP_PROD }}
       SERVER_USER_PROD: ${{ secrets.SERVER_USER_PROD }}
       SERVER_SSH_KEY_PROD: ${{ secrets.SERVER_SSH_KEY_PROD }}
 
+      # Deployment environment variables for Dev
       NODE_ENV_DEV: ${{ secrets.NODE_ENV_DEV }}
       INSTALL_PLAYWRIGHT_DEV: ${{ secrets.INSTALL_PLAYWRIGHT_DEV }}
       INSTALL_DEV_LIBRARIES_DEV: ${{ secrets.INSTALL_DEV_LIBRARIES_DEV }}
@@ -99,6 +110,7 @@ jobs:
       NGINX_IMAGE_NAME_DEV: ${{ secrets.NGINX_IMAGE_NAME_DEV }}
       NGINX_PORT_DEV: ${{ secrets.NGINX_PORT_DEV }}
 
+      # Deployment environment variables for QA
       NODE_ENV_QA: ${{ secrets.NODE_ENV_QA }}
       INSTALL_PLAYWRIGHT_QA: ${{ secrets.INSTALL_PLAYWRIGHT_QA }}
       INSTALL_DEV_LIBRARIES_QA: ${{ secrets.INSTALL_DEV_LIBRARIES_QA }}
@@ -115,6 +127,7 @@ jobs:
       NGINX_IMAGE_NAME_QA: ${{ secrets.NGINX_IMAGE_NAME_QA }}
       NGINX_PORT_QA: ${{ secrets.NGINX_PORT_QA }}
 
+      # Deployment environment variables for Production
       NODE_ENV_PROD: ${{ secrets.NODE_ENV_PROD }}
       INSTALL_PLAYWRIGHT_PROD: ${{ secrets.INSTALL_PLAYWRIGHT_PROD }}
       INSTALL_DEV_LIBRARIES_PROD: ${{ secrets.INSTALL_DEV_LIBRARIES_PROD }}
@@ -131,4 +144,5 @@ jobs:
       NGINX_IMAGE_NAME_PROD: ${{ secrets.NGINX_IMAGE_NAME_PROD }}
       NGINX_PORT_PROD: ${{ secrets.NGINX_PORT_PROD }}
 
+      # Docker Hub credentials for pushing/pulling container images
       DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}

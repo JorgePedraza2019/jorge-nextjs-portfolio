@@ -1,17 +1,23 @@
 services:
-  frontend:  # Define the 'app' service for the Next.js application
-    container_name: ${NEXT_CONTAINER_NAME}  # Set the container name using the environment variable NEXT_CONTAINER_NAME
-    build:  # Build the Docker image using the specified Dockerfile
-      context: ..  # Set the build context to the parent directory to access the Dockerfile in the root directory
-      dockerfile: ./Dockerfile.nextjs  # Specify the Dockerfile to use for building the image
+  frontend:  # Define the service for the Next.js frontend application
+    container_name: ${NEXT_CONTAINER_NAME}  # Assign a custom container name from the NEXT_CONTAINER_NAME environment variable
+
+    build:  # Configure how the Docker image should be built
+      context: ..  # Use the parent directory as the build context to include the entire project source
+      dockerfile: ./Dockerfile.nextjs  # Specify the Dockerfile to build the Next.js application
+
       args:
-        NODE_ENV: ${NODE_ENV}  # Pass the value of NODE_ENV as a build argument to the Dockerfile
-        INSTALL_PLAYWRIGHT: ${INSTALL_PLAYWRIGHT}  # Pass the value of INSTALL_PLAYWRIGHT as a build argument to the Dockerfile
-        INSTALL_DEV_LIBRARIES: ${INSTALL_DEV_LIBRARIES}
-    image: ${IMAGE_NAME}
+        NODE_ENV: ${NODE_ENV}  # Provide the runtime environment (e.g., development or production) as a build argument
+        INSTALL_PLAYWRIGHT: ${INSTALL_PLAYWRIGHT}  # Specify whether to install Playwright and its dependencies
+        INSTALL_DEV_LIBRARIES: ${INSTALL_DEV_LIBRARIES}  # Specify whether to install development libraries
+
+    image: ${IMAGE_NAME}  # Tag and name of the Docker image to build or use
+
     environment:
-      - NODE_ENV=${NODE_ENV}  # Add NODE_ENV as an environment variable
-      - PORT=${NEXT_PORT}  # Port used by Next.js inside the container
+      - NODE_ENV=${NODE_ENV}  # Set the environment variable inside the container (used by Next.js)
+      - PORT=${NEXT_PORT}  # Set the port Next.js will listen on inside the container
+
     env_file:
-      - ../env/${ENV_FILE_NAME}  # Here the .env file is loaded into the container locally
-    command: ${START_COMMAND}  # Command to start the application
+      - ../env/${ENV_FILE_NAME}  # Load additional environment variables from the specified .env file
+
+    command: ${START_COMMAND}  # Command to run the application (e.g., npm run dev or npm start)
