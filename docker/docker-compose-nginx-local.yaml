@@ -1,20 +1,15 @@
 services:
-  nginx:  # Defines the NGINX reverse proxy service for handling HTTPS traffic in a local environment
-
-    container_name: ${NGINX_CONTAINER_NAME}  # Sets the container name using the value from the .env file (e.g., jorge-portfolio-frontend-nginx-dev-local-container)
-
+  nginx:  # Defines the NGINX reverse proxy service for handling HTTPS requests
+    container_name: ${NGINX_CONTAINER_NAME}  # Sets the container name from environment variable (e.g., jorge-portfolio-frontend-nginx-dev-server-container)
     build:
-      context: ../  # Sets the build context to the parent directory to ensure access to the NGINX Dockerfile and all required resources
-      dockerfile: docker/nginx/Dockerfile.nginx  # Specifies the custom Dockerfile to build the NGINX image with environment-specific configuration and certificates
+      context: ../  # Set the build context to the nginx directory
+      dockerfile: docker/nginx/Dockerfile.nginx  # Specify the Dockerfile to use for building Nginx
       args:
-        ENV_TYPE: ${ENV_TYPE}  # Passes the current environment type (dev, qa, prod) as a build argument
-        NGINX_CONF_DIR: ${NGINX_CONF_DIR}  # Provides the path to the local NGINX config file to copy into the image
-        NGINX_CERTS_DIR: ${NGINX_CERTS_DIR}  # Provides the path to the self-signed SSL certificates to copy into the image
-
-    image: ${NGINX_IMAGE_NAME}  # Tags the built image with the specified name from the .env file
-
+        ENV_TYPE: ${ENV_TYPE}  # Pass the ENV_TYPE argument to specify the environment type (e.g., dev, qa, prod)
+        NGINX_CONF_DIR: ${NGINX_CONF_DIR}  # Pass the NGINX_CONF argument to the build process
+        NGINX_CERTS_DIR: ${NGINX_CERTS_DIR}  # Pass the CERTS_DIR argument to the build process
+    image: ${NGINX_IMAGE_NAME}
     ports:
-      - "${NGINX_PORT}:${NGINX_PORT}"  # Maps HTTPS port from the host to the container (typically 443)
-
+      - "${NGINX_PORT}:${NGINX_PORT}"  # Map port 443 on the host to port 443 inside the container
     depends_on:
-      - frontend  # Ensures that the frontend (Next.js application) is started before NGINX
+      - frontend  # Ensure that Nginx starts after the Next.js app

@@ -1,9 +1,7 @@
 services:
   frontend:  # Define the service for the Next.js frontend application
-
     ports:
-      - ${USE_PORTS:-}  # Maps host:container ports if USE_PORTS is defined; ignored if empty
-
+      - ${USE_PORTS:-}  # If USE_PORTS is empty, this will resolve to an empty value and be ignored
     volumes:
-      - ${USE_VOLUMES}  # Mounts the project directory into the container (usually the source code)
-      - ${USE_VOLUMES_NODE_MODULES}  # Mounts node_modules as a persistent volume to avoid container reinstallations
+      - ${USE_VOLUMES}  # Mount the volumes using USE_VOLUMES from the .env file
+      - ${USE_VOLUMES_NODE_MODULES}  # Optionally, mount node_modules as a separate volume
