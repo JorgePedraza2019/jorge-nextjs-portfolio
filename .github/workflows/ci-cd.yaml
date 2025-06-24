@@ -95,6 +95,7 @@ jobs:
       ENV_TYPE_DEV: ${{ secrets.ENV_TYPE_DEV }}
       NGINX_CONF_DIR_DEV: ${{ secrets.NGINX_CONF_DIR_DEV }}
       NGINX_CERTS_DIR_DEV: ${{ secrets.NGINX_CERTS_DIR_DEV }}
+      NGINX_CONTAINER_NAME_DEV: ${{ secrets.NGINX_CONTAINER_NAME_DEV }}
       NGINX_IMAGE_NAME_DEV: ${{ secrets.NGINX_IMAGE_NAME_DEV }}
       NGINX_PORT_DEV: ${{ secrets.NGINX_PORT_DEV }}
 
@@ -110,6 +111,7 @@ jobs:
       ENV_TYPE_QA: ${{ secrets.ENV_TYPE_QA }}
       NGINX_CONF_DIR_QA: ${{ secrets.NGINX_CONF_DIR_QA }}
       NGINX_CERTS_DIR_QA: ${{ secrets.NGINX_CERTS_DIR_QA }}
+      NGINX_CONTAINER_NAME_QA: ${{ secrets.NGINX_CONTAINER_NAME_QA }}
       NGINX_IMAGE_NAME_QA: ${{ secrets.NGINX_IMAGE_NAME_QA }}
       NGINX_PORT_QA: ${{ secrets.NGINX_PORT_QA }}
 
@@ -125,6 +127,7 @@ jobs:
       ENV_TYPE_PROD: ${{ secrets.ENV_TYPE_PROD }}
       NGINX_CONF_DIR_PROD: ${{ secrets.NGINX_CONF_DIR_PROD }}
       NGINX_CERTS_DIR_PROD: ${{ secrets.NGINX_CERTS_DIR_PROD }}
+      NGINX_CONTAINER_NAME_PROD: ${{ secrets.NGINX_CONTAINER_NAME_PROD }}
       NGINX_IMAGE_NAME_PROD: ${{ secrets.NGINX_IMAGE_NAME_PROD }}
       NGINX_PORT_PROD: ${{ secrets.NGINX_PORT_PROD }}
 
