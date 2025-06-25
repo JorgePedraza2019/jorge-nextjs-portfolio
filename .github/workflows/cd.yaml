@@ -25,7 +25,7 @@ on:
       # Application and NGINX secrets per environment (dev, qa, prod)
       # Includes Docker image, ports, environment file name, and custom NGINX variables
       NODE_ENV_DEV: { required: true }
-      INSTALL_PLAYWRIGHT_DEV: { required: true }
+      INSTALL_PLAYWRIGHT_DEV_SERVER: { required: true }
       INSTALL_DEV_LIBRARIES_DEV: { required: true }
       IMAGE_NAME_DEV: { required: true }
       NEXT_PORT_DEV: { required: true }
@@ -121,7 +121,7 @@ jobs:
             if [[ "$DEPLOY_BRANCH" == "dev" ]]; then
               ENV_FILE=".env.dev.server"
               NODE_ENV="${{ secrets.NODE_ENV_DEV }}"
-              INSTALL_PLAYWRIGHT="${{ secrets.INSTALL_PLAYWRIGHT_DEV }}"
+              INSTALL_PLAYWRIGHT="${{ secrets.INSTALL_PLAYWRIGHT_DEV_SERVER }}"
               INSTALL_DEV_LIBRARIES="${{ secrets.INSTALL_DEV_LIBRARIES_DEV }}"
               IMAGE_NAME="${{ secrets.IMAGE_NAME_DEV }}"
               NEXT_PORT="${{ secrets.NEXT_PORT_DEV }}"
@@ -193,7 +193,7 @@ jobs:
           # Environment secrets for DEV / QA / PROD (all preloaded for reuse above)
           DEPLOY_BRANCH: ${{ env.DEPLOY_BRANCH }}
           NODE_ENV_DEV: ${{ secrets.NODE_ENV_DEV }}
-          INSTALL_PLAYWRIGHT_DEV: ${{ secrets.INSTALL_PLAYWRIGHT_DEV }}
+          INSTALL_PLAYWRIGHT_DEV_SERVER: ${{ secrets.INSTALL_PLAYWRIGHT_DEV_SERVER }}
           INSTALL_DEV_LIBRARIES_DEV: ${{ secrets.INSTALL_DEV_LIBRARIES_DEV }}
           IMAGE_NAME_DEV: ${{ secrets.IMAGE_NAME_DEV }}
           NEXT_PORT_DEV: ${{ secrets.NEXT_PORT_DEV }}

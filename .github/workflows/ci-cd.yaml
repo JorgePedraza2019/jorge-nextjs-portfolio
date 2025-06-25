@@ -95,7 +95,7 @@ jobs:
 
       # Deployment environment variables for Dev
       NODE_ENV_DEV: ${{ secrets.NODE_ENV_DEV }}
-      INSTALL_PLAYWRIGHT_DEV: ${{ secrets.INSTALL_PLAYWRIGHT_DEV }}
+      INSTALL_PLAYWRIGHT_DEV_SERVER: ${{ secrets.INSTALL_PLAYWRIGHT_DEV_SERVER }}
       INSTALL_DEV_LIBRARIES_DEV: ${{ secrets.INSTALL_DEV_LIBRARIES_DEV }}
       IMAGE_NAME_DEV: ${{ secrets.IMAGE_NAME_DEV }}
       NEXT_PORT_DEV: ${{ secrets.NEXT_PORT_DEV }}
