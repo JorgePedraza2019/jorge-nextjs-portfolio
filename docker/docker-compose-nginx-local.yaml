@@ -6,6 +6,7 @@ services:
     build:
       context: ../  # Sets the build context to the parent directory to ensure access to the NGINX Dockerfile and all required resources
       dockerfile: docker/nginx/Dockerfile.nginx  # Specifies the custom Dockerfile to build the NGINX image with environment-specific configuration and certificates
+
       args:
         ENV_TYPE: ${ENV_TYPE}  # Passes the current environment type (dev, qa, prod) as a build argument
         NGINX_CONF_DIR: ${NGINX_CONF_DIR}  # Provides the path to the local NGINX config file to copy into the image
