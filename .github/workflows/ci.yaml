@@ -49,17 +49,17 @@ jobs:
 
             # Inject the correct secrets based on the branch
             if [[ "$BRANCH_NAME" == "dev" ]]; then
-              echo "${{ secrets.ENV_VARS_DEV_CI }}" > "$ENV_DIR/ci.env"
+              echo -e "${{ secrets.ENV_VARS_DEV_CI }}" > "$ENV_DIR/ci.env"
             elif [[ "$BRANCH_NAME" == "qa" ]]; then
-              echo "${{ secrets.ENV_VARS_QA_CI }}" > "$ENV_DIR/ci.env"
+              echo -e "${{ secrets.ENV_VARS_QA_CI }}" > "$ENV_DIR/ci.env"
             elif [[ "$BRANCH_NAME" == "main" ]]; then
-              echo "${{ secrets.ENV_VARS_PROD_CI }}" > "$ENV_DIR/ci.env"
+              echo -e "${{ secrets.ENV_VARS_PROD_CI }}" > "$ENV_DIR/ci.env"
             fi
           else
             # For any other branches (e.g., feature/*), use the feature env
             ENV_DIR="env/feature"
             mkdir -p "$ENV_DIR"
-            echo "${{ secrets.ENV_VARS_FEATURE_CI }}" > "$ENV_DIR/ci.env"
+            echo -e "${{ secrets.ENV_VARS_FEATURE_CI }}" > "$ENV_DIR/ci.env"
           fi
 
       - name: Set up Docker Compose and run container
