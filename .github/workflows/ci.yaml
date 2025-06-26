@@ -116,7 +116,7 @@ jobs:
         # Run unit tests with Jest in dev branch only
         run: |
           if [[ "${{ github.ref }}" == "refs/heads/dev" ]]; then
-            docker-compose --env-file env/dev/ci.yaml -p jorge-portfolio-frontend-dev-server -f docker/docker-compose.yaml exec -T frontend npm test
+            docker-compose --env-file env/dev/ci.env -p jorge-portfolio-frontend-dev-server -f docker/docker-compose.yaml exec -T frontend npm test
           else
             echo "Skipping Jest tests for branch ${{ github.ref }} as tests are only run on the 'dev' branch"
           fi
