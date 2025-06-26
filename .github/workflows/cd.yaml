@@ -30,7 +30,7 @@ jobs:
         with:
           host: ${{ env.SERVER_IP }}
           username: ${{ env.SERVER_USER }}
-          key: ${{ fromJSON(format('"{0}"', secrets[format('ENV_VARS_{0}_CD', inputs.deploy_branch | upper)])).SERVER_SSH_KEY }}
+          key: ${{ inputs.deploy_branch == 'dev' && fromJSON(secrets.ENV_VARS_DEV_CD).SERVER_SSH_KEY || inputs.deploy_branch == 'qa' && fromJSON(secrets.ENV_VARS_QA_CD).SERVER_SSH_KEY || inputs.deploy_branch == 'main' && fromJSON(secrets.ENV_VARS_PROD_CD).SERVER_SSH_KEY }}
           port: 22
           script: |
             DEPLOY_BRANCH="${{ inputs.deploy_branch }}"
@@ -39,7 +39,11 @@ jobs:
             git pull origin $DEPLOY_BRANCH
 
             mkdir -p env/$DEPLOY_BRANCH
-            echo -e "${{ secrets[format('ENV_VARS_' + inputs.deploy_branch | upper + '_CD')] }}" > env/$DEPLOY_BRANCH/cd.env
+            echo -e "${{ 
+              inputs.deploy_branch == 'dev' && secrets.ENV_VARS_DEV_CD || 
+              inputs.deploy_branch == 'qa' && secrets.ENV_VARS_QA_CD || 
+              inputs.deploy_branch == 'main' && secrets.ENV_VARS_PROD_CD 
+            }}" > env/$DEPLOY_BRANCH/cd.env
 
       - name: Run Makefile to lift containers on remote
         # Executes Makefile target that brings up the Docker Compose setup remotely
@@ -47,7 +51,7 @@ jobs:
         with:
           host: ${{ env.SERVER_IP }}
           username: ${{ env.SERVER_USER }}
-          key: ${{ fromJSON(format('"{0}"', secrets[format('ENV_VARS_{0}_CD', inputs.deploy_branch | upper)])).SERVER_SSH_KEY }}
+          key: ${{ inputs.deploy_branch == 'dev' && fromJSON(secrets.ENV_VARS_DEV_CD).SERVER_SSH_KEY || inputs.deploy_branch == 'qa' && fromJSON(secrets.ENV_VARS_QA_CD).SERVER_SSH_KEY || inputs.deploy_branch == 'main' && fromJSON(secrets.ENV_VARS_PROD_CD).SERVER_SSH_KEY }}
           port: 22
           script: |
             DEPLOY_BRANCH="${{ inputs.deploy_branch }}"
