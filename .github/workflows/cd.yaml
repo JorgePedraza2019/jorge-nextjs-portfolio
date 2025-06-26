@@ -78,7 +78,7 @@ jobs:
             git pull origin $DEPLOY_BRANCH
 
             mkdir -p env/$DEPLOY_BRANCH
-            echo "${{ inputs.deploy_branch == 'dev' && secrets.ENV_VARS_DEV_CD || inputs.deploy_branch == 'qa' && secrets.ENV_VARS_QA_CD || inputs.deploy_branch == 'main' && secrets.ENV_VARS_PROD_CD }}" > env/$DEPLOY_BRANCH/cd.env
+            echo -e "${{ inputs.deploy_branch == 'dev' && secrets.ENV_VARS_DEV_CD || inputs.deploy_branch == 'qa' && secrets.ENV_VARS_QA_CD || inputs.deploy_branch == 'main' && secrets.ENV_VARS_PROD_CD }}" > env/$DEPLOY_BRANCH/cd.env
 
             # Environment context passed to the SSH script so it can reference the right secrets
         env:

@@ -142,5 +142,5 @@ jobs:
           elif [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
             docker-compose --env-file env/prod/ci.env -f docker/docker-compose.prod.yaml down
           else
-            docker-compose --env-file env/feature/.env.feature.local -f docker/docker-compose.yaml down
+            docker-compose --env-file env/feature/ci.env -f docker/docker-compose.yaml down
           fi
