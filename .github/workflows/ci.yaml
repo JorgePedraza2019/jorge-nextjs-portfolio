@@ -62,10 +62,15 @@ jobs:
             echo -e "${{ secrets.ENV_VARS_FEATURE_CI }}" > "$ENV_DIR/ci.env"
           fi
 
-      - name: Print out generated env file
+      - name: Print and create environment file correctly
         run: |
-          echo "Branch: ${{ github.ref }}"
-          cat env/feature/ci.env
+          BRANCH_NAME="${GITHUB_REF##*/}"
+          ENV_DIR="env/feature"
+          mkdir -p "$ENV_DIR"
+          printf "%b" "${{ secrets.ENV_VARS_FEATURE_CI }}" > "$ENV_DIR/ci.env"
+
+          echo "Printed contents of $ENV_DIR/ci.env:"
+          cat "$ENV_DIR/ci.env"
 
       - name: Set up Docker Compose and run container
         # Start Docker container with appropriate environment file and compose project
