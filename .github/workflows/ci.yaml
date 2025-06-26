@@ -9,18 +9,20 @@ on:
   workflow_call:
     secrets:
       # Secrets for FEATURE branches
-      NODE_ENV_FEATURE: { required: true }
-      NEXT_PORT_FEATURE: { required: true }
-      HOST_PORT_FEATURE: { required: true }
-      NEXT_CONTAINER_NAME_FEATURE: { required: true }
-      INSTALL_PLAYWRIGHT_FEATURE: { required: true }
-      INSTALL_DEV_LIBRARIES_FEATURE: { required: true }
-      IMAGE_NAME_FEATURE: { required: true }
-      ENV_FILE_NAME_FEATURE: { required: true }
-      START_COMMAND_FEATURE: { required: true }
-      USE_VOLUMES_FEATURE: { required: true }
-      USE_VOLUMES_NODE_MODULES_FEATURE: { required: true }
-      USE_PORTS_FEATURE: { required: true }
+      ENV_VARS_FEATURE: { required: true }
+
+      # NODE_ENV_FEATURE: { required: true }
+      # NEXT_PORT_FEATURE: { required: true }
+      # HOST_PORT_FEATURE: { required: true }
+      # NEXT_CONTAINER_NAME_FEATURE: { required: true }
+      # INSTALL_PLAYWRIGHT_FEATURE: { required: true }
+      # INSTALL_DEV_LIBRARIES_FEATURE: { required: true }
+      # IMAGE_NAME_FEATURE: { required: true }
+      # ENV_FILE_NAME_FEATURE: { required: true }
+      # START_COMMAND_FEATURE: { required: true }
+      # USE_VOLUMES_FEATURE: { required: true }
+      # USE_VOLUMES_NODE_MODULES_FEATURE: { required: true }
+      # USE_PORTS_FEATURE: { required: true }
 
       # Secrets for DEV branch
       NODE_ENV_DEV: { required: true }
@@ -124,18 +126,20 @@ jobs:
             echo "USE_PORTS=${{ secrets.USE_PORTS_PROD }}" >> env/prod/.env.prod.server
           else
             mkdir -p env/feature
-            echo "NODE_ENV=${{ secrets.NODE_ENV_FEATURE }}" >> env/feature/.env.feature.local
-            echo "NEXT_PORT=${{ secrets.NEXT_PORT_FEATURE }}" >> env/feature/.env.feature.local
-            echo "HOST_PORT=${{ secrets.HOST_PORT_FEATURE }}" >> env/feature/.env.feature.local
-            echo "NEXT_CONTAINER_NAME=${{ secrets.NEXT_CONTAINER_NAME_FEATURE }}" >> env/feature/.env.feature.local
-            echo "INSTALL_PLAYWRIGHT=${{ secrets.INSTALL_PLAYWRIGHT_FEATURE }}" >> env/feature/.env.feature.local
-            echo "INSTALL_DEV_LIBRARIES=${{ secrets.INSTALL_DEV_LIBRARIES_FEATURE }}" >> env/feature/.env.feature.local
-            echo "IMAGE_NAME=${{ secrets.IMAGE_NAME_FEATURE }}" >> env/feature/.env.feature.local
-            echo "ENV_FILE_NAME=${{ secrets.ENV_FILE_NAME_FEATURE }}" >> env/feature/.env.feature.local
-            echo "START_COMMAND=${{ secrets.START_COMMAND_FEATURE }}" >> env/feature/.env.feature.local
-            echo "USE_VOLUMES=${{ secrets.USE_VOLUMES_FEATURE }}" >> env/feature/.env.feature.local
-            echo "USE_VOLUMES_NODE_MODULES=${{ secrets.USE_VOLUMES_NODE_MODULES_FEATURE }}" >> env/feature/.env.feature.local
-            echo "USE_PORTS=${{ secrets.USE_PORTS_FEATURE }}" >> env/feature/.env.feature.local
+            echo "${{ secrets.ENV_VARS_FEATURE }}" > env/feature/.env.feature.local
+
+            # echo "NODE_ENV=${{ secrets.NODE_ENV_FEATURE }}" >> env/feature/.env.feature.local
+            # echo "NEXT_PORT=${{ secrets.NEXT_PORT_FEATURE }}" >> env/feature/.env.feature.local
+            # echo "HOST_PORT=${{ secrets.HOST_PORT_FEATURE }}" >> env/feature/.env.feature.local
+            # echo "NEXT_CONTAINER_NAME=${{ secrets.NEXT_CONTAINER_NAME_FEATURE }}" >> env/feature/.env.feature.local
+            # echo "INSTALL_PLAYWRIGHT=${{ secrets.INSTALL_PLAYWRIGHT_FEATURE }}" >> env/feature/.env.feature.local
+            # echo "INSTALL_DEV_LIBRARIES=${{ secrets.INSTALL_DEV_LIBRARIES_FEATURE }}" >> env/feature/.env.feature.local
+            # echo "IMAGE_NAME=${{ secrets.IMAGE_NAME_FEATURE }}" >> env/feature/.env.feature.local
+            # echo "ENV_FILE_NAME=${{ secrets.ENV_FILE_NAME_FEATURE }}" >> env/feature/.env.feature.local
+            # echo "START_COMMAND=${{ secrets.START_COMMAND_FEATURE }}" >> env/feature/.env.feature.local
+            # echo "USE_VOLUMES=${{ secrets.USE_VOLUMES_FEATURE }}" >> env/feature/.env.feature.local
+            # echo "USE_VOLUMES_NODE_MODULES=${{ secrets.USE_VOLUMES_NODE_MODULES_FEATURE }}" >> env/feature/.env.feature.local
+            # echo "USE_PORTS=${{ secrets.USE_PORTS_FEATURE }}" >> env/feature/.env.feature.local
           fi
 
       - name: Set up Docker Compose and run container
