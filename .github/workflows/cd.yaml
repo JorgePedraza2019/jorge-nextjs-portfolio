@@ -80,4 +80,4 @@ jobs:
             source env/$DEPLOY_BRANCH/cd.env
             set +a
 
-            make ${DEPLOY_BRANCH}-server-build-up
+            make ${DEPLOY_BRANCH}-cd-build-up

@@ -37,5 +37,7 @@ Open your browser and navigate to http://localhost:3000 to view the portfolio in
 ## Status
 This project is currently under development. Check back for updates as I continue to add features and projects!
 
+📖 For full details on environment behavior, testing, and deployment strategy, see [ENVIRONMENTS.md](./ENVIRONMENTS.md).
+
 ## Contact
 Feel free to reach out to me at jpedrazavaldez@gmail.com for any inquiries or opportunities.

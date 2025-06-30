@@ -59,75 +59,49 @@ jobs:
             echo -e "${{ secrets.ENV_VARS_FEATURE_CI }}" > "$ENV_DIR/ci.env"
           fi
 
-      - name: Set up Docker Compose and run container
-        # Start Docker container with appropriate environment file and compose project
+      - name: Start containers
         run: |
-          echo "Branch: ${{ github.ref }}"
-          if [[ "${{ github.ref }}" == "refs/heads/dev" ]]; then
-            docker-compose --env-file env/dev/ci.env -p jorge-portfolio-frontend-dev-server -f docker/docker-compose.yaml up -d --build
-          elif [[ "${{ github.ref }}" == "refs/heads/qa" ]]; then
-            docker-compose --env-file env/qa/ci.env -p jorge-portfolio-frontend-qa-server -f docker/docker-compose.yaml up -d --build
-          elif [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
-            docker-compose --env-file env/prod/ci.env -p jorge-portfolio-frontend-prod-server -f docker/docker-compose.yaml up -d --build
-          else
-            docker-compose --env-file env/feature/ci.env -p jorge-portfolio-frontend-feature-local -f docker/docker-compose.yaml -f docker/docker-compose-override-feature.yaml up -d --build
-          fi
+          case "${{ github.ref }}" in
+            refs/heads/dev)   make dev-ci-build-up ;;
+            refs/heads/qa)    make qa-ci-build-up ;;
+            refs/heads/main)  make prod-ci-build-up ;;
+            *)                make feature-ci-build-up ;;
+          esac
 
-      - name: Install dependencies in Docker container
-        # Only install dev dependencies in dev/qa environments. In prod, just run with predefined setup.
+      - name: Install dependencies
         run: |
-          if [[ "${{ github.ref }}" == "refs/heads/dev" ]]; then
-            docker-compose --env-file env/dev/ci.env -p jorge-portfolio-frontend-dev-server -f docker/docker-compose.yaml exec -T frontend sh -c 'export NODE_ENV=development && npm install --only=dev --legacy-peer-deps'
-          elif [[ "${{ github.ref }}" == "refs/heads/qa" ]]; then
-            docker-compose --env-file env/qa/ci.env -p jorge-portfolio-frontend-qa-server -f docker/docker-compose.yaml exec -T frontend sh -c 'export NODE_ENV=development && npm install --only=dev --legacy-peer-deps'
-          elif [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
-            docker-compose --env-file env/prod/ci.env -p jorge-portfolio-frontend-prod-server -f docker/docker-compose.yaml exec -T frontend sh -c 'export NODE_ENV=development'
-          else
-            echo "Skipping installation in non-dev, non-qa, and non-prod branches."
-          fi
+          case "${{ github.ref }}" in
+            refs/heads/dev) make dev-ci-install-deps ;;
+            refs/heads/qa)  make qa-ci-install-deps ;;
+            *)              echo "Skipping deps" ;;
+          esac
 
-      - name: Run ESLint in Docker
-        # Run code linting only in 'dev' or 'feature/*' branches
+      - name: Run ESLint
         run: |
-          if [[ "${{ github.ref }}" == "refs/heads/dev" || "${{ github.ref }}" =~ refs/heads/feature/.* ]]; then
-            if [[ "${{ github.ref }}" == "refs/heads/dev" ]]; then
-              docker-compose --env-file env/dev/ci.env -p jorge-portfolio-frontend-dev-server -f docker/docker-compose.yaml exec -T frontend npm run lint
-            else
-              docker-compose --env-file env/feature/ci.env -p jorge-portfolio-frontend-feature-local -f docker/docker-compose.yaml exec -T frontend npm run lint
-            fi
-          else
-            echo "Skipping ESLint in non-dev and non-feature branches."
-          fi
+          case "${{ github.ref }}" in
+            refs/heads/dev)            make dev-ci-lint ;;
+            refs/heads/feature/*)      make feature-ci-lint ;;
+            *)                         echo "Skipping lint" ;;
+          esac
 
-      - name: Run Jest in Docker
-        # Run unit tests with Jest in dev branch only
+      - name: Run Jest
         run: |
-          if [[ "${{ github.ref }}" == "refs/heads/dev" ]]; then
-            docker-compose --env-file env/dev/ci.env -p jorge-portfolio-frontend-dev-server -f docker/docker-compose.yaml exec -T frontend npm test
-          else
-            echo "Skipping Jest tests for branch ${{ github.ref }} as tests are only run on the 'dev' branch"
-          fi
+          [[ "${{ github.ref }}" == "refs/heads/dev" ]] && make dev-ci-jest || echo "Skipping Jest"
 
-      - name: Run Playwright in Docker
-        # Run E2E tests with Playwright in dev and qa branches
+      - name: Run Playwright
         run: |
-          if [[ "${{ github.ref }}" == "refs/heads/dev" ]]; then
-            docker-compose --env-file env/dev/ci.env -p jorge-portfolio-frontend-dev-server -f docker/docker-compose.yaml exec -T frontend npx playwright test
-          elif [[ "${{ github.ref }}" == "refs/heads/qa" ]]; then
-            docker-compose --env-file env/qa/ci.env -p jorge-portfolio-frontend-qa-server -f docker/docker-compose.yaml exec -T frontend npx playwright test
-          else
-            echo "Skipping Playwright tests for branch ${{ github.ref }} as tests are only run on the 'dev' and 'qa' branch."
-          fi
+          case "${{ github.ref }}" in
+            refs/heads/dev) make dev-ci-playwright ;;
+            refs/heads/qa)  make qa-ci-playwright ;;
+            *)              echo "Skipping Playwright" ;;
+          esac
 
-      - name: Stop and Remove Docker Containers
+      - name: Teardown containers
         # Clean up Docker containers after the job to avoid resource leaks or conflicts
         run: |
-          if [[ "${{ github.ref }}" == "refs/heads/dev" ]]; then
-            docker-compose --env-file env/dev/ci.env -f docker/docker-compose.yaml down
-          elif [[ "${{ github.ref }}" == "refs/heads/qa" ]]; then
-            docker-compose --env-file env/qa/ci.env -f docker/docker-compose.qa.yaml down
-          elif [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
-            docker-compose --env-file env/prod/ci.env -f docker/docker-compose.prod.yaml down
-          else
-            docker-compose --env-file env/feature/ci.env -f docker/docker-compose.yaml down
-          fi
+          case "${{ github.ref }}" in
+            refs/heads/dev)   make dev-ci-down ;;
+            refs/heads/qa)    make qa-ci-down ;;
+            refs/heads/main)  make prod-ci-down ;;
+            *)                make feature-ci-down ;;
+          esac
