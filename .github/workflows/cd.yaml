@@ -54,7 +54,8 @@ jobs:
             DEPLOY_BRANCH="${{ inputs.deploy_branch }}"
 
             cd /var/www/jorge-nextjs-portfolio/
-            git pull origin $DEPLOY_BRANCH
+            git fetch origin
+            git reset --hard origin/$DEPLOY_BRANCH
 
             mkdir -p env/$DEPLOY_BRANCH
             echo -e "${{ 
