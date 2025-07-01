@@ -128,26 +128,35 @@ fi
 
 CANDIDATE_LABELS+=("Continue without merging")
 
-printf "\n${COLOR_YELLOW}🧩 Select a branch to merge into local '$TARGET_BRANCH':${COLOR_RESET}\n"
-select CHOICE in "${CANDIDATE_LABELS[@]}"; do
-  if [ "$CHOICE" = "Continue without merging" ]; then
-    printf "${COLOR_YELLOW}➡️  Continuing without merging...${COLOR_RESET}\n"
-    make "${TARGET_BRANCH}-local-up"
-    exit 0
-  elif [ -n "$CHOICE" ]; then
-    SELECTED_INDEX=$((REPLY - 1))
-    SELECTED_BRANCH="${MERGE_CANDIDATES[$SELECTED_INDEX]}"
-    printf "${COLOR_GREEN}🔀 Merging '$SELECTED_BRANCH' into '$TARGET_BRANCH'...${COLOR_RESET}\n"
-    if ! git merge origin/"$SELECTED_BRANCH" --no-edit; then
-      printf "${COLOR_RED}❌ Merge conflict detected. Resolve manually.${COLOR_RESET}\n"
-      exit 1
-    fi
-    break
-  else
-    printf "${COLOR_RED}❌ Invalid selection. Try again.${COLOR_RESET}\n"
-  fi
+printf "\n${COLOR_YELLOW}🧩 Select a branch to merge into local '$TARGET_BRANCH':${COLOR_RESET}\n\n"
+
+for i in "${!CANDIDATE_LABELS[@]}"; do
+  printf "%s) %b\n" "$((i + 1))" "${CANDIDATE_LABELS[$i]}"
 done
 
+# Ask for input
+echo ""
+read -p "$(printf "${COLOR_YELLOW}#? ${COLOR_RESET}")" USER_CHOICE
+
+if ! [[ "$USER_CHOICE" =~ ^[0-9]+$ ]] || [ "$USER_CHOICE" -lt 1 ] || [ "$USER_CHOICE" -gt "${#CANDIDATE_LABELS[@]}" ]; then
+  printf "${COLOR_RED}❌ Invalid selection. Exiting.${COLOR_RESET}\n"
+  exit 1
+fi
+
+SELECTED_INDEX=$((USER_CHOICE - 1))
+SELECTED_BRANCH="${MERGE_CANDIDATES[$SELECTED_INDEX]}"
+
+if [ "$SELECTED_BRANCH" = "" ]; then
+  printf "${COLOR_YELLOW}➡️  Continuing without merging...${COLOR_RESET}\n"
+  make "${TARGET_BRANCH}-local-up"
+  exit 0
+fi
+
+printf "${COLOR_GREEN}🔀 Merging '$SELECTED_BRANCH' into '$TARGET_BRANCH'...${COLOR_RESET}\n"
+if ! git merge origin/"$SELECTED_BRANCH" --no-edit; then
+  printf "${COLOR_RED}❌ Merge conflict detected. Resolve manually.${COLOR_RESET}\n"
+  exit 1
+fi
 
 if container_exists; then
   if git diff --name-only HEAD^ HEAD | grep -q "package.json"; then
