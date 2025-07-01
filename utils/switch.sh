@@ -2,7 +2,7 @@
 set -e
 
 # -------------------------
-# Colors
+# Colors (for console output)
 # -------------------------
 COLOR_GREEN='\033[1;32m'
 COLOR_YELLOW='\033[1;33m'
@@ -15,24 +15,42 @@ COLOR_AUTHOR='\033[1;32m'
 COLOR_FILES='\033[1;35m'
 COLOR_BRANCH='\033[1;34m'
 
+# -------------------------
+# Project configuration
+# -------------------------
 PROJECT_NAME="jorge-portfolio-frontend"
 TARGET_BRANCH=$1
 SANITIZED_BRANCH="${TARGET_BRANCH//\//-}"
 
+# -------------------------
+# Validate input branch
+# -------------------------
 if [ -z "$TARGET_BRANCH" ]; then
   printf "${COLOR_RED}❌ ERROR: You must provide a target branch (e.g., dev, qa, main).${COLOR_RESET}\n"
   exit 1
 fi
 
+# -------------------------
+# Get current branch
+# -------------------------
 PREV_BRANCH="$(git symbolic-ref --short HEAD 2>/dev/null || printf "")"
 
+# -------------------------
+# Show switching message
+# -------------------------
 printf "${COLOR_BLUE}🔄 Git branch changed. Restarting Docker environment... From: '$PREV_BRANCH' ➡️  To: '$TARGET_BRANCH'${COLOR_RESET}\n"
 
+# -------------------------
+# Skip if branch is the same
+# -------------------------
 if [ "$PREV_BRANCH" = "$TARGET_BRANCH" ]; then
   printf "${COLOR_YELLOW}⚠️  Same branch detected ($TARGET_BRANCH), skipping stop/start${COLOR_RESET}\n"
   exit 0
 fi
 
+# -------------------------
+# Stop local containers based on the previous branch
+# -------------------------
 case "$PREV_BRANCH" in
   dev) make dev-local-stop || true ;;
   qa) make qa-local-stop || true ;;
@@ -40,25 +58,40 @@ case "$PREV_BRANCH" in
   feature/*) make feature-local-stop || true ;;
 esac
 
+# -------------------------
+# Fetch remote branches
+# -------------------------
 git fetch origin
 
+# -------------------------
+# Try to switch to target branch
+# -------------------------
 if ! git switch "$TARGET_BRANCH" > /dev/null 2>&1; then
   printf "${COLOR_RED}❌ Failed to switch to branch '$TARGET_BRANCH'${COLOR_RESET}\n"
   exit 1
 fi
 
-LOCAL_COMMIT=$(git log -1 HEAD --pretty=format:"%h — %s — %an — %cd" --date=format:"%Y-%m-%d %H:%M" || echo "(none)")
+# -------------------------
+# Show commit info for local and origin branch
+# -------------------------
 REMOTE_COMMIT=$(git log -1 origin/"$TARGET_BRANCH" --pretty=format:"%h — %s — %an — %cd" --date=format:"%Y-%m-%d %H:%M" || echo "(none)")
+LOCAL_COMMIT=$(git log -1 HEAD --pretty=format:"%h — %s — %an — %cd" --date=format:"%Y-%m-%d %H:%M" || echo "(none)")
 
-printf "\n${COLOR_BLUE}📅 Local  '$TARGET_BRANCH': $LOCAL_COMMIT${COLOR_RESET}"
 printf "\n${COLOR_BLUE}☁️  Origin '$TARGET_BRANCH': $REMOTE_COMMIT${COLOR_RESET}\n"
+printf "\n${COLOR_BLUE}📅 Local  '$TARGET_BRANCH': $LOCAL_COMMIT${COLOR_RESET}"
 
+# -------------------------
+# Warn if local branch is ahead of origin
+# -------------------------
 AHEAD_COUNT=$(git rev-list --count origin/"$TARGET_BRANCH"..HEAD)
 if [ "$AHEAD_COUNT" -gt 0 ]; then
   printf "\n${COLOR_YELLOW}⚠️  Your local '$TARGET_BRANCH' branch is ahead of 'origin/$TARGET_BRANCH' by $AHEAD_COUNT commit(s).${COLOR_RESET}\n"
   printf "${COLOR_YELLOW}⚠️  Consider pushing your local changes first.${COLOR_RESET}\n"
 fi
 
+# -------------------------
+# Check if the container exists
+# -------------------------
 container_exists() {
   case "$TARGET_BRANCH" in
     feature/*)
@@ -70,11 +103,15 @@ container_exists() {
   esac
 }
 
+# -------------------------
+# Define merge source pattern based on target
+# -------------------------
 case "$TARGET_BRANCH" in
   dev) FROM_PATTERN="origin/feature/" ;;
   qa) FROM_PATTERN="origin/dev" ;;
   main) FROM_PATTERN="origin/qa" ;;
   feature/*)
+    # Start or build the feature container directly
     if container_exists; then
       make feature-local-up
     else
@@ -89,6 +126,9 @@ case "$TARGET_BRANCH" in
     ;;
 esac
 
+# -------------------------
+# Check for branches with new commits
+# -------------------------
 printf "\n${COLOR_GREEN}🔍 Looking for updates not yet merged into local '$TARGET_BRANCH'...${COLOR_RESET}\n"
 
 MERGE_CANDIDATES=()
@@ -97,6 +137,7 @@ CANDIDATE_LABELS=()
 while read -r remote_branch; do
   LOCAL_BRANCH="${remote_branch#origin/}"
   COMMITS_AHEAD=$(git rev-list --count HEAD.."$remote_branch")
+
   if [ "$COMMITS_AHEAD" -gt 0 ]; then
     COMMIT_HASH=$(git log -1 --pretty=format:"%h" "$remote_branch")
     COMMIT_MSG=$(git log -1 --pretty=format:"%s" "$remote_branch" | cut -c1-60)
@@ -113,6 +154,9 @@ while read -r remote_branch; do
   fi
 done < <(git branch -r --sort=-committerdate | grep "$FROM_PATTERN")
 
+# -------------------------
+# If no branches to merge, just start containers
+# -------------------------
 if [ "${#MERGE_CANDIDATES[@]}" -eq 0 ]; then
   printf "${COLOR_YELLOW}ℹ️  No branches with new commits to merge into '$TARGET_BRANCH'.${COLOR_RESET}\n\n"
   if container_exists; then
@@ -126,15 +170,19 @@ if [ "${#MERGE_CANDIDATES[@]}" -eq 0 ]; then
   exit 0
 fi
 
+# -------------------------
+# Prompt user for a branch to merge
+# -------------------------
 CANDIDATE_LABELS+=("Continue without merging")
-
 printf "${COLOR_YELLOW}🧩 Select a branch to merge into local '$TARGET_BRANCH':${COLOR_RESET}\n"
 
 for i in "${!CANDIDATE_LABELS[@]}"; do
   printf "     %s) %b\n" "$((i + 1))" "${CANDIDATE_LABELS[$i]}"
 done
 
-# Ask for input
+# -------------------------
+# Ask user to select option
+# -------------------------
 echo ""
 read -p "$(printf "     ${COLOR_YELLOW}#? ${COLOR_RESET}")" USER_CHOICE
 
@@ -146,18 +194,27 @@ fi
 SELECTED_INDEX=$((USER_CHOICE - 1))
 SELECTED_BRANCH="${MERGE_CANDIDATES[$SELECTED_INDEX]}"
 
+# -------------------------
+# Skip merge if "continue without merging" was chosen
+# -------------------------
 if [ "$SELECTED_BRANCH" = "" ]; then
   printf "${COLOR_YELLOW}➡️  Continuing without merging...${COLOR_RESET}\n"
   make "${TARGET_BRANCH}-local-up"
   exit 0
 fi
 
+# -------------------------
+# Perform the merge
+# -------------------------
 printf "${COLOR_GREEN}🔀 Merging '$SELECTED_BRANCH' into '$TARGET_BRANCH'...${COLOR_RESET}\n"
 if ! git merge origin/"$SELECTED_BRANCH" --no-edit; then
   printf "${COLOR_RED}❌ Merge conflict detected. Resolve manually.${COLOR_RESET}\n"
   exit 1
 fi
 
+# -------------------------
+# Run the proper container up command depending on changes
+# -------------------------
 if container_exists; then
   if git diff --name-only HEAD^ HEAD | grep -q "package.json"; then
     printf "${COLOR_GREEN}📦 Detected changes in package.json. Running build...${COLOR_RESET}\n"
