@@ -183,7 +183,7 @@ qa-local-up:
 	@echo "$(COLOR_BLUE)🚀 Starting QA containers... Running without logs, use 'make qa-local-logs' to see output.$(COLOR_RESET)"
 	@sh -c '$(call show-banner)'
 	@docker-compose --env-file ${ENV_QA_LOCAL} -p $(PROJECT_NAME)-qa-local -f docker/docker-compose.yaml -f docker/docker-compose-nginx-local.yaml up -d
-	@echo "$(COLOR_Gcontainers started successfully.$(COLOR_RESET)"
+	@echo "$(COLOR_GREEN)✅ QA containers started successfully.$(COLOR_RESET)"
 
 qa-local-stop:
 	@echo "$(COLOR_YELLOW)⏹️  Stopping QA containers...$(COLOR_RESET)"
