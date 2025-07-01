@@ -98,35 +98,26 @@ esac
 
 printf "\n${COLOR_GREEN}🔍 Looking for updates not yet merged into local '$TARGET_BRANCH'...${COLOR_RESET}\n"
 
-MERGE_BRANCHES=()
+MERGE_CANDIDATES=()
 CANDIDATE_LABELS=()
 
 while read -r remote_branch; do
   LOCAL_BRANCH="${remote_branch#origin/}"
-  COMMITS_AHEAD=$(git rev-list --count HEAD.."$remote_branch")
 
+  COMMITS_AHEAD=$(git rev-list --count HEAD.."$remote_branch")
   if [ "$COMMITS_AHEAD" -gt 0 ]; then
     COMMIT_HASH=$(git log -1 --pretty=format:"%h" "$remote_branch")
     COMMIT_MSG=$(git log -1 --pretty=format:"%s" "$remote_branch" | cut -c1-60)
     COMMIT_AUTHOR=$(git log -1 --pretty=format:"%an" "$remote_branch")
     COMMIT_DATE=$(git log -1 --pretty=format:"%cd" --date=format:"%Y-%m-%d %H:%M")
-
     FILES=$(git diff-tree --no-commit-id --name-only -r "$COMMIT_HASH" | head -3 | tr '\n' ', ' | sed 's/, $//')
     FILE_COUNT=$(git diff-tree --no-commit-id --name-only -r "$COMMIT_HASH" | wc -l | tr -d ' ')
-
     if [ "$FILE_COUNT" -gt 3 ]; then
       FILES="$FILES... (+$((FILE_COUNT - 3)) more)"
     fi
 
-    LABEL="${COLOR_BRANCH}${LOCAL_BRANCH}${COLOR_RESET} — \
-${COLOR_HASH}${COMMIT_HASH}${COLOR_RESET} — \
-${COLOR_MSG}${COMMIT_MSG}${COLOR_RESET} — \
-${COLOR_AUTHOR}${COMMIT_AUTHOR}${COLOR_RESET} — \
-${COLOR_HASH}${COMMIT_DATE}${COLOR_RESET} — \
-${COLOR_FILES}${FILES}${COLOR_RESET}"
-
-    MERGE_BRANCHES+=("$LOCAL_BRANCH")
-    CANDIDATE_LABELS+=("$LABEL")
+    MERGE_CANDIDATES+=("$LOCAL_BRANCH")
+    CANDIDATE_LABELS+=("${COLOR_BRANCH}${LOCAL_BRANCH}${COLOR_RESET} — ${COLOR_HASH}${COMMIT_HASH}${COLOR_RESET} — ${COLOR_MSG}${COMMIT_MSG}${COLOR_RESET} — ${COLOR_AUTHOR}${COMMIT_AUTHOR}${COLOR_RESET} — ${COLOR_HASH}${COMMIT_DATE}${COLOR_RESET} — ${COLOR_FILES}${FILES}${COLOR_RESET}")
   fi
 done < <(git branch -r --sort=-committerdate | grep "$FROM_PATTERN")
 
@@ -144,15 +135,18 @@ if [ "${#MERGE_BRANCHES[@]}" -eq 0 ]; then
   exit 0
 fi
 
-# Mostrar menú
-printf "\n${COLOR_YELLOW}🧩 Select a branch to merge into local '$TARGET_BRANCH':${COLOR_RESET}\n"
-select OPT in "${CANDIDATE_LABELS[@]}" "Continue without merging"; do
-  if [ "$REPLY" -eq $(( ${#CANDIDATE_LABELS[@]} + 1 )) ]; then
+# Agregar opción final manualmente
+CANDIDATE_LABELS+=("Continue without merging")
+
+printf "${COLOR_YELLOW}🧩 Select a branch to merge into local '$TARGET_BRANCH':${COLOR_RESET}\n"
+select CHOICE in "${CANDIDATE_LABELS[@]}"; do
+  if [ "$CHOICE" = "Continue without merging" ]; then
     printf "${COLOR_YELLOW}➡️  Continuing without merging...${COLOR_RESET}\n"
     make "${TARGET_BRANCH}-local-up"
     exit 0
-  elif [[ "$REPLY" =~ ^[0-9]+$ ]] && [ "$REPLY" -ge 1 ] && [ "$REPLY" -le "${#CANDIDATE_LABELS[@]}" ]; then
-    SELECTED_BRANCH="${MERGE_BRANCHES[$((REPLY - 1))]}"
+  elif [ -n "$CHOICE" ]; then
+    SELECTED_INDEX=$((REPLY-1))
+    SELECTED_BRANCH=${MERGE_CANDIDATES[$SELECTED_INDEX]}
     printf "${COLOR_GREEN}🔀 Merging '$SELECTED_BRANCH' into '$TARGET_BRANCH'...${COLOR_RESET}\n"
     if ! git merge origin/"$SELECTED_BRANCH" --no-edit; then
       printf "${COLOR_RED}❌ Merge conflict detected. Resolve manually.${COLOR_RESET}\n"
