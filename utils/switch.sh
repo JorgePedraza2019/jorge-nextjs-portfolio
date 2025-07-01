@@ -45,7 +45,7 @@ fi
 case "$PREV_BRANCH" in
   dev) make dev-local-stop || true ;;
   qa) make qa-local-stop || true ;;
-  main) make prod-local-stop || true ;;
+  main) make main-local-stop || true ;;
   feature/*) make feature-local-stop || true ;;
 esac
 

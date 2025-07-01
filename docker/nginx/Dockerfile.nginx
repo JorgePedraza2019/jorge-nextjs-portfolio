@@ -4,7 +4,7 @@ FROM nginx:latest
 # Define build arguments for dynamic configuration
 ARG NGINX_CONF_DIR        # Path to the NGINX configuration file (from build context)
 ARG NGINX_CERTS_DIR       # Path to the SSL certificates directory (from build context)
-ARG ENV_TYPE              # Environment type (e.g., dev, qa, prod) used to organize certs inside the container
+ARG ENV_TYPE              # Environment type (e.g., dev, qa, main) used to organize certs inside the container
 
 # Copy the NGINX configuration file into the default configuration path
 # Note: This overwrites the default.conf file inside the container
