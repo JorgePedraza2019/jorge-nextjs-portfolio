@@ -53,28 +53,25 @@ esac
 git fetch origin
 
 # Switch to the new target branch
-# git switch "$TARGET_BRANCH" > /dev/null 2>&1
-# git switch "$TARGET_BRANCH" > /dev/null 2>&1
-if ! git switch "$TARGET_BRANCH"; then
+if ! git switch "$TARGET_BRANCH" > /dev/null 2>&1; then
   printf "${COLOR_RED}❌ Failed to switch to branch '$TARGET_BRANCH'${COLOR_RESET}\n"
   exit 1
 fi
-echo "✅ llegó hasta aquí"
 
-# # Get latest commit from local branch
-# LOCAL_COMMIT=$(git log -1 HEAD --pretty=format:"%h — %s — %an — %cd" --date=format:"%Y-%m-%d %H:%M") || {
-#   printf "${COLOR_RED}⚠️ Error getting local commit log${COLOR_RESET}\n"
-#   LOCAL_COMMIT="(none)"
-# }
+# Get latest commit from local branch
+LOCAL_COMMIT=$(git log -1 HEAD --pretty=format:"%h — %s — %an — %cd" --date=format:"%Y-%m-%d %H:%M") || {
+  printf "${COLOR_RED}⚠️ Error getting local commit log${COLOR_RESET}\n"
+  LOCAL_COMMIT="(none)"
+}
 
-# # Get latest commit from remote
-# REMOTE_COMMIT=$(git log -1 origin/"$TARGET_BRANCH" --pretty=format:"%h — %s — %an — %cd" --date=format:"%Y-%m-%d %H:%M") || {
-#   printf "${COLOR_RED}⚠️ Error getting origin commit log${COLOR_RESET}\n"
-#   REMOTE_COMMIT="(none)"
-# }
+# Get latest commit from remote
+REMOTE_COMMIT=$(git log -1 origin/"$TARGET_BRANCH" --pretty=format:"%h — %s — %an — %cd" --date=format:"%Y-%m-%d %H:%M") || {
+  printf "${COLOR_RED}⚠️ Error getting origin commit log${COLOR_RESET}\n"
+  REMOTE_COMMIT="(none)"
+}
 
-# printf "\n${COLOR_BLUE}📅 Local  '$TARGET_BRANCH': $LOCAL_COMMIT${COLOR_RESET}"
-# printf "\n${COLOR_BLUE}☁️  Origin '$TARGET_BRANCH': $REMOTE_COMMIT${COLOR_RESET}\n"
+printf "\n${COLOR_BLUE}📅 Local  '$TARGET_BRANCH': $LOCAL_COMMIT${COLOR_RESET}"
+printf "\n${COLOR_BLUE}☁️  Origin '$TARGET_BRANCH': $REMOTE_COMMIT${COLOR_RESET}\n"
 
 AHEAD_COUNT=$(git rev-list --count origin/"$TARGET_BRANCH"..HEAD)
 
@@ -143,13 +140,13 @@ if [ -z "$MERGE_CANDIDATES" ]; then
   printf "${COLOR_YELLOW}ℹ️  No branches with new commits to merge into '$TARGET_BRANCH'.${COLOR_RESET}\n"
   printf "\n"
   if container_exists; then
-    # printf "${COLOR_BLUE}📦 Container exists. Running make ${TARGET_BRANCH}-local-up...${COLOR_RESET}\n"
+    printf "${COLOR_BLUE}📦 Container exists. Running make ${TARGET_BRANCH}-local-up...${COLOR_RESET}\n"
     make "${TARGET_BRANCH}-local-up"
   else
-    # printf "${COLOR_BLUE}📦 Container does not exist. Running make ${TARGET_BRANCH}-local-build-up...${COLOR_RESET}\n"
+    printf "${COLOR_BLUE}📦 Container does not exist. Running make ${TARGET_BRANCH}-local-build-up...${COLOR_RESET}\n"
     make "${TARGET_BRANCH}-local-build-up"
   fi
-  # printf "${COLOR_GREEN}✅ Done switching to $TARGET_BRANCH${COLOR_RESET}\n"
+  printf "${COLOR_GREEN}✅ Done switching to $TARGET_BRANCH${COLOR_RESET}\n"
   exit 0
 fi
 
