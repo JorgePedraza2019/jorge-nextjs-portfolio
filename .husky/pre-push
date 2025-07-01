@@ -20,7 +20,7 @@ BRANCH_NAME="$(git rev-parse --abbrev-ref HEAD)"
 # ---------------------------------------------------
 # Run ESLint and Jest unit tests on 'dev' branch
 # ---------------------------------------------------
- [ "$BRANCH_NAME" = "dev" ]; then
+if [ "$BRANCH_NAME" = "dev" ]; then
   echo "${COLOR_GREEN}🔍 Running ESLint on dev...${COLOR_RESET}"
   make lint-dev-local
 
