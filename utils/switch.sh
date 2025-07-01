@@ -121,7 +121,7 @@ done
 
 # Levantar contenedor con rebuild si package.json cambió
 if container_exists; then
-  if git diff --name-only HEAD@{1} HEAD | grep -q "package.json"; then
+  if git show --pretty="" --name-only HEAD | grep -q "package.json"; then
     printf "${COLOR_GREEN}📦 Detected changes in package.json. Running build...${COLOR_RESET}\n"
     make "${TARGET_BRANCH}-local-build-up"
   else
