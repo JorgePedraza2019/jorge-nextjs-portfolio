@@ -29,6 +29,7 @@ CURR_BRANCH="$(git symbolic-ref --short HEAD 2>/dev/null || printf "")"
 # else
 #   PREV_BRANCH=""
 # fi
+
 PREV_BRANCH="$(git symbolic-ref --short HEAD 2>/dev/null || printf "")"
 
 printf "${COLOR_BLUE}🔄 Git branch changed. Restarting Docker environment... From: '$PREV_BRANCH' ➡️  To: '$TARGET_BRANCH'${COLOR_RESET}\n"
@@ -131,8 +132,11 @@ esac
 # Identify remote branches that contain commits not yet merged into the target branch
 MERGE_CANDIDATES=$(git branch -r --sort=-committerdate | grep "$FROM_PATTERN" | while read -r remote_branch; do
   LOCAL_BRANCH="${remote_branch#origin/}"
-  if [ "$(git rev-list --count HEAD..$remote_branch)" -gt 0 ]; then
-    printf "$LOCAL_BRANCH\n"
+  AHEAD=$(git rev-list --count HEAD.."$remote_branch")
+
+  if [ "$AHEAD" -gt 0 ]; then
+    COMMIT_INFO=$(git log -1 "$remote_branch" --pretty=format:"%h — %s — %an — %cd" --date=format:"%Y-%m-%d %H:%M")
+    printf "$LOCAL_BRANCH — $COMMIT_INFO\n"
   fi
 done)
 
@@ -152,12 +156,13 @@ fi
 
 # Prompt user to select a branch to merge into the target branch
 printf "${COLOR_YELLOW}🧩 Select a branch to merge into local '$TARGET_BRANCH':${COLOR_RESET}\n"
-select FEATURE_BRANCH in $MERGE_CANDIDATES "Continue without merging"; do
-  if [ "$FEATURE_BRANCH" = "Continue without merging" ]; then
+select BRANCH_LINE in $MERGE_CANDIDATES "Continue without merging"; do
+  if [ "$BRANCH_LINE" = "Continue without merging" ]; then
     printf "${COLOR_YELLOW}➡️  Continuing without merging...${COLOR_RESET}\n"
     make "${TARGET_BRANCH}-local-up"
     exit 0
-  elif [ -n "$FEATURE_BRANCH" ]; then
+  elif [ -n "$BRANCH_LINE" ]; then
+    FEATURE_BRANCH=$(printf "$BRANCH_LINE" | cut -d " " -f1)
     printf "${COLOR_GREEN}🔀 Merging '$FEATURE_BRANCH' into '$TARGET_BRANCH'...${COLOR_RESET}\n"
     if ! git merge origin/"$FEATURE_BRANCH" --no-edit; then
       printf "${COLOR_RED}❌ Merge conflict detected. Resolve manually.${COLOR_RESET}\n"
