@@ -148,6 +148,7 @@ select CHOICE in "${CANDIDATE_LABELS[@]}"; do
   fi
 done
 
+
 if container_exists; then
   if git diff --name-only HEAD^ HEAD | grep -q "package.json"; then
     printf "${COLOR_GREEN}📦 Detected changes in package.json. Running build...${COLOR_RESET}\n"
