@@ -58,7 +58,7 @@ container_exists() {
 }
 
 printf "${COLOR_GREEN}🛑 Stopping any running container for '$TARGET_BRANCH' (if any)...${COLOR_RESET}\n"
-make "${TARGET_BRANCH}-local-down" || true
+make "${TARGET_BRANCH}-local-stop" || true
 
 # Define the branch pattern to look for merge candidates into the target branch
 case "$TARGET_BRANCH" in
