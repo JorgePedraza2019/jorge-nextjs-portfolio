@@ -8,7 +8,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "test": "jest"
+    "test": "jest",
+    "sw": "./utils/switch.sh",
+    "sw2": "./utils/switch.sh"
   },
   "dependencies": {
     "react": "19.0.0-rc-69d4b800-20241021",

@@ -1,25 +1,26 @@
-# Use the official Node.js image
+# Use the official Node.js 20 image as the base
 FROM node:20.11.1
 
-# Set the working directory
+# Set the working directory inside the container
 WORKDIR /usr/src/app
 
-# Declare the NODE_ENV, and INSTALL_PLAYWRIGHT argument with a default value
-ARG NODE_ENV
-ARG INSTALL_PLAYWRIGHT
-# ARG INSTALL_DEV_LIBRARIES
+# Accept environment variables and arguments
+ARG NODE_ENV                # Expected values: development | production
+ARG INSTALL_PLAYWRIGHT      # Set to "true" to install Playwright and system dependencies
+# ARG INSTALL_DEV_LIBRARIES # (Optional) Uncomment if needed to include dev dependencies separately
 
-# Copy package.json and package-lock.json
+# Copy package definition files
 COPY package*.json ./
 
 # Install dependencies
+# If INSTALL_DEV_LIBRARIES is set to true, include dev dependencies (Note: Currently commented)
 RUN if [ "${INSTALL_DEV_LIBRARIES}" = "true" ]; then \
       npm install --include=dev; \
     else \
       npm install; \
     fi
 
-# Copy the rest of the application code
+# Conditionally install Playwright system dependencies if needed
 RUN if [ "${INSTALL_PLAYWRIGHT}" = "true" ]; then apt-get update && apt-get upgrade -y && apt-get install -y --no-install-recommends \
   libnss3 \
   libnspr4 \
@@ -56,11 +57,11 @@ RUN if [ "${INSTALL_PLAYWRIGHT}" = "true" ]; then apt-get update && apt-get upgr
   && apt-get clean \
   && rm -rf /var/lib/apt/lists/*; fi
 
-# Install Playwright dependencies
+# Install Playwright binaries if requested
 RUN if [ "${INSTALL_PLAYWRIGHT}" = "true" ]; then npx playwright install; fi
 
-# Copy the rest of the application code
+# Copy the rest of the application source code
 COPY . .
 
-# Build the application for production if NODE_ENV is set to production
+# Build the application in production mode
 RUN if [ "${NODE_ENV}" != "development" ]; then npm run build; fi

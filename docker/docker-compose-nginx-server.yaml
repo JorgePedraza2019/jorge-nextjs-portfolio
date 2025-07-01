@@ -1,0 +1,16 @@
+services:
+  nginx:  # Defines the NGINX reverse proxy service for handling HTTPS traffic in a server environment
+
+    container_name: ${NGINX_CONTAINER_NAME}  # Sets the container name from environment variable (e.g., jorge-portfolio-frontend-nginx-dev-server-container)
+
+    image: nginx:latest  # Uses the official NGINX image from Docker Hub
+
+    ports:
+      - "${NGINX_PORT}:${NGINX_PORT}"  # Maps the host port to the container's NGINX port (typically 443 for HTTPS)
+
+    volumes:
+      - ${NGINX_CONF_DIR}:/etc/nginx/conf.d/default.conf:ro  # Mounts the NGINX configuration file into the container as read-only
+      - ${NGINX_CERTS_DIR}:/etc/nginx/certs/${ENV_TYPE}:ro   # Mounts the SSL certificates for the given environment (e.g., dev, qa, prod) into the container as read-only
+
+    depends_on:
+      - frontend  # Ensures that the frontend (Next.js app) service starts before NGINX
