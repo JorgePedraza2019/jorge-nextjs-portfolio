@@ -111,7 +111,7 @@ fi
 printf "${COLOR_YELLOW}🧩 Select a branch to merge into '$TARGET_BRANCH':${COLOR_RESET}\n"
 select FEATURE_BRANCH in $MERGE_CANDIDATES "Continue without merging"; do
   if [ "$FEATURE_BRANCH" = "Continue without merging" ]; then
-    printf "${COLOR_YELLOW}➡️ Continuing without merging...${COLOR_RESET}\n"
+    printf "${COLOR_YELLOW}➡️  Continuing without merging...${COLOR_RESET}\n"
     make "${TARGET_BRANCH}-local-up"
     exit 0
   elif [ -n "$FEATURE_BRANCH" ]; then
