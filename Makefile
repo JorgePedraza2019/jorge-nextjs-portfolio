@@ -92,6 +92,9 @@ feature-local-down:
 	@echo "$(COLOR_YELLOW)🧹 Removing FEATURE container...$(COLOR_RESET)"
 	@docker-compose --env-file ${ENV_FEATURE_LOCAL} -p $(PROJECT_NAME)-feature-local -f docker/docker-compose.yaml down -v
 
+feature-local-lint:
+	@docker-compose --env-file ${ENV_FEATURE_LOCAL} -p $(PROJECT_NAME)-feature-local -f docker/feature/docker-compose.feature.yaml exec -T frontend npm run lint
+
 ## CI
 feature-ci-build-up:
 	docker-compose --env-file ${ENV_FEATURE_CI} -p $(PROJECT_NAME)-feature-local -f docker/docker-compose.yaml -f docker/docker-compose-override-feature.yaml up -d --build
@@ -127,6 +130,12 @@ dev-local-stop:
 dev-local-down:
 	@echo "$(COLOR_YELLOW)🧹 Removing DEV containers...$(COLOR_RESET)"
 	@docker-compose --env-file ${ENV_DEV_LOCAL} -p $(PROJECT_NAME)-dev-local -f docker/docker-compose.yaml -f docker/docker-compose-nginx-local.yaml down -v
+
+dev-local-lint:
+	@docker-compose --env-file ${ENV_DEV_LOCAL} -p $(PROJECT_NAME)-dev-local -f docker/docker-compose.dev.yaml exec -T frontend npm run lint
+
+dev-local-test:
+	@docker-compose --env-file ${ENV_DEV_LOCAL} -p $(PROJECT_NAME)-dev-local -f docker/docker-compose.dev.yaml exec -T frontend npm test
 
 ## CI
 dev-ci-build-up:
@@ -186,6 +195,9 @@ qa-local-logs:
 qa-local-down:
 	@echo "$(COLOR_YELLOW)🧹 Removing QA containers...$(COLOR_RESET)"
 	@docker-compose --env-file ${ENV_QA_LOCAL} -p $(PROJECT_NAME)-qa-local -f docker/docker-compose.yaml -f docker/docker-compose-nginx-local.yaml down -v
+
+qa-local-test:
+	@docker-compose --env-file ${ENV_QA_LOCAL} -p $(PROJECT_NAME)-qa-local -f docker/docker-compose.qa.yaml exec -T frontend npx playwright test
 
 ## CI
 qa-ci-build-up:

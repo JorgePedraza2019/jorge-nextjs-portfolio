@@ -1,66 +1,46 @@
 #!/usr/bin/env sh
 
-# ---------------------------------------------------
-# Load Husky environment (required for Git hooks)
-# ---------------------------------------------------
+# ----------------------------------------
+# Load Husky environment
+# ----------------------------------------
 . "$(dirname -- "$0")/_/husky.sh"
 
-# ---------------------------------------------------
-# Determine the current Git branch name
-# ---------------------------------------------------
+# ----------------------------------------
+# Colors
+# ----------------------------------------
+COLOR_GREEN='\033[1;32m'
+COLOR_YELLOW='\033[1;33m'
+COLOR_RESET='\033[0m'
+
+# ----------------------------------------
+# Detect branch
+# ----------------------------------------
 BRANCH_NAME="$(git rev-parse --abbrev-ref HEAD)"
 
 # ---------------------------------------------------
-# Set environment variables and compose file
-# based on the current Git branch
+# Run ESLint and Jest unit tests on 'dev' branch
 # ---------------------------------------------------
 if [ "$BRANCH_NAME" = "dev" ]; then
-  ENV_FILE="./env/dev/local.env"
-  DOCKER_COMPOSE_FILE="docker/docker-compose.dev.yaml"
-  PROJECT_NAME="jorge-portfolio-frontend-dev-local"
-elif [ "$BRANCH_NAME" = "qa" ]; then
-  ENV_FILE="./env/qa/local.env"
-  DOCKER_COMPOSE_FILE="docker/docker-compose.qa.yaml"
-  PROJECT_NAME="jorge-portfolio-frontend-qa-local"
-elif [ "$BRANCH_NAME" = "main" ]; then
-  ENV_FILE="./env/prod/local.env"
-  DOCKER_COMPOSE_FILE="docker/docker-compose.prod.yaml"
-  PROJECT_NAME="jorge-portfolio-frontend-prod-local"
-elif [[ "$BRANCH_NAME" =~ ^feature/ ]]; then
-  ENV_FILE="./env/feature/local.env"
-  DOCKER_COMPOSE_FILE="docker/feature/docker-compose.feature.yaml"
-  PROJECT_NAME="jorge-portfolio-frontend-feature-local"
-else
-  echo "Skipping hook: unsupported branch '$BRANCH_NAME'"
-  exit 0
-fi
+  echo "${COLOR_GREEN}🔍 Running ESLint on dev...${COLOR_RESET}"
+  make dev-local-lint
 
-# ---------------------------------------------------
-# Run ESLint on 'dev' and 'feature/*' branches
-# ---------------------------------------------------
-if [ "$BRANCH_NAME" = "dev" ] || [[ "$BRANCH_NAME" =~ ^feature/ ]]; then
-  echo "Running ESLint on branch '$BRANCH_NAME'..."
-  docker-compose --env-file "$ENV_FILE" -p "$PROJECT_NAME" -f "$DOCKER_COMPOSE_FILE" exec -T frontend npm run lint
-else
-  echo "Skipping ESLint on branch '$BRANCH_NAME'"
-fi
-
-# ---------------------------------------------------
-# Run Jest unit tests on 'dev' branch
-# ---------------------------------------------------
-if [ "$BRANCH_NAME" = "dev" ]; then
-  echo "Running Jest tests on branch '$BRANCH_NAME'..."
-  docker-compose --env-file "$ENV_FILE" -p "$PROJECT_NAME" -f "$DOCKER_COMPOSE_FILE" exec -T frontend npm test
-else
-  echo "Skipping Jest tests on branch '$BRANCH_NAME'"
-fi
+  echo "${COLOR_GREEN}🧪 Running Jest on dev...${COLOR_RESET}"
+  make dev-local-test
 
 # ---------------------------------------------------
 # Run Playwright E2E tests on 'qa' branch
 # ---------------------------------------------------
-if [ "$BRANCH_NAME" = "qa" ]; then
-  echo "Running Playwright tests on branch '$BRANCH_NAME'..."
-  docker-compose --env-file "$ENV_FILE" -p "$PROJECT_NAME" -f "$DOCKER_COMPOSE_FILE" exec -T frontend npx playwright test
+elif [ "$BRANCH_NAME" = "qa" ]; then
+  echo "${COLOR_GREEN}🎭 Running Playwright on qa...${COLOR_RESET}"
+  make qa-local-test
+
+# ---------------------------------------------------
+# Run ESLint on 'feature/*' branches
+# ---------------------------------------------------
+elif echo "$BRANCH_NAME" | grep -qE '^feature/'; then
+  echo "${COLOR_GREEN}🔍 Running ESLint on feature...${COLOR_RESET}"
+  make feature-local-lint
+
 else
-  echo "Skipping Playwright tests on branch '$BRANCH_NAME'"
+  echo "${COLOR_YELLOW}⚠️  Skipping pre-push checks on unsupported branch '${BRANCH_NAME}'${COLOR_RESET}"
 fi
