@@ -4,7 +4,7 @@
 .PHONY: feature-local-up feature-local-down feature-ci-* \
         dev-local-up dev-local-down dev-cd-* dev-ci-* \
         qa-local-up qa-local-down qa-cd-* qa-ci-* \
-        prod-local-up prod-local-down prod-cd-* prod-ci-*
+        main-local-up main-local-down main-cd-* main-ci-*
 
 # ----------------------------------------
 # Project-level constants
@@ -27,11 +27,11 @@ SSL_QA_KEY   = ./docker/nginx/local/certs/qa/qa.jorgeportfolio.local.key
 ENV_QA_CI         = ./env/qa/ci.env
 ENV_QA_CD     = ./env/qa/cd.env
 
-ENV_PROD_LOCAL    = ./env/prod/local.env
-SSL_PROD_CRT = ./docker/nginx/local/certs/prod/jorgeportfolio.local.crt
-SSL_PROD_KEY = ./docker/nginx/local/certs/prod/jorgeportfolio.local.key
-ENV_PROD_CI       = ./env/prod/ci.env
-ENV_PROD_CD   = ./env/prod/cd.env
+ENV_MAIN_LOCAL    = ./env/main/local.env
+SSL_MAIN_CRT = ./docker/nginx/local/certs/main/jorgeportfolio.local.crt
+SSL_MAIN_KEY = ./docker/nginx/local/certs/main/jorgeportfolio.local.key
+ENV_MAIN_CI       = ./env/main/ci.env
+ENV_MAIN_CD   = ./env/main/cd.env
 
 # ----------------------------------------
 # Colors (ANSI escape codes)
@@ -227,42 +227,42 @@ qa-cd-down:
 # ----------------------------------------
 
 ## Local
-prod-local-build-up:
-	@sh -c '$(call check-env-file,$(ENV_PROD_LOCAL)); $(call check-ssl-files,$$1,$$2)' dummy "$(SSL_PROD_CRT)" "$(SSL_PROD_KEY)"
-	@echo "$(COLOR_BLUE)🚀 Building and starting PRODUCTION containers... Running without logs, use 'make prod-local-logs' to see output.$(COLOR_RESET)"
-	@docker-compose --env-file ${ENV_PROD_LOCAL} -p $(PROJECT_NAME)-prod-local -f docker/docker-compose.yaml -f docker/docker-compose-nginx-local.yaml up -d --build
+main-local-build-up:
+	@sh -c '$(call check-env-file,$(ENV_MAIN_LOCAL)); $(call check-ssl-files,$$1,$$2)' dummy "$(SSL_MAIN_CRT)" "$(SSL_MAIN_KEY)"
+	@echo "$(COLOR_BLUE)🚀 Building and starting PRODUCTION containers... Running without logs, use 'make main-local-logs' to see output.$(COLOR_RESET)"
+	@docker-compose --env-file ${ENV_MAIN_LOCAL} -p $(PROJECT_NAME)-main-local -f docker/docker-compose.yaml -f docker/docker-compose-nginx-local.yaml up -d --build
 	@echo "$(COLOR_GREEN)✅ PRODUCTION containers started successfully.$(COLOR_RESET)"
 
-prod-local-up:
-	@sh -c '$(call check-env-file,$(ENV_PROD_LOCAL)); $(call check-ssl-files,$$1,$$2)' dummy "$(SSL_PROD_CRT)" "$(SSL_PROD_KEY)"
-	@echo "$(COLOR_BLUE)🚀 Starting PRODUCTION containers... Running without logs, use 'make prod-local-logs' to see output.$(COLOR_RESET)"
-	@docker-compose --env-file ${ENV_PROD_LOCAL} -p $(PROJECT_NAME)-prod-local -f docker/docker-compose.yaml -f docker/docker-compose-nginx-local.yaml up -d
+main-local-up:
+	@sh -c '$(call check-env-file,$(ENV_MAIN_LOCAL)); $(call check-ssl-files,$$1,$$2)' dummy "$(SSL_MAIN_CRT)" "$(SSL_MAIN_KEY)"
+	@echo "$(COLOR_BLUE)🚀 Starting PRODUCTION containers... Running without logs, use 'make main-local-logs' to see output.$(COLOR_RESET)"
+	@docker-compose --env-file ${ENV_MAIN_LOCAL} -p $(PROJECT_NAME)-main-local -f docker/docker-compose.yaml -f docker/docker-compose-nginx-local.yaml up -d
 	@echo "$(COLOR_GREEN)✅ PRODUCTION containers started successfully.$(COLOR_RESET)"
 
-prod-local-stop:
+main-local-stop:
 	@echo "$(COLOR_YELLOW)⏹️  Stopping PRODUCTION containers...$(COLOR_RESET)"
-	@docker-compose --env-file ${ENV_PROD_LOCAL} -p $(PROJECT_NAME)-prod-local -f docker/docker-compose.yaml -f docker/docker-compose-nginx-local.yaml stop
+	@docker-compose --env-file ${ENV_MAIN_LOCAL} -p $(PROJECT_NAME)-main-local -f docker/docker-compose.yaml -f docker/docker-compose-nginx-local.yaml stop
 
-prod-local-logs:
-	@docker-compose -p $(PROJECT_NAME)-prod-local logs -f
+main-local-logs:
+	@docker-compose -p $(PROJECT_NAME)-main-local logs -f
 
-prod-local-down:
+main-local-down:
 	@echo "$(COLOR_YELLOW)🧹 Removing PRODUCTION containers...$(COLOR_RESET)"
-	@docker-compose --env-file ${ENV_PROD_LOCAL} -p $(PROJECT_NAME)-prod-local -f docker/docker-compose.yaml -f docker/docker-compose-nginx-local.yaml down -v
+	@docker-compose --env-file ${ENV_MAIN_LOCAL} -p $(PROJECT_NAME)-main-local -f docker/docker-compose.yaml -f docker/docker-compose-nginx-local.yaml down -v
 
 ## CI
-prod-ci-build-up:
-	docker-compose --env-file ${ENV_PROD_CI} -p $(PROJECT_NAME)-prod-server -f docker/docker-compose.yaml up -d --build
+main-ci-build-up:
+	docker-compose --env-file ${ENV_MAIN_CI} -p $(PROJECT_NAME)-main-server -f docker/docker-compose.yaml up -d --build
 
-prod-ci-down:
-	docker-compose --env-file ${ENV_PROD_CI} -f docker/docker-compose.yaml down
+main-ci-down:
+	docker-compose --env-file ${ENV_MAIN_CI} -f docker/docker-compose.yaml down
 
 ## CD
-prod-cd-build-up:
-	@docker-compose --env-file ${ENV_PROD_CD} -p $(PROJECT_NAME)-prod-server -f docker/docker-compose.yaml -f docker/docker-compose-nginx-server.yaml up --build -d
+main-cd-build-up:
+	@docker-compose --env-file ${ENV_MAIN_CD} -p $(PROJECT_NAME)-main-server -f docker/docker-compose.yaml -f docker/docker-compose-nginx-server.yaml up --build -d
 
-prod-cd-up:
-	@docker-compose --env-file ${ENV_PROD_CD} -p $(PROJECT_NAME)-prod-server -f docker/docker-compose.yaml -f docker/docker-compose-nginx-server.yaml up
+main-cd-up:
+	@docker-compose --env-file ${ENV_MAIN_CD} -p $(PROJECT_NAME)-main-server -f docker/docker-compose.yaml -f docker/docker-compose-nginx-server.yaml up
 
-prod-cd-down:
-	@docker-compose --env-file ${ENV_PROD_CD} -p $(PROJECT_NAME)-prod-server -f docker/docker-compose.yaml -f docker/docker-compose-nginx-server.yaml down -v
+main-cd-down:
+	@docker-compose --env-file ${ENV_MAIN_CD} -p $(PROJECT_NAME)-main-server -f docker/docker-compose.yaml -f docker/docker-compose-nginx-server.yaml down -v
