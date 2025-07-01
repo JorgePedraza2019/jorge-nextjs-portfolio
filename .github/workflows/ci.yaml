@@ -14,8 +14,8 @@ on:
       ENV_VARS_DEV_CI: { required: true }
       # Secrets for QA branch
       ENV_VARS_QA_CI: { required: true }
-      # Secrets for PROD (main) branch
-      ENV_VARS_PROD_CI: { required: true }
+      # Secrets for MAIN branch
+      ENV_VARS_MAIN_CI: { required: true }
 
 jobs:
   build:
@@ -50,7 +50,7 @@ jobs:
             elif [[ "$BRANCH_NAME" == "qa" ]]; then
               echo -e "${{ secrets.ENV_VARS_QA_CI }}" > "$ENV_DIR/ci.env"
             elif [[ "$BRANCH_NAME" == "main" ]]; then
-              echo -e "${{ secrets.ENV_VARS_PROD_CI }}" > "$ENV_DIR/ci.env"
+              echo -e "${{ secrets.ENV_VARS_MAIN_CI }}" > "$ENV_DIR/ci.env"
             fi
           else
             # For any other branches (e.g., feature/*), use the feature env
@@ -64,7 +64,7 @@ jobs:
           case "${{ github.ref }}" in
             refs/heads/dev)   make dev-ci-build-up ;;
             refs/heads/qa)    make qa-ci-build-up ;;
-            refs/heads/main)  make prod-ci-build-up ;;
+            refs/heads/main)  make main-ci-build-up ;;
             *)                make feature-ci-build-up ;;
           esac
 
@@ -102,6 +102,6 @@ jobs:
           case "${{ github.ref }}" in
             refs/heads/dev)   make dev-ci-down ;;
             refs/heads/qa)    make qa-ci-down ;;
-            refs/heads/main)  make prod-ci-down ;;
+            refs/heads/main)  make main-ci-down ;;
             *)                make feature-ci-down ;;
           esac

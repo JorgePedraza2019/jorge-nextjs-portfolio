@@ -14,9 +14,9 @@ on:
       # QA environment
       SERVER_SSH_KEY_QA:       { required: true }
       ENV_VARS_QA_CD:          { required: true }
-      # PROD environment
-      SERVER_SSH_KEY_PROD:     { required: true }
-      ENV_VARS_PROD_CD:        { required: true }
+      # MAIN environment
+      SERVER_SSH_KEY_MAIN:     { required: true }
+      ENV_VARS_MAIN_CD:        { required: true }
 
 jobs:
   deploy:
@@ -33,7 +33,7 @@ jobs:
           elif [[ "${{ inputs.deploy_branch }}" == "qa" ]]; then
             echo "${{ secrets.ENV_VARS_QA_CD }}" > env.temp
           elif [[ "${{ inputs.deploy_branch }}" == "main" ]]; then
-            echo "${{ secrets.ENV_VARS_PROD_CD }}" > env.temp
+            echo "${{ secrets.ENV_VARS_MAIN_CD }}" > env.temp
           fi
 
           # Obtain SERVER_IP y SERVER_USER y export as env
@@ -48,7 +48,7 @@ jobs:
           username: ${{ env.SERVER_USER }}
           key: ${{ inputs.deploy_branch == 'dev' && secrets.SERVER_SSH_KEY_DEV || 
                   inputs.deploy_branch == 'qa' && secrets.SERVER_SSH_KEY_QA || 
-                  inputs.deploy_branch == 'main' && secrets.SERVER_SSH_KEY_PROD }}
+                  inputs.deploy_branch == 'main' && secrets.SERVER_SSH_KEY_MAIN }}
           port: 22
           script: |
             DEPLOY_BRANCH="${{ inputs.deploy_branch }}"
@@ -61,7 +61,7 @@ jobs:
             echo -e "${{ 
               inputs.deploy_branch == 'dev' && secrets.ENV_VARS_DEV_CD || 
               inputs.deploy_branch == 'qa' && secrets.ENV_VARS_QA_CD || 
-              inputs.deploy_branch == 'main' && secrets.ENV_VARS_PROD_CD 
+              inputs.deploy_branch == 'main' && secrets.ENV_VARS_MAIN_CD 
             }}" > env/$DEPLOY_BRANCH/cd.env
 
       - name: Run Makefile to lift containers on remote
@@ -71,7 +71,7 @@ jobs:
           username: ${{ env.SERVER_USER }}
           key: ${{ inputs.deploy_branch == 'dev' && secrets.SERVER_SSH_KEY_DEV || 
                   inputs.deploy_branch == 'qa' && secrets.SERVER_SSH_KEY_QA || 
-                  inputs.deploy_branch == 'main' && secrets.SERVER_SSH_KEY_PROD }}
+                  inputs.deploy_branch == 'main' && secrets.SERVER_SSH_KEY_MAIN }}
           port: 22
           script: |
             DEPLOY_BRANCH="${{ inputs.deploy_branch }}"

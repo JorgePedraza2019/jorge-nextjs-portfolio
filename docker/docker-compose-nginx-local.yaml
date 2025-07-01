@@ -8,7 +8,7 @@ services:
       dockerfile: docker/nginx/Dockerfile.nginx  # Specifies the custom Dockerfile to build the NGINX image with environment-specific configuration and certificates
 
       args:
-        ENV_TYPE: ${ENV_TYPE}  # Passes the current environment type (dev, qa, prod) as a build argument
+        ENV_TYPE: ${ENV_TYPE}  # Passes the current environment type (dev, qa, main) as a build argument
         NGINX_CONF_DIR: ${NGINX_CONF_DIR}  # Provides the path to the local NGINX config file to copy into the image
         NGINX_CERTS_DIR: ${NGINX_CERTS_DIR}  # Provides the path to the self-signed SSL certificates to copy into the image
 
