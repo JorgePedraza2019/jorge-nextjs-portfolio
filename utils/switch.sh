@@ -13,6 +13,7 @@ COLOR_RESET='\033[0m'
 
 PROJECT_NAME="jorge-portfolio-frontend"
 TARGET_BRANCH=$1
+SANITIZED_BRANCH="${TARGET_BRANCH//\//-}"
 
 if [ -z "$TARGET_BRANCH" ]; then
   printf "${COLOR_RED}❌ ERROR: You must provide a target branch (e.g., dev, qa, main).${COLOR_RESET}\n"
@@ -53,7 +54,7 @@ git switch "$TARGET_BRANCH"
 
 # Helper function: check if container for the target branch already exists
 container_exists() {
-  docker ps -a --format '{{.Names}}' | grep -q "${PROJECT_NAME}-app-${TARGET_BRANCH}-local-container"
+  docker ps -a --format '{{.Names}}' | grep -q "${PROJECT_NAME}-app-${SANITIZED_BRANCH}-local-container"
 }
 
 printf "${COLOR_GREEN}🛑 Stopping any running container for '$TARGET_BRANCH' (if any)...${COLOR_RESET}\n"
