@@ -54,11 +54,15 @@ git switch "$TARGET_BRANCH"
 
 # Helper function: check if container for the target branch already exists
 container_exists() {
-  docker ps -a --format '{{.Names}}' | grep -q "${PROJECT_NAME}-app-${SANITIZED_BRANCH}-local-container"
+  case "$TARGET_BRANCH" in
+    feature/*)
+      docker ps -a --format '{{.Names}}' | grep -q "${PROJECT_NAME}-app-feature-local-container"
+      ;;
+    *)
+      docker ps -a --format '{{.Names}}' | grep -q "${PROJECT_NAME}-app-${SANITIZED_BRANCH}-local-container"
+      ;;
+  esac
 }
-
-printf "${COLOR_GREEN}🛑 Stopping any running container for '$TARGET_BRANCH' (if any)...${COLOR_RESET}\n"
-make "${TARGET_BRANCH}-local-stop" || true
 
 # Define the branch pattern to look for merge candidates into the target branch
 case "$TARGET_BRANCH" in
@@ -94,7 +98,7 @@ MERGE_CANDIDATES=$(git branch -r --sort=-committerdate | grep "$FROM_PATTERN" | 
 done)
 
 if [ -z "$MERGE_CANDIDATES" ]; then
-  printf "${COLOR_YELLOW}ℹ️ No branches with new commits to merge into '$TARGET_BRANCH'.${COLOR_RESET}\n"
+  printf "${COLOR_YELLOW}ℹ️  No branches with new commits to merge into '$TARGET_BRANCH'.${COLOR_RESET}\n"
   if container_exists; then
     make "${TARGET_BRANCH}-local-up"
   else
