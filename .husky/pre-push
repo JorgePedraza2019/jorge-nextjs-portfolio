@@ -22,24 +22,24 @@ BRANCH_NAME="$(git rev-parse --abbrev-ref HEAD)"
 # ---------------------------------------------------
 if [ "$BRANCH_NAME" = "dev" ]; then
   echo "${COLOR_GREEN}🔍 Running ESLint on dev...${COLOR_RESET}"
-  make lint-dev-local
+  make dev-local-lint
 
   echo "${COLOR_GREEN}🧪 Running Jest on dev...${COLOR_RESET}"
-  make test-dev-local
+  make dev-local-test
 
 # ---------------------------------------------------
 # Run Playwright E2E tests on 'qa' branch
 # ---------------------------------------------------
 elif [ "$BRANCH_NAME" = "qa" ]; then
   echo "${COLOR_GREEN}🎭 Running Playwright on qa...${COLOR_RESET}"
-  make test-qa-local
+  make qa-local-test
 
 # ---------------------------------------------------
 # Run ESLint on 'feature/*' branches
 # ---------------------------------------------------
 elif echo "$BRANCH_NAME" | grep -qE '^feature/'; then
   echo "${COLOR_GREEN}🔍 Running ESLint on feature...${COLOR_RESET}"
-  make lint-feature-local
+  make feature-local-lint
 
 else
   echo "${COLOR_YELLOW}⚠️  Skipping pre-push checks on unsupported branch '${BRANCH_NAME}'${COLOR_RESET}"
