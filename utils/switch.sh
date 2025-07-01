@@ -49,8 +49,19 @@ case "$PREV_BRANCH" in
   feature/*) make feature-local-stop || true ;;
 esac
 
+git fetch origin
+
 # Switch to the new target branch
-git switch "$TARGET_BRANCH"
+git switch "$TARGET_BRANCH" > /dev/null 2>&1
+
+AHEAD_COUNT=$(git rev-list --count origin/"$TARGET_BRANCH"..HEAD)
+
+# Check if local branch is ahead of origin
+if [ "$AHEAD_COUNT" -gt 0 ]; then
+  printf "\n"
+  printf "${COLOR_YELLOW}⚠️  Your local '$TARGET_BRANCH' branch is ahead of 'origin/$TARGET_BRANCH' by $AHEAD_COUNT commit(s).${COLOR_RESET}\n"
+  printf "${COLOR_YELLOW}⚠️  Consider pushing your local changes first.${COLOR_RESET}\n"
+fi
 
 # Helper function: check if container for the target branch already exists
 container_exists() {
@@ -86,19 +97,29 @@ case "$TARGET_BRANCH" in
 esac
 
 printf "\n"
-printf "${COLOR_GREEN}🔍 Looking for branches with updates not yet merged into '$TARGET_BRANCH'...${COLOR_RESET}\n"
-git fetch origin
+case "$TARGET_BRANCH" in
+  dev)
+    printf "${COLOR_GREEN}🔍 Looking for feature branches (origin/feature/*) with updates not yet merged into local '$TARGET_BRANCH'...${COLOR_RESET}\n"
+    ;;
+  qa)
+    printf "${COLOR_GREEN}🔍 Looking for updates from 'origin/dev' not yet merged into local '$TARGET_BRANCH'...${COLOR_RESET}\n"
+    ;;
+  main)
+    printf "${COLOR_GREEN}🔍 Looking for updates from 'origin/qa' not yet merged into local '$TARGET_BRANCH'...${COLOR_RESET}\n"
+    ;;
+esac
 
 # Identify remote branches that contain commits not yet merged into the target branch
 MERGE_CANDIDATES=$(git branch -r --sort=-committerdate | grep "$FROM_PATTERN" | while read -r remote_branch; do
   LOCAL_BRANCH="${remote_branch#origin/}"
-  if [ "$(git rev-list --count origin/$TARGET_BRANCH..$remote_branch)" -gt 0 ]; then
+  if [ "$(git rev-list --count HEAD..$remote_branch)" -gt 0 ]; then
     printf "$LOCAL_BRANCH\n"
   fi
 done)
 
 if [ -z "$MERGE_CANDIDATES" ]; then
   printf "${COLOR_YELLOW}ℹ️  No branches with new commits to merge into '$TARGET_BRANCH'.${COLOR_RESET}\n"
+  printf "\n"
   if container_exists; then
     make "${TARGET_BRANCH}-local-up"
   else
@@ -108,7 +129,7 @@ if [ -z "$MERGE_CANDIDATES" ]; then
 fi
 
 # Prompt user to select a branch to merge into the target branch
-printf "${COLOR_YELLOW}🧩 Select a branch to merge into '$TARGET_BRANCH':${COLOR_RESET}\n"
+printf "${COLOR_YELLOW}🧩 Select a branch to merge into local '$TARGET_BRANCH':${COLOR_RESET}\n"
 select FEATURE_BRANCH in $MERGE_CANDIDATES "Continue without merging"; do
   if [ "$FEATURE_BRANCH" = "Continue without merging" ]; then
     printf "${COLOR_YELLOW}➡️  Continuing without merging...${COLOR_RESET}\n"
@@ -116,10 +137,10 @@ select FEATURE_BRANCH in $MERGE_CANDIDATES "Continue without merging"; do
     exit 0
   elif [ -n "$FEATURE_BRANCH" ]; then
     printf "${COLOR_GREEN}🔀 Merging '$FEATURE_BRANCH' into '$TARGET_BRANCH'...${COLOR_RESET}\n"
-    git merge origin/"$FEATURE_BRANCH" --no-edit || {
+    if ! git merge origin/"$FEATURE_BRANCH" --no-edit; then
       printf "${COLOR_RED}❌ Merge conflict detected. Resolve manually.${COLOR_RESET}\n"
       exit 1
-    }
+    fi
     break
   else
     printf "${COLOR_RED}❌ Invalid selection. Try again.${COLOR_RESET}\n"
