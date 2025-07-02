@@ -2,7 +2,17 @@
 
 This document explains how the project behaves per **branch** and **environment** (`local`, `CI`, `CD`) regarding tools, dependencies, servers, testing, and execution.
 
----
+⸻
+
+### 📚 Table of Contents
+
+1. [📁 Branches Overview](#-branches-overview)  
+2. [🛠️ Tools & Technologies](#️-tools--technologies)  
+3. [🚀 Environment Behavior Matrix](#-environment-behavior-matrix)  
+4. [⚙️ Execution Modes Explained](#️-execution-modes-explained)  
+5. [📌 Final Notes](#-final-notes)
+
+⸻
 
 ## 📁 Branches Overview
 
@@ -13,7 +23,7 @@ This document explains how the project behaves per **branch** and **environment*
 | `qa`         | Manual validation before production (deployed to QA server)   |
 | `main`       | Final production build. No testing, stable execution only     |
 
----
+⸻
 
 ## 🛠️ Tools & Technologies
 
@@ -24,7 +34,7 @@ This document explains how the project behaves per **branch** and **environment*
 - **ESLint**: Used in `feature/*` and `dev`.
 - **Dev Libraries**: Installed only in `feature/*` and `dev` (`local` and `CI` only).
 
----
+⸻
 
 ## 🚀 Environment Behavior Matrix
 
@@ -45,14 +55,16 @@ This document explains how the project behaves per **branch** and **environment*
 
 **Note:** Installing `devDependencies` does not depend solely on the execution mode (development vs production). In some CI environments, even if the app runs in production mode (`npm start`), dev tools like ESLint, Jest, and Playwright are required, so they are installed intentionally.
 
+⸻
+
 ### ⚙️ Execution Modes Explained
 
-| Mode         | Description |
-|--------------|-------------|
+| Mode          | Description |
+|---------------|-------------|
 | `development` | - Runs the app using `npm run dev` (with hot reloading)<br>- Installs **all dependencies**, including `devDependencies` from `package.json`<br>- Used for active development and local testing |
 | `production`  | - Runs the app using `npm start` after a `npm run build`<br>- Installs **only production dependencies** (excluding `devDependencies`)<br>- Used in CI/CD pipelines and production servers |
 
----
+⸻
 
 ## 📌 Final Notes
 
@@ -65,6 +77,6 @@ This document explains how the project behaves per **branch** and **environment*
 
 > Refer to the `Makefile` for the exact commands used in each environment (`*-ci-*`, `*-cd-*`, `*-local-*`), including dependency installation, testing, and teardown.
 
----
+⸻
 
 📁 This file serves as a high-level guide to understand **what runs where, when, and how**—ensuring clarity and consistency across environments and branches.
