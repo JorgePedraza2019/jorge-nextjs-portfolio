@@ -77,8 +77,8 @@ fi
 REMOTE_COMMIT=$(git log -1 origin/"$TARGET_BRANCH" --pretty=format:"%h — %s — %an — %cd" --date=format:"%Y-%m-%d %H:%M" || echo "(none)")
 LOCAL_COMMIT=$(git log -1 HEAD --pretty=format:"%h — %s — %an — %cd" --date=format:"%Y-%m-%d %H:%M" || echo "(none)")
 
-printf "\n${COLOR_BLUE}☁️  Origin '$TARGET_BRANCH': $REMOTE_COMMIT${COLOR_RESET}\n"
-printf "\n${COLOR_BLUE}📅 Local  '$TARGET_BRANCH': $LOCAL_COMMIT${COLOR_RESET}"
+printf "\n${COLOR_BLUE}☁️  Origin '$TARGET_BRANCH': $REMOTE_COMMIT${COLOR_RESET}"
+printf "\n${COLOR_BLUE}📅 Local  '$TARGET_BRANCH': $LOCAL_COMMIT${COLOR_RESET}\n"
 
 # -------------------------
 # Warn if local branch is ahead of origin
