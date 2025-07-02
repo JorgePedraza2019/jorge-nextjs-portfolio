@@ -1,10 +1,12 @@
 # 🧠 Git Workflow Guide with Docker Environments
 
-This document describes the two recommended Git and Docker workflows for this project:  
-- One for a **solo developer**
-- Another for a **collaborative team**
+This document explains how to work with Git and Docker across environments (`feature`, `dev`, `qa`, `main`) using the provided automation scripts.
 
----
+It covers two typical workflows:
+- One for **solo developers**
+- One for **collaborative teams**
+
+⸻
 
 ## 📚 Table of Contents
 
@@ -19,14 +21,27 @@ This document describes the two recommended Git and Docker workflows for this pr
 4. [Best Practices](#best-practices)  
 5. [CI/CD Considerations](#cicd-considerations)
 
----
+⸻
 
 ## 🧭 Overview
 
 This project uses a multi-environment structure (`feature`, `dev`, `qa`, `main`) powered by Docker Compose.  
-It includes automation hooks (e.g., Git `post-checkout`) to manage containers and optionally prompt for merges when switching between branches.
+It includes automation hooks to manage containers and optionally prompt for merges when switching between branches.
 
----
+Branches:
+- `feature/*`: Active development  
+- `dev`: Integration and unit tests  
+- `qa`: Staging  
+- `main`: Production
+
+Environments are managed using two CLI scripts:
+
+| Script             | Purpose                                                                     |
+|--------------------|-----------------------------------------------------------------------------|
+| `npm run sw -- dev`  | Switch to a target branch (e.g. dev, qa, main) and start full environment |
+| `npm run launch`     | Start environment on the **current branch** with smart merge/build logic  |
+
+⸻
 
 ## ✅ Option 1: Solo Developer Workflow
 
@@ -37,28 +52,25 @@ It includes automation hooks (e.g., Git `post-checkout`) to manage containers an
    git checkout -b feature/your-feature
    ```
 
-2. **Make code changes and commit**  
+2.	**Code, commit, and push**
    ```bash
    git add .
    git commit -m "New feature implemented"
    git push origin feature/your-feature
    ```
 
-3. **Switch to dev**  
+3.	**Switch to dev and integrate your branch**
    ```bash
-   git switch dev
+   npm run sw -- dev
    ```
 
-4. **The `post-checkout` hook will:**  
-   - Stop your current docker environment
-   - Detect new commits in your `feature` branch  
-   - Ask: “Do you want to merge `feature/your-feature` into `dev`?”  
-   - If yes → performs `git merge` automatically  
-   - If no → skips the merge and starts docker
-
-5. **Based on the changes:**  
-   - If `package.json` was modified → runs `make dev-local-build-up`  
-   - If not → runs `make dev-local-up`
+   This command will:
+	•	Stop any previous containers
+	•	Fetch latest remote branches
+	•	Offer to merge feature/your-feature into dev (if updates exist)
+	•	Detect changes in package.json and choose:
+	•	make dev-local-build-up (if changed)
+	•	make dev-local-up (otherwise)
 
 6. **Test in dev, then optionally push changes**  
    ```bash
@@ -69,16 +81,19 @@ It includes automation hooks (e.g., Git `post-checkout`) to manage containers an
    - Switch to `qa`, merge from `dev`, test, push  
    - Switch to `main`, merge from `qa`, test, push  
 
----
+⸻
 
-### 🔁 Automated Git Merge Detection
+### 🔁 Smart Git Merge Detection
 
-The system automatically checks:  
-- If your source branch (e.g., `feature/*`) has new commits  
-- If `package.json` or other build-relevant files changed  
-- Prompts for a merge only when needed
+When switching branches (via switch.sh) or launching (launch.sh), the system will:
+	•	Detect available updates in source branches
+	•	e.g., feature/* → dev, dev → qa, qa → main
+	•	Offer interactive prompt to merge the branch
+	•	Detect whether package.json changed
+	•	If yes → build from scratch (make <branch>-local-build-up)
+	•	If no → skip build for faster startup
 
----
+⸻
 
 ## 👥 Option 2: Team Collaboration Workflow
 
@@ -95,40 +110,52 @@ They:
 - Push changes to origin  
 - Notify the dev/qa maintainers when ready  
 
----
+⸻
 
 ### 🧪 Dev/QA Maintainers
 
-These users:  
-- Do **not** work on `feature` branches  
-- Only run `make dev-local-up` or `make qa-local-up`  
-- Do **not** switch branches manually  
+Maintainers of dev, qa, or main do not switch manually or run Docker commands directly.
+Instead, they simply run:
+```bash
+npm run launch
+```
 
-The `make dev-local-up` command will automatically:  
-- Detect if any `feature` branches have new changes  
-- Prompt: “Merge updates from `feature/username-task` into `dev`?”  
-- Perform the merge if accepted  
+This script:
+	•	Detects changes in upstream source branches (e.g., feature/* → dev)
+	•	Prompts for merging updates
+	•	Applies smart build logic based on package.json diffs
+	•	Launches the environment accordingly
 
-The same logic applies for QA:  
-- Detects updates in `dev` and prompts to merge into `qa`
+✅ This allows QA or Dev users to stay in a single branch and always have the latest changes.
 
----
+⸻
 
-### 🤖 Merge Automation
+### 🤖 Merge Automation Behavior
 
-This ensures that **even if the user never uses `git switch`**, the system still checks for upstream changes and handles merges before launching containers.
+| Branch             | Merge Source Detected        | Example                          |
+|--------------------|-----------------------------------------------------------------|
+| dev                | origin/feature/*             | Merge feature branches into dev  |
+| qa                 | origin/dev                   | Merge dev into qa                |
+| main               | origin/qa                    | Merge qa into main               |
+| feature/*          | ❌ No merge (direct startup) | Skip merge; build or up directly |
 
----
+feature/* branches are treated as isolated and do not pull from other branches.
+
+⸻
 
 ## 🛠 Best Practices
 
+- ✅ Use npm run sw -- <branch> to switch branches and apply all logic safely
+- ✅ Use npm run launch when staying in a branch and checking for updates
+- 🧪 Only use make commands for debugging or low-level tasks
+- 🔐 Keep .env and cert files properly configured
 - ✅ Always verify **CI status** on GitHub before merging  
+- 🔁 Push after every successful test or merge to keep the team synced
 - 🔍 Keep feature branches **small and focused**  
 - 🧹 Clean up old branches after merging  
 - 🧠 Prefer **interactive review** for major changes  
-- 🔐 Ensure `.env` and SSL files are correctly set per environment  
 
----
+⸻
 
 ## 🚀 CI/CD Considerations
 
@@ -141,3 +168,10 @@ This ensures that **even if the user never uses `git switch`**, the system still
 	- qa: Deploys to the QA server for staging and testing
 	- main: Deploys to the production server for final delivery
 	- 🔐 Only branches with stable and reviewed code should be merged into main
+
+| Branch            | CI | CD | Notes                                  |
+|-------------------|----|----|----------------------------------------|
+| feature/*         | ✅ | ❌ | Tests only (no deployment)             |
+| dev               | ✅ | ✅ | Deployed to dev server after CI passes |
+| qa                | ✅ | ✅ | Deployed to staging (QA) server        |
+| main              | ✅ | ✅ | Final production deployment            |
