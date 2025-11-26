@@ -1,7 +1,13 @@
+// src/app/[locale]/landing/page.js
+"use client";
+
 import Image from "next/image";
 import styles from "./page.module.css";
+import { useTranslations } from "next-intl";
 
-export default function Home() {
+export default function HomePage({ locale }) {
+  const t = useTranslations("home"); // Translation hook
+
   return (
     <div className={styles.page}>
       <main className={styles.main}>
@@ -17,7 +23,7 @@ export default function Home() {
           <li>
             Get started by editing <code>src/app/page.js</code>.
           </li>
-          <li>Save and see your changes instantly.</li>
+          <li>{t("list")}</li>
         </ol>
 
         <div className={styles.ctas}>

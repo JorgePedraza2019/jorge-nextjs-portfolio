@@ -13,9 +13,11 @@
     "sw": "./utils/switch.sh"
   },
   "dependencies": {
-    "react": "19.0.0-rc-69d4b800-20241021",
-    "react-dom": "19.0.0-rc-69d4b800-20241021",
-    "next": "15.0.1"
+    "next": "^15.4.1",
+    "@formatjs/intl-localematcher": "^0.6.1",
+    "next-intl": "^4.5.5",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
   },
   "devDependencies": {
     "@playwright/test": "^1.48.2",
