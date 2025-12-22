@@ -1,5 +1,504 @@
 {
   "home": {
-    "list": "Guarda y ve tus cambios instantáneamente."
+    "hero": {
+      "heading": "Hola, soy Jorge —",
+      "title": "Desarrollador Front-End",
+      "description": "Construyo experiencias web modernas, rápidas, limpias y animadas usando Next.js, React y MUI.",
+      "buttonText": "Ver Proyectos"
+    },
+    "tabsSection": {
+      "tabs": [
+        {
+          "title": "+4 Años",
+          "subtitle": "Experiencia e Impacto",
+          "description": "Desarrollador de Software Full-Stack con resultados comprobados en ingeniería front-end, arquitectura en la nube y soluciones de datos. Fuerte dominio en React, Next.js, Node.js, AWS, SQL y Power BI — entregando mejoras medibles en rendimiento, confiabilidad y experiencia UI/UX.",
+          "img": "https://images.unsplash.com/photo-1522199710521-72d69614c702?w=1200",
+          "extra": [
+            "Mejoré el rendimiento de UI en un 30% en múltiples sistemas productivos.",
+            "Reduje la latencia de APIs y tiempos de carga en un 20% mediante arquitectura optimizada.",
+            "Entregué aplicaciones React/Next.js seguras y escalables con arquitectura de componentes limpia.",
+            "Ingeniería en AWS — EC2, S3, RDS, VPC, con 10% menos downtime y mayor resiliencia.",
+            "Desarrollé dashboards en Power BI que mejoraron la toma de decisiones en un 20%.",
+            "Lideré y mentoricé equipos en entornos ágiles realizando revisiones de código."
+          ]
+        },
+        {
+          "title": "+5 Proyectos",
+          "subtitle": "Entregados en Producción",
+          "description": "Desarrollo end-to-end de aplicaciones escalables, mantenibles y listas para producción a través de entornos web, nube y datos. Alto sentido de ownership entregando soluciones enfocadas al negocio con impacto técnico medible.",
+          "img": "https://images.unsplash.com/photo-1506765515384-028b60a970df?w=1200",
+          "extra": [
+            "ServiGO (Onibex): +30% de optimización de rendimiento en componentes UI y arquitectura de estado.",
+            "Connect with Confluent: Dashboards Kafka con métricas en tiempo real y autenticación segura.",
+            "BadBank (MIT xPRO): Aplicación bancaria full-stack con autenticación, validaciones y lógica de transacciones.",
+            "Plug & Analyze: Dashboards analíticos reduciendo tiempos de análisis en 20–25%.",
+            "Infraestructura AWS: Deployments seguros y escalables usando EC2, S3, RDS, VPC, IAM.",
+            "Interfaces responsivas cross-platform para web y móvil usando React y sistemas modernos de CSS."
+          ]
+        }
+      ]
+    }
+  },
+  "about": {
+    "title": "Sobre mí",
+    "description": "Soy Jorge Pedraza — un Ingeniero de Software Full-Stack enfocado en construir aplicaciones web modernas, rápidas y escalables.\n\nDurante más de 4 años he entregado sistemas productivos cubriendo ingeniería front-end, infraestructura en la nube y analítica de datos. Mis principales fortalezas incluyen diseñar arquitecturas limpias en React/Next.js, optimizar rendimiento a gran escala y desplegar soluciones confiables basadas en AWS.\n\nCombino una sólida ingeniería de interfaces con pensamiento orientado a la nube: desde sistemas de componentes reutilizables y patrones de manejo de estado, hasta diseño de APIs seguras, modelado SQL y pipelines analíticos con Power BI.\n\nMe apasiona entregar productos de alta calidad, mejorar la experiencia del usuario mediante motion e interacción, y resolver problemas reales de negocio con ingeniería bien pensada. Me desenvuelvo mejor en entornos que valoran la responsabilidad, la claridad y la atención al detalle — siempre buscando generar impacto medible.",
+    "buttonText": "Descargar CV",
+    "timeline": {
+      "2026": {
+        "title": "Entrega a Nivel Senior y Consolidación de Portafolio",
+        "point1Brief": "Entregué aplicaciones modernas y escalables en Next.js con animaciones.",
+        "point1Detail": "Desarrollé aplicaciones escalables en Next.js con transiciones fluidas y prácticas modernas de UI.",
+        "point2Brief": "Arquitecté despliegues seguros en AWS con las mejores prácticas.",
+        "point2Detail": "Diseñé e implementé pipelines seguros de despliegue en AWS siguiendo estándares de la industria.",
+        "point3Brief": "Construí un portafolio de ingeniería premium alineado con estándares de contratación en EE.UU.",
+        "point3Detail": "Creé un portafolio profesional alineado con estándares de contratación en EE.UU. para mostrar habilidades y proyectos."
+      },
+      "2025": {
+        "title": "Entrega a Nivel Senior y Consolidación de Portafolio",
+        "point1Brief": "Entregué aplicaciones modernas y escalables en Next.js con animaciones.",
+        "point1Detail": "Desarrollé aplicaciones escalables en Next.js con transiciones fluidas y prácticas modernas de UI.",
+        "point2Brief": "Arquitecté despliegues seguros en AWS con las mejores prácticas.",
+        "point2Detail": "Diseñé e implementé pipelines seguros de despliegue en AWS siguiendo estándares de la industria.",
+        "point3Brief": "Construí un portafolio de ingeniería premium alineado con estándares de contratación en EE.UU.",
+        "point3Detail": "Creé un portafolio profesional alineado con estándares de contratación en EE.UU. para mostrar habilidades y proyectos."
+      },
+      "2024": {
+        "title": "React Avanzado, Next.js y Diseño de Sistemas",
+        "point1Brief": "Construí sistemas modulares en React/Next.js listos para producción.",
+        "point1Detail": "Desarrollé componentes modulares y reutilizables en React y Next.js para aplicaciones listas para producción.",
+        "point2Brief": "Lideré mejoras de UI/UX con arquitectura de componentes reutilizables.",
+        "point2Detail": "Impulsé mejoras de UI/UX diseñando arquitecturas de componentes reutilizables que aumentaron la consistencia y productividad.",
+        "point3Brief": "Reduje tiempos de carga un 20–30% en interfaces de alto tráfico.",
+        "point3Detail": "Implementé optimizaciones que redujeron significativamente los tiempos de carga en interfaces de alto tráfico."
+      },
+      "2023": {
+        "title": "Desarrollo Profesional e Ingeniería de Analítica",
+        "point1Brief": "Integré dashboards en Power BI mejorando la toma de decisiones un 20%.",
+        "point1Detail": "Construí e integré dashboards en Power BI que mejoraron la inteligencia de negocio y la eficiencia en la toma de decisiones en un 20%.",
+        "point2Brief": "Diseñé arquitecturas escalables listas para la nube.",
+        "point2Detail": "Arquitecté sistemas listos para la nube priorizando mantenibilidad, escalabilidad y seguridad.",
+        "point3Brief": "Mejoré tiempos de respuesta de APIs y la confiabilidad del sistema.",
+        "point3Detail": "Optimicé APIs backend para reducir tiempos de respuesta y aumentar la confiabilidad general del sistema."
+      },
+      "2022": {
+        "title": "Crecimiento en Full-Stack y Cloud Engineering",
+        "point1Brief": "Desarrollé sistemas full-stack escalables usando Node.js y SQL.",
+        "point1Detail": "Implementé sistemas backend escalables usando Node.js y bases SQL, enfocándome en rendimiento y mantenibilidad.",
+        "point2Brief": "Implementé mejoras de rendimiento en UI en múltiples aplicaciones.",
+        "point2Detail": "Optimizé la respuesta y carga de UI con code-splitting, lazy loading y manejo eficiente de estado.",
+        "point3Brief": "Desplegué soluciones usando EC2, S3, RDS y redes de AWS.",
+        "point3Detail": "Desplegué aplicaciones en infraestructura AWS configurando EC2, S3, RDS y componentes de red."
+      },
+      "2021": {
+        "title": "Front-End Avanzado y Certificación MIT xPRO",
+        "point1Brief": "Completé el Certificado Profesional Full-Stack de MIT xPRO.",
+        "point1Detail": "Obtuve un certificado profesional de MIT xPRO cubriendo conceptos avanzados de desarrollo full-stack.",
+        "point2Brief": "Creé una app full-stack bancaria con autenticación y transacciones.",
+        "point2Detail": "Construí una app bancaria full-stack con autenticación segura y lógica de transacciones.",
+        "point3Brief": "Dominé React Hooks, arquitectura de componentes y patrones de API.",
+        "point3Detail": "Profundicé en React Hooks, estructura de componentes y diseño eficiente de comunicación API."
+      },
+      "2020": {
+        "title": "Fundamentos de Ingeniería de Software",
+        "point1Brief": "Completé fundamentos tempranos de CS y entrenamiento full-stack.",
+        "point1Detail": "En 2020 completé cursos fundamentales de ciencias de la computación y desarrollo full-stack, incluyendo proyectos prácticos usando herramientas estándar de la industria.",
+        "point2Brief": "Construí mis primeras aplicaciones tipo producción y herramientas internas.",
+        "point2Detail": "Desarrollé aplicaciones iniciales estilo producción y herramientas internas, obteniendo experiencia en entrega real y colaboración en equipos.",
+        "point3Brief": "Obtuve fuerte dominio en JavaScript y fundamentos de React.",
+        "point3Detail": "Me enfoqué en dominar JavaScript y bases de React para construir interfaces responsivas e interactivas."
+      }
+    }
+  },
+  "projects": {
+    "heroTitle": "Mis Proyectos",
+    "tabs": {
+      "company": "Empresa",
+      "academic": "Académicos",
+      "personal": "Personales"
+    },
+    "cards": [
+      {
+        "slug": "servigo-onibex",
+        "category": "Empresa",
+        "title": "ServiGO (Onibex)",
+        "shortDescription": "Optimización de rendimiento en UI logrando +30% de mejora general.",
+        "summary": "Sistema integral de seguimiento de envíos para mejorar visibilidad y eficiencia en la gestión logística.",
+        "longDescription": [
+          "Desarrollé una solución integral de seguimiento de envíos que mejora la visibilidad y la eficiencia en la gestión logística.",
+          "Creé una aplicación web usando React y Next.js con Material-UI para proporcionar una interfaz de usuario intuitiva y responsiva.",
+          "Desarrollé APIs en Node.js para la gestión de datos y la interacción cliente-servidor, asegurando eficiencia y escalabilidad del sistema.",
+          "Implementé procedimientos almacenados en MySQL y ejecuté consultas SELECT para optimizar el acceso a datos y mejorar el rendimiento de la base de datos.",
+          "Implementé componentes reutilizables y optimicé la experiencia del usuario, logrando una navegación fluida y eficiente.",
+          "Integré APIs para la recolección de datos en tiempo real, permitiendo a los usuarios rastrear los envíos de manera precisa y oportuna.",
+          "Colaboré con un equipo multidisciplinario para asegurar que los requerimientos del proyecto estuvieran alineados y se entregaran soluciones efectivas.",
+          "Resultados: Mejoré la satisfacción del cliente en un 25% al reducir los tiempos de espera y proporcionar información actualizada sobre el estado de los envíos."
+        ],
+        "chips": [
+          "React",
+          "Optimización de UI",
+          "Gestión de Estado"
+        ],
+        "year": "2020",
+        "videoLight": "/videos/projects/light/servigo-light.mp4",
+        "videoDark": "/videos/projects/dark/servigo-dark.mp4"
+      },
+      {
+        "slug": "connect-confluent",
+        "category": "Empresa",
+        "title": "Connect with Confluent",
+        "shortDescription": "Dashboards de monitoreo Kafka en tiempo real.",
+        "summary": "Sistema integral de seguimiento de envíos para mejorar visibilidad y eficiencia en la gestión logística.",
+        "longDescription": [
+          "Desarrollé una solución integral de seguimiento de envíos que mejora la visibilidad y la eficiencia en la gestión logística.",
+          "Creé una aplicación web usando React y Next.js con Material-UI para proporcionar una interfaz de usuario intuitiva y responsiva.",
+          "Desarrollé APIs en Node.js para la gestión de datos y la interacción cliente-servidor, asegurando eficiencia y escalabilidad del sistema.",
+          "Implementé procedimientos almacenados en MySQL y ejecuté consultas SELECT para optimizar el acceso a datos y mejorar el rendimiento de la base de datos.",
+          "Implementé componentes reutilizables y optimicé la experiencia del usuario, logrando una navegación fluida y eficiente.",
+          "Integré APIs para la recolección de datos en tiempo real, permitiendo a los usuarios rastrear los envíos de manera precisa y oportuna.",
+          "Colaboré con un equipo multidisciplinario para asegurar que los requerimientos del proyecto estuvieran alineados y se entregaran soluciones efectivas.",
+          "Resultados: Mejoré la satisfacción del cliente en un 25% al reducir los tiempos de espera y proporcionar información actualizada sobre el estado de los envíos."
+        ],
+        "chips": [
+          "React",
+          "Node.js",
+          "Kafka",
+          "Autenticación",
+          "Dashboards"
+        ],
+        "year": "2020",
+        "videoLight": "/videos/projects/light/servigo-light.mp4",
+        "videoDark": "/videos/projects/dark/servigo-dark.mp4"
+      },
+      {
+        "slug": "badbank-mit",
+        "category": "Académicos",
+        "title": "BadBank (MIT xPRO)",
+        "shortDescription": "Aplicación bancaria full-stack con autenticación.",
+        "summary": "Sistema integral de seguimiento de envíos para mejorar visibilidad y eficiencia en la gestión logística.",
+        "longDescription": [
+          "Desarrollé una solución integral de seguimiento de envíos que mejora la visibilidad y la eficiencia en la gestión logística.",
+          "Creé una aplicación web usando React y Next.js con Material-UI para proporcionar una interfaz de usuario intuitiva y responsiva.",
+          "Desarrollé APIs en Node.js para la gestión de datos y la interacción cliente-servidor, asegurando eficiencia y escalabilidad del sistema.",
+          "Implementé procedimientos almacenados en MySQL y ejecuté consultas SELECT para optimizar el acceso a datos y mejorar el rendimiento de la base de datos.",
+          "Implementé componentes reutilizables y optimicé la experiencia del usuario, logrando una navegación fluida y eficiente.",
+          "Integré APIs para la recolección de datos en tiempo real, permitiendo a los usuarios rastrear los envíos de manera precisa y oportuna.",
+          "Colaboré con un equipo multidisciplinario para asegurar que los requerimientos del proyecto estuvieran alineados y se entregaran soluciones efectivas.",
+          "Resultados: Mejoré la satisfacción del cliente en un 25% al reducir los tiempos de espera y proporcionar información actualizada sobre el estado de los envíos."
+        ],
+        "chips": [
+          "React",
+          "Node.js",
+          "MongoDB",
+          "Autenticación"
+        ],
+        "year": "2020",
+        "videoLight": "/videos/projects/light/servigo-light.mp4",
+        "videoDark": "/videos/projects/dark/servigo-dark.mp4"
+      },
+      {
+        "slug": "powerbi-analytics",
+        "category": "Empresa",
+        "title": "Plug & Analyze (Power BI)",
+        "shortDescription": "Dashboards empresariales reduciendo tiempos de análisis en 20–25%.",
+        "summary": "Sistema integral de seguimiento de envíos para mejorar visibilidad y eficiencia en la gestión logística.",
+        "longDescription": [
+          "Desarrollé una solución integral de seguimiento de envíos que mejora la visibilidad y la eficiencia en la gestión logística.",
+          "Creé una aplicación web usando React y Next.js con Material-UI para proporcionar una interfaz de usuario intuitiva y responsiva.",
+          "Desarrollé APIs en Node.js para la gestión de datos y la interacción cliente-servidor, asegurando eficiencia y escalabilidad del sistema.",
+          "Implementé procedimientos almacenados en MySQL y ejecuté consultas SELECT para optimizar el acceso a datos y mejorar el rendimiento de la base de datos.",
+          "Implementé componentes reutilizables y optimicé la experiencia del usuario, logrando una navegación fluida y eficiente.",
+          "Integré APIs para la recolección de datos en tiempo real, permitiendo a los usuarios rastrear los envíos de manera precisa y oportuna.",
+          "Colaboré con un equipo multidisciplinario para asegurar que los requerimientos del proyecto estuvieran alineados y se entregaran soluciones efectivas.",
+          "Resultados: Mejoré la satisfacción del cliente en un 25% al reducir los tiempos de espera y proporcionar información actualizada sobre el estado de los envíos."
+        ],
+        "chips": [
+          "Power BI",
+          "SQL",
+          "DAX",
+          "Modelado de Datos"
+        ],
+        "year": "2020",
+        "videoLight": "/videos/projects/light/servigo-light.mp4",
+        "videoDark": "/videos/projects/dark/servigo-dark.mp4"
+      },
+      {
+        "slug": "aws-infrastructure",
+        "category": "Empresa",
+        "title": "AWS Infrastructure Delivery",
+        "shortDescription": "Infraestructura segura y escalable con menor downtime.",
+        "summary": "Sistema integral de seguimiento de envíos para mejorar visibilidad y eficiencia en la gestión logística.",
+        "longDescription": [
+          "Desarrollé una solución integral de seguimiento de envíos que mejora la visibilidad y la eficiencia en la gestión logística.",
+          "Creé una aplicación web usando React y Next.js con Material-UI para proporcionar una interfaz de usuario intuitiva y responsiva.",
+          "Desarrollé APIs en Node.js para la gestión de datos y la interacción cliente-servidor, asegurando eficiencia y escalabilidad del sistema.",
+          "Implementé procedimientos almacenados en MySQL y ejecuté consultas SELECT para optimizar el acceso a datos y mejorar el rendimiento de la base de datos.",
+          "Implementé componentes reutilizables y optimicé la experiencia del usuario, logrando una navegación fluida y eficiente.",
+          "Integré APIs para la recolección de datos en tiempo real, permitiendo a los usuarios rastrear los envíos de manera precisa y oportuna.",
+          "Colaboré con un equipo multidisciplinario para asegurar que los requerimientos del proyecto estuvieran alineados y se entregaran soluciones efectivas.",
+          "Resultados: Mejoré la satisfacción del cliente en un 25% al reducir los tiempos de espera y proporcionar información actualizada sobre el estado de los envíos."
+        ],
+        "chips": [
+          "AWS",
+          "EC2",
+          "S3",
+          "RDS",
+          "VPC",
+          "IAM"
+        ],
+        "year": "2020",
+        "videoLight": "/videos/projects/light/servigo-light.mp4",
+        "videoDark": "/videos/projects/dark/servigo-dark.mp4"
+      },
+      {
+        "slug": "personal-portfolio",
+        "category": "Personales",
+        "title": "Portfolio Personal",
+        "shortDescription": "Mi portafolio personal con diseño moderno.",
+        "summary": "Sistema integral de seguimiento de envíos para mejorar visibilidad y eficiencia en la gestión logística.",
+        "longDescription": [
+          "Desarrollé una solución integral de seguimiento de envíos que mejora la visibilidad y la eficiencia en la gestión logística.",
+          "Creé una aplicación web usando React y Next.js con Material-UI para proporcionar una interfaz de usuario intuitiva y responsiva.",
+          "Desarrollé APIs en Node.js para la gestión de datos y la interacción cliente-servidor, asegurando eficiencia y escalabilidad del sistema.",
+          "Implementé procedimientos almacenados en MySQL y ejecuté consultas SELECT para optimizar el acceso a datos y mejorar el rendimiento de la base de datos.",
+          "Implementé componentes reutilizables y optimicé la experiencia del usuario, logrando una navegación fluida y eficiente.",
+          "Integré APIs para la recolección de datos en tiempo real, permitiendo a los usuarios rastrear los envíos de manera precisa y oportuna.",
+          "Colaboré con un equipo multidisciplinario para asegurar que los requerimientos del proyecto estuvieran alineados y se entregaran soluciones efectivas.",
+          "Resultados: Mejoré la satisfacción del cliente en un 25% al reducir los tiempos de espera y proporcionar información actualizada sobre el estado de los envíos."
+        ],
+        "chips": [
+          "Next.js",
+          "React",
+          "Framer Motion"
+        ],
+        "year": "2020",
+        "videoLight": "/videos/projects/light/servigo-light.mp4",
+        "videoDark": "/videos/projects/dark/servigo-dark.mp4"
+      }
+    ],
+    "viewCaseStudy": "Ver caso de estudio",
+    "projectOverview": "Resumen del Proyecto",
+    "projectDetails": "Detalles del proyecto",
+    "closeButton": "Cerrar"
+  },
+  "skills": {
+    "hero": {
+      "title": "Habilidades",
+      "description": "Domino una variedad de tecnologías y herramientas para construir aplicaciones web modernas, rápidas y escalables. Aquí están algunas de mis principales habilidades:",
+      "chips": [
+        "Frontend",
+        "Backend",
+        "Cloud",
+        "Data",
+        "Soft Skills"
+      ]
+    },
+    "header": {
+      "hard": "Habilidades Técnicas",
+      "soft": "Habilidades Blandas"
+    },
+    "techStack": [
+      "React",
+      "Next.js",
+      "TypeScript",
+      "Redux",
+      "Material UI",
+      "Framer Motion",
+      "Node.js",
+      "AWS",
+      "Postgres",
+      "MongoDB",
+      "Power BI",
+      "Docker"
+    ],
+    "softStack": [
+      "Comunicación",
+      "Liderazgo",
+      "Resolución de Problemas",
+      "Trabajo en Equipo",
+      "Adaptabilidad",
+      "Pensamiento Crítico"
+    ],
+    "hardCards": {
+      "frontend": {
+        "title": "Front-End",
+        "description": "Diseño interfaces de usuario de alto rendimiento, accesibles y animadas utilizando React, Next.js y patrones modernos de UI.",
+        "tags": [
+          "React",
+          "Next.js",
+          "Optimización de UI",
+          "Accesibilidad",
+          "Framer Motion"
+        ]
+      },
+      "backend": {
+        "title": "Back-End",
+        "description": "Construyo APIs y servicios seguros y escalables con Node.js, patrones REST y arquitecturas orientadas a bases de datos.",
+        "tags": [
+          "Node.js",
+          "Express",
+          "REST APIs",
+          "JWT",
+          "MongoDB",
+          "SQL"
+        ]
+      },
+      "cloud": {
+        "title": "Cloud & DevOps",
+        "description": "Diseño y despliego infraestructura en la nube sobre AWS, enfocada en escalabilidad, seguridad y confiabilidad.",
+        "tags": [
+          "AWS EC2",
+          "S3",
+          "RDS",
+          "VPC",
+          "IAM"
+        ]
+      },
+      "data": {
+        "title": "Data & BI",
+        "description": "Transformo datos en insights accionables utilizando SQL, Power BI y modelos de datos optimizados.",
+        "tags": [
+          "Power BI",
+          "DAX",
+          "Modelado de Datos",
+          "Rendimiento SQL"
+        ]
+      }
+    },
+    "softCards": {
+      "communication": {
+        "title": "Comunicación",
+        "description": "Comunico ideas técnicas de forma clara y efectiva, alineando equipos y stakeholders con objetivos comunes.",
+        "tags": [
+          "Presentaciones",
+          "Redacción Clara",
+          "Actualizaciones de Equipo"
+        ]
+      },
+      "leadership": {
+        "title": "Liderazgo",
+        "description": "Asumo ownership de iniciativas, guiando equipos, tomando decisiones y asegurando entregables de calidad.",
+        "tags": [
+          "Mentoría",
+          "Responsabilidad",
+          "Guía de Equipo"
+        ]
+      },
+      "problem-solving": {
+        "title": "Resolución de Problemas",
+        "description": "Analizo problemas complejos con enfoque lógico y calmado, priorizando impacto y soluciones sostenibles.",
+        "tags": [
+          "Análisis",
+          "Depuración",
+          "Pensamiento Crítico"
+        ]
+      }
+    },
+    "highlightedTitle": {
+      "hard": "Habilidades Técnicas Destacadas",
+      "soft": "Habilidades Blandas Destacadas",
+      "impact": "IMPACTO"
+    },
+    "hardHighlights": [
+      {
+        "title": "Optimización de UI",
+        "subtitle": "+30% rendimiento de render en Onibex",
+        "bullets": [
+          "Reducción de re-renders usando memoización y context selectivo",
+          "Mejoras en CSS crítico y code-splitting"
+        ]
+      },
+      {
+        "title": "Dashboards en Tiempo Real",
+        "subtitle": "Kafka + Dashboards",
+        "bullets": [
+          "Métricas en tiempo real con WebSockets y consultas optimizadas",
+          "Visualizaciones personalizadas en Power BI para stakeholders"
+        ]
+      },
+      {
+        "title": "Infraestructura AWS",
+        "subtitle": "Infraestructura segura y escalable",
+        "bullets": [
+          "Templates IaC, diseño de VPC y roles IAM seguros",
+          "Despliegues y monitoreo automatizados"
+        ]
+      }
+    ],
+    "softHighlights": [
+      {
+        "title": "Comunicación Clara",
+        "subtitle": "Alineación con stakeholders y equipo",
+        "bullets": [
+          "Traducción de conceptos técnicos para stakeholders no técnicos",
+          "Actualizaciones asíncronas y documentación consistentes"
+        ]
+      },
+      {
+        "title": "Liderazgo y Ownership",
+        "subtitle": "Impulsando iniciativas",
+        "bullets": [
+          "Lideré features de principio a fin desde planificación hasta release",
+          "Mentoricé compañeros y revisé PRs"
+        ]
+      },
+      {
+        "title": "Resolución de Problemas",
+        "subtitle": "Calma bajo presión",
+        "bullets": [
+          "Análisis de causa raíz en problemas de producción",
+          "Balance entre rapidez y calidad en la toma de decisiones"
+        ]
+      }
+    ],
+    "radar": {
+      "title": {
+        "hard": "Radar de Habilidades Técnicas",
+        "soft": "Radar de Habilidades Blandas"
+      },
+      "quickFacts": {
+        "hard": {
+          "title": "Datos rápidos",
+          "chips": [
+            "Dominio a nivel senior",
+            "Experiencia en producción",
+            "Mejora continua"
+          ]
+        },
+        "soft": {
+          "title": "Datos rápidos",
+          "chips": [
+            "Comunicación efectiva",
+            "Trabajo en equipo",
+            "Liderazgo demostrado"
+          ]
+        }
+      }
+    }
+  },
+  "contact": {
+    "title": "CONSTRUYAMOS ALGO INCREÍBLE",
+    "highlight": "INCREÍBLE",
+    "description": "Estoy abierto a colaboraciones, oportunidades freelance y posiciones de tiempo completo. Escríbeme un mensaje y me pondré en contacto contigo pronto.",
+    "form": {
+      "emailLabel": "Tu correo electrónico",
+      "messageLabel": "Mensaje",
+      "submit": "Enviar mensaje"
+    }
+  },
+  "navbar": {
+    "projectName": "PORTAFOLIO DE JORGE",
+    "home": "Inicio",
+    "about": "Acerca de",
+    "projects": "Proyectos",
+    "skills": "Habilidades",
+    "contact": "Contacto"
+  },
+  "footer": {
+    "home": "Inicio",
+    "about": "Acerca de",
+    "projects": "Proyectos",
+    "skills": "Habilidades",
+    "contact": "Contacto",
+    "rights": "Todos los derechos reservados"
   }
 }

@@ -1,27 +1,34 @@
-import localFont from "next/font/local";
-import "./globals.css";
+// src/layout.js
 
-const geistSans = localFont({
-  src: "./fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
-  weight: "100 900",
-});
-const geistMono = localFont({
-  src: "./fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
-  weight: "100 900",
-});
+import Providers from "@/components/Providers";
 
+/**
+ * Metadata for the application
+ * - Defines the default title and description for the website.
+ * - Can be extended for SEO purposes.
+ */
 export const metadata = {
   title: "Jorge's Portfolio",
-  description: "Welcome to Jorge's personal portfolio website.",
+  description: "Page not found or path does not exist.",
 };
 
+/**
+ * RootLayout
+ *
+ * Root layout component for the entire application.
+ * - Wraps all pages with Providers to supply Redux store, session management,
+ *   theming, and token renewal functionality.
+ * - Sets the HTML language to English.
+ *
+ * @param {React.ReactNode} children - Page content rendered inside the layout
+ */
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        {children}
+      <body>
+        <Providers>
+          {children}
+        </Providers>
       </body>
     </html>
   );
