@@ -74,7 +74,7 @@ export default function HeroSection({ locale }) {
             }}
           />
           <video
-            src="/videos/home/light/hero.mp4"
+            src={`${process.env.NEXT_PUBLIC_ASSETS_URL}/videos/home/light/hero.mp4`}
             autoPlay
             muted
             loop
@@ -90,7 +90,7 @@ export default function HeroSection({ locale }) {
             }}
           />
           <video
-            src="/videos/home/dark/hero.mp4"
+            src={`${process.env.NEXT_PUBLIC_ASSETS_URL}/videos/home/dark/hero.mp4`}
             autoPlay
             muted
             loop

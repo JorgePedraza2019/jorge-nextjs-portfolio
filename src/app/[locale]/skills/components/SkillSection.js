@@ -17,46 +17,46 @@ export default function SkillSection({ theme }) {
     {
       id: "frontend",
       level: 95,
-      videoLight: "/videos/projects/dark/hero.mp4",
-      videoDark: "/videos/projects/light/hero.mp4",
+      videoLight: `${process.env.NEXT_PUBLIC_ASSETS_URL}/videos/projects/portfolio/dark/hero.mp4`,
+      videoDark: `${process.env.NEXT_PUBLIC_ASSETS_URL}/videos/projects/portfolio/light/hero.mp4`,
     },
     {
       id: "backend",
       level: 82,
-      videoLight: "/videos/projects/dark/hero.mp4",
-      videoDark: "/videos/projects/light/hero.mp4",
+      videoLight: `${process.env.NEXT_PUBLIC_ASSETS_URL}/videos/projects/portfolio/dark/hero.mp4`,
+      videoDark: `${process.env.NEXT_PUBLIC_ASSETS_URL}/videos/projects/portfolio/light/hero.mp4`,
     },
     {
       id: "cloud",
       level: 75,
-      videoLight: "/videos/projects/dark/hero.mp4",
-      videoDark: "/videos/projects/light/hero.mp4",
+      videoLight: `${process.env.NEXT_PUBLIC_ASSETS_URL}/videos/projects/portfolio/dark/hero.mp4`,
+      videoDark: `${process.env.NEXT_PUBLIC_ASSETS_URL}/videos/projects/portfolio/light/hero.mp4`,
     },
     {
       id: "data",
       level: 78,
-      videoLight: "/videos/projects/dark/hero.mp4",
-      videoDark: "/videos/projects/light/hero.mp4",
+      videoLight: `${process.env.NEXT_PUBLIC_ASSETS_URL}/videos/projects/portfolio/dark/hero.mp4`,
+      videoDark: `${process.env.NEXT_PUBLIC_ASSETS_URL}/videos/projects/portfolio/light/hero.mp4`,
     },
   ];
   const softSkillCards = [
     {
       id: "communication",
       level: 88,
-      videoLight: "/videos/projects/dark/hero.mp4",
-      videoDark: "/videos/projects/light/hero.mp4",
+      videoLight: `${process.env.NEXT_PUBLIC_ASSETS_URL}/videos/projects/portfolio/dark/hero.mp4`,
+      videoDark: `${process.env.NEXT_PUBLIC_ASSETS_URL}/videos/projects/portfolio/light/hero.mp4`,
     },
     {
       id: "leadership",
       level: 82,
-      videoLight: "/videos/projects/dark/hero.mp4",
-      videoDark: "/videos/projects/light/hero.mp4",
+      videoLight: `${process.env.NEXT_PUBLIC_ASSETS_URL}/videos/projects/portfolio/dark/hero.mp4`,
+      videoDark: `${process.env.NEXT_PUBLIC_ASSETS_URL}/videos/projects/portfolio/light/hero.mp4`,
     },
     {
       id: "problem-solving",
       level: 90,
-      videoLight: "/videos/projects/dark/hero.mp4",
-      videoDark: "/videos/projects/light/hero.mp4",
+      videoLight: `${process.env.NEXT_PUBLIC_ASSETS_URL}/videos/projects/portfolio/dark/hero.mp4`,
+      videoDark: `${process.env.NEXT_PUBLIC_ASSETS_URL}/videos/projects/portfolio/light/hero.mp4`,
     },
   ];
   const hardHighlights = t.raw("hardHighlights");

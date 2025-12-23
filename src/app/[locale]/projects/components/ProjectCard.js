@@ -91,8 +91,8 @@ export default function ProjectCard({ project }) {
 
             {/* VIDEO CON FADE */}
             <motion.video
-              key={videoSrc} // clave para animar al cambiar de tema
-              src={videoSrc}
+              key={`${process.env.NEXT_PUBLIC_ASSETS_URL}${videoSrc}`} // clave para animar al cambiar de tema
+              src={`${process.env.NEXT_PUBLIC_ASSETS_URL}${videoSrc}`}
               autoPlay
               muted
               loop
@@ -215,7 +215,12 @@ export default function ProjectCard({ project }) {
               >
                 {/* Scrollable content */}
                 <Box sx={{ overflowY: "auto", flex: 1, pr: 1 }}>
-                  <Typography variant="h3" fontWeight={800} gutterBottom sx={{ mb: 3 }}>
+                  <Typography
+                    variant="h3"
+                    fontWeight={800}
+                    gutterBottom
+                    sx={{ mb: 3 }}
+                  >
                     {project.title}
                   </Typography>
                   <Box
@@ -225,13 +230,23 @@ export default function ProjectCard({ project }) {
                       <Chip key={i} label={c} color="primary" />
                     ))}
                   </Box>
-                  <Typography variant="h6" fontWeight={700} gutterBottom sx={{ mt: 2, mb: 1 }}>
+                  <Typography
+                    variant="h6"
+                    fontWeight={700}
+                    gutterBottom
+                    sx={{ mt: 2, mb: 1 }}
+                  >
                     {t("projectOverview")}
                   </Typography>
                   <Typography sx={{ opacity: 0.8, mb: 4 }}>
                     {project.summary}
                   </Typography>
-                  <Typography variant="h6" fontWeight={700} gutterBottom sx={{ mt: 2, mb: 2 }}>
+                  <Typography
+                    variant="h6"
+                    fontWeight={700}
+                    gutterBottom
+                    sx={{ mt: 2, mb: 2 }}
+                  >
                     {t("projectDetails")}
                   </Typography>
                   <Box component="ul" sx={{ m: 0, pl: 3, mb: 2 }}>

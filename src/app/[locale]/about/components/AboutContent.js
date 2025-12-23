@@ -102,7 +102,7 @@ export default function AboutContent({ locale }) {
             <Button
               download
               component={Link}
-              href="/resume/Jorge-Pedraza-Software-Developer-2025.pdf"
+              href={`${process.env.NEXT_PUBLIC_ASSETS_URL}/resume/Jorge-Pedraza-Software-Developer.pdf`}
               variant="contained"
               sx={{
                 borderRadius: 3,
@@ -159,7 +159,7 @@ export default function AboutContent({ locale }) {
               }}
             >
               <video
-                src="/videos/about/light/hero.mp4"
+                src={`${process.env.NEXT_PUBLIC_ASSETS_URL}/videos/about/light/hero.mp4`}
                 autoPlay
                 loop
                 muted
@@ -177,7 +177,7 @@ export default function AboutContent({ locale }) {
                 }}
               />
               <video
-                src="/videos/about/dark/hero.mp4"
+                src={`${process.env.NEXT_PUBLIC_ASSETS_URL}/videos/about/dark/hero.mp4`}
                 autoPlay
                 loop
                 muted

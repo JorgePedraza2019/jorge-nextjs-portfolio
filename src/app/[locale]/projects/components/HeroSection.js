@@ -50,7 +50,7 @@ export default function HeroSection() {
           }}
         >
           <video
-            src="/videos/projects/light/hero.mp4"
+            src={`${process.env.NEXT_PUBLIC_ASSETS_URL}/videos/projects/portfolio/light/hero.mp4`}
             autoPlay
             muted
             loop
@@ -66,7 +66,7 @@ export default function HeroSection() {
             }}
           />
           <video
-            src="/videos/projects/dark/hero.mp4"
+            src={`${process.env.NEXT_PUBLIC_ASSETS_URL}/videos/projects/portfolio/dark/hero.mp4`}
             autoPlay
             muted
             loop
