@@ -1,0 +1,184 @@
+.
+├── backend
+│   ├── eslint.config.mjs
+│   ├── nest-cli.json
+│   ├── package-lock.json
+│   ├── package.json
+│   ├── README.md
+│   ├── src
+│   │   ├── app.controller.spec.ts
+│   │   ├── app.controller.ts
+│   │   ├── app.module.ts
+│   │   ├── app.service.ts
+│   │   └── main.ts
+│   ├── test
+│   │   ├── app.e2e-spec.ts
+│   │   └── jest-e2e.json
+│   ├── tsconfig.build.json
+│   └── tsconfig.json
+├── frontend
+│   ├── docker
+│   │   ├── docker-compose-nginx-local.yaml
+│   │   ├── docker-compose-nginx-server.yaml
+│   │   ├── docker-compose-override-dev.yaml
+│   │   ├── docker-compose-override-feature.yaml
+│   │   ├── docker-compose.yaml
+│   │   └── nginx
+│   │       ├── Dockerfile.nginx
+│   │       ├── local
+│   │       │   ├── certs
+│   │       │   │   ├── dev
+│   │       │   │   │   ├── dev.jorgeportfolio.local.crt
+│   │       │   │   │   └── dev.jorgeportfolio.local.key
+│   │       │   │   ├── main
+│   │       │   │   │   ├── jorgeportfolio.local.crt
+│   │       │   │   │   └── jorgeportfolio.local.key
+│   │       │   │   └── qa
+│   │       │   │       ├── qa.jorgeportfolio.local.crt
+│   │       │   │       └── qa.jorgeportfolio.local.key
+│   │       │   └── config
+│   │       │       ├── nginx.dev.local.conf
+│   │       │       ├── nginx.main.local.conf
+│   │       │       └── nginx.qa.local.conf
+│   │       └── server
+│   │           ├── certs
+│   │           │   ├── dev.jorgeportfolio.com.chain.crt
+│   │           │   ├── dev.jorgeportfolio.com.crt
+│   │           │   ├── dev.jorgeportfolio.com.key
+│   │           │   └── dev.jorgeportfolio.com.pass.key
+│   │           └── config
+│   │               ├── nginx.dev.server.conf
+│   │               ├── nginx.main.server.conf
+│   │               └── nginx.qa.server.conf
+│   ├── Dockerfile.nextjs
+│   ├── docs
+│   │   ├── environments.md
+│   │   ├── project-structure.md
+│   │   └── workflow-guide.md
+│   ├── env
+│   │   ├── dev
+│   │   │   ├── cd.env
+│   │   │   ├── cd.env.example
+│   │   │   ├── ci.env
+│   │   │   ├── ci.env.example
+│   │   │   ├── local.env
+│   │   │   └── local.env.example
+│   │   ├── feature
+│   │   │   ├── ci.env
+│   │   │   ├── ci.env.example
+│   │   │   ├── local.env
+│   │   │   └── local.env.example
+│   │   ├── main
+│   │   │   ├── cd.env
+│   │   │   ├── cd.env.example
+│   │   │   ├── ci.env
+│   │   │   ├── ci.env.example
+│   │   │   ├── local.env
+│   │   │   └── local.env.example
+│   │   └── qa
+│   │       ├── cd.env
+│   │       ├── cd.env.example
+│   │       ├── ci.env
+│   │       ├── ci.env.example
+│   │       ├── local.env
+│   │       └── local.env.example
+│   ├── jest.config.js
+│   ├── jsconfig.json
+│   ├── Makefile
+│   ├── next
+│   ├── next-intl.config.js
+│   ├── next.config.mjs
+│   ├── package-lock.json
+│   ├── package.json
+│   ├── playwright.config.js
+│   ├── project.txt
+│   ├── public
+│   ├── README.md
+│   ├── src
+│   │   ├── app
+│   │   │   ├── [locale]
+│   │   │   │   ├── about
+│   │   │   │   │   ├── components
+│   │   │   │   │   │   ├── AboutContent.js
+│   │   │   │   │   │   └── Timeline.js
+│   │   │   │   │   └── page.js
+│   │   │   │   ├── contact
+│   │   │   │   │   └── page.js
+│   │   │   │   ├── home
+│   │   │   │   │   ├── components
+│   │   │   │   │   │   ├── HeroSection.js
+│   │   │   │   │   │   └── TabsSection.js
+│   │   │   │   │   └── page.js
+│   │   │   │   ├── layout.js
+│   │   │   │   ├── page.js
+│   │   │   │   ├── projects
+│   │   │   │   │   ├── components
+│   │   │   │   │   │   ├── HeroSection.js
+│   │   │   │   │   │   └── ProjectCard.js
+│   │   │   │   │   └── page.js
+│   │   │   │   └── skills
+│   │   │   │       ├── components
+│   │   │   │       │   ├── HeroSection.js
+│   │   │   │       │   ├── HighlightedWork.js
+│   │   │   │       │   ├── SkillHeader.js
+│   │   │   │       │   ├── SkillList
+│   │   │   │       │   │   ├── ExpertiseCard.js
+│   │   │   │       │   │   └── SkillList.js
+│   │   │   │       │   ├── SkillRadar.js
+│   │   │   │       │   └── SkillSection.js
+│   │   │   │       └── page.js
+│   │   │   ├── api
+│   │   │   │   └── chat-stream
+│   │   │   │       └── route.js
+│   │   │   ├── fonts
+│   │   │   │   ├── GeistMonoVF.woff
+│   │   │   │   └── GeistVF.woff
+│   │   │   ├── globals.css
+│   │   │   ├── layout.js
+│   │   │   ├── not-found.js
+│   │   │   └── tests
+│   │   │       ├── jest
+│   │   │       │   └── example.test.js
+│   │   │       └── playwright
+│   │   │           └── example.spec.js
+│   │   ├── components
+│   │   │   ├── AI
+│   │   │   │   └── AIAssistantBar.js
+│   │   │   ├── AIIconButton.js
+│   │   │   ├── Error
+│   │   │   │   └── NotFoundPage.js
+│   │   │   ├── Footer.js
+│   │   │   ├── Language
+│   │   │   │   └── LanguageSelector.js
+│   │   │   ├── Navbar.js
+│   │   │   ├── Providers.js
+│   │   │   └── Theme
+│   │   │       ├── ThemeRegistry.js
+│   │   │       └── ThemeToggleIcon.js
+│   │   ├── i18n
+│   │   │   └── request.js
+│   │   ├── messages
+│   │   │   ├── en.json
+│   │   │   └── es.json
+│   │   ├── middleware.js
+│   │   ├── redux
+│   │   │   ├── store.js
+│   │   │   └── themeSlice.js
+│   │   ├── services
+│   │   │   ├── chatApi.js
+│   │   │   ├── emailApi.js
+│   │   │   └── httpClient.js
+│   │   └── theme
+│   │       ├── dark
+│   │       │   └── index.js
+│   │       ├── index.js
+│   │       └── light
+│   │           └── index.js
+│   ├── test-results
+│   └── utils
+│       ├── launch.sh
+│       └── switch.sh
+├── jorge-portfolio-tree.txt
+└── project.txt
+
+57 directories, 125 files

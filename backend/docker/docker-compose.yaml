@@ -1,0 +1,21 @@
+services:
+  backend:
+    container_name: ${BACKEND_CONTAINER_NAME}
+
+    build:
+      context: ..
+      dockerfile: ./docker/Dockerfile.nestjs
+
+      args:
+        NODE_ENV: ${NODE_ENV}
+
+    image: ${IMAGE_NAME}
+
+    environment:
+      - NODE_ENV=${NODE_ENV}
+      - PORT=${BACKEND_PORT}
+
+    env_file:
+      - ../env/${ENV_FILE_NAME}
+
+    command: ${START_COMMAND}

@@ -1,0 +1,24 @@
+# Use Node.js official image
+FROM node:20.11.1
+
+# Set working directory
+WORKDIR /usr/src/app
+
+# Accept environment variables
+ARG NODE_ENV
+
+# Copy package.json and package-lock.json
+COPY package*.json ./
+
+# Install dependencies
+RUN if [ "${NODE_ENV}" = "development" ]; then \
+      npm install; \
+    else \
+      npm ci --omit=dev; \
+    fi
+
+# Copy the rest of the source code
+COPY . .
+
+# Build the app if not development
+RUN if [ "${NODE_ENV}" != "development" ]; then npm run build; fi

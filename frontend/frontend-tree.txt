@@ -64,6 +64,7 @@
 │       ├── ci.env.example
 │       ├── local.env
 │       └── local.env.example
+├── frontend-tree.txt
 ├── jest.config.js
 ├── jsconfig.json
 ├── Makefile
@@ -75,30 +76,6 @@
 ├── playwright.config.js
 ├── project.txt
 ├── public
-│   ├── images
-│   │   └── projects
-│   │       └── dark
-│   │           └── project_dummy.png
-│   ├── resume
-│   │   └── Jorge-Pedraza-Software-Developer-2025.pdf
-│   └── videos
-│       ├── about
-│       │   ├── dark
-│       │   │   └── hero.mp4
-│       │   └── light
-│       │       └── hero.mp4
-│       ├── home
-│       │   ├── dark
-│       │   │   └── hero.mp4
-│       │   └── light
-│       │       └── hero.mp4
-│       └── projects
-│           ├── dark
-│           │   ├── hero.mp4
-│           │   └── servigo-dark.mp4
-│           └── light
-│               ├── hero.mp4
-│               └── servigo-light.mp4
 ├── README.md
 ├── src
 │   ├── app
@@ -121,8 +98,6 @@
 │   │   │   │   ├── components
 │   │   │   │   │   ├── HeroSection.js
 │   │   │   │   │   └── ProjectCard.js
-│   │   │   │   ├── data
-│   │   │   │   │   └── projects.js
 │   │   │   │   └── page.js
 │   │   │   └── skills
 │   │   │       ├── components
@@ -135,6 +110,9 @@
 │   │   │       │   ├── SkillRadar.js
 │   │   │       │   └── SkillSection.js
 │   │   │       └── page.js
+│   │   ├── api
+│   │   │   └── chat-stream
+│   │   │       └── route.js
 │   │   ├── fonts
 │   │   │   ├── GeistMonoVF.woff
 │   │   │   └── GeistVF.woff
@@ -147,6 +125,9 @@
 │   │       └── playwright
 │   │           └── example.spec.js
 │   ├── components
+│   │   ├── AI
+│   │   │   └── AIAssistantBar.js
+│   │   ├── AIIconButton.js
 │   │   ├── Error
 │   │   │   └── NotFoundPage.js
 │   │   ├── Footer.js
@@ -166,6 +147,10 @@
 │   ├── redux
 │   │   ├── store.js
 │   │   └── themeSlice.js
+│   ├── services
+│   │   ├── chatApi.js
+│   │   ├── emailApi.js
+│   │   └── httpClient.js
 │   └── theme
 │       ├── dark
 │       │   └── index.js
@@ -177,4 +162,4 @@
     ├── launch.sh
     └── switch.sh
 
-64 directories, 114 files
+53 directories, 110 files
