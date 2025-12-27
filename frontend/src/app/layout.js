@@ -1,6 +1,7 @@
 // src/layout.js
 
 import Providers from "@/components/Providers";
+import Script from "next/script";
 
 /**
  * Metadata for the application
@@ -25,6 +26,29 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
+      <head>
+        {/* Google Analytics solo en producción */}
+        {process.env.NODE_ENV === "production" && (
+          <>
+            <Script
+              strategy="afterInteractive"
+              src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA_ID}`}
+            />
+            <Script
+              id="ga-script"
+              strategy="afterInteractive"
+              dangerouslySetInnerHTML={{
+                __html: `
+                  window.dataLayer = window.dataLayer || [];
+                  function gtag(){dataLayer.push(arguments);}
+                  gtag('js', new Date());
+                  gtag('config', '${process.env.NEXT_PUBLIC_GA_ID}');
+                `,
+              }}
+            />
+          </>
+        )}
+      </head>
       <body>
         <Providers>
           {children}

@@ -1,23 +1,82 @@
 .
+├── .DS_Store
+├── .github
+│   └── workflows
 ├── backend
+│   ├── .gitignore
+│   ├── .prettierrc
+│   ├── backend-tree.txt
+│   ├── docker
+│   │   ├── docker-compose-override-feature.yaml
+│   │   └── docker-compose.yaml
+│   ├── Dockerfile.nestjs
+│   ├── env
+│   │   ├── dev
+│   │   ├── feature
+│   │   │   └── local.env
+│   │   ├── main
+│   │   └── qa
 │   ├── eslint.config.mjs
+│   ├── Makefile
 │   ├── nest-cli.json
 │   ├── package-lock.json
 │   ├── package.json
 │   ├── README.md
 │   ├── src
-│   │   ├── app.controller.spec.ts
-│   │   ├── app.controller.ts
 │   │   ├── app.module.ts
-│   │   ├── app.service.ts
-│   │   └── main.ts
-│   ├── test
-│   │   ├── app.e2e-spec.ts
-│   │   └── jest-e2e.json
+│   │   ├── config
+│   │   ├── main.ts
+│   │   └── modules
+│   │       ├── email
+│   │       │   ├── __tests__
+│   │       │   │   ├── email.controller.e2e-spec.ts
+│   │       │   │   └── email.service.e2e-spec.ts
+│   │       │   ├── controllers
+│   │       │   │   ├── email.controller.spec.ts
+│   │       │   │   └── email.controller.ts
+│   │       │   ├── dto
+│   │       │   │   └── send-email.dto.ts
+│   │       │   ├── email.module.ts
+│   │       │   └── services
+│   │       │       ├── email.service.spec.ts
+│   │       │       └── email.service.ts
+│   │       └── rag
+│   │           ├── __tests__
+│   │           │   ├── rag.controller.e2e-spec.ts
+│   │           │   └── rag.service.e2e-spec.ts
+│   │           ├── controllers
+│   │           │   ├── rag.controller.spec.ts
+│   │           │   └── rag.controller.ts
+│   │           ├── dto
+│   │           │   └── query-prompt.dto.ts
+│   │           ├── rag.module.ts
+│   │           └── services
+│   │               ├── rag.service.spec.ts
+│   │               └── rag.service.ts
 │   ├── tsconfig.build.json
-│   └── tsconfig.json
+│   ├── tsconfig.json
+│   └── utils
+│       ├── launch.sh
+│       └── switch.sh
+├── docker-compose.yaml
 ├── frontend
+│   ├── .DS_Store
+│   ├── .eslintrc.json
+│   ├── .github
+│   │   └── workflows
+│   │       ├── cd.yaml
+│   │       ├── ci-cd.yaml
+│   │       └── ci.yaml
+│   ├── .gitignore
+│   ├── .husky
+│   │   ├── _
+│   │   │   ├── .gitignore
+│   │   │   └── husky.sh
+│   │   └── pre-push
+│   ├── .vscode
+│   │   └── settings.json
 │   ├── docker
+│   │   ├── .DS_Store
 │   │   ├── docker-compose-nginx-local.yaml
 │   │   ├── docker-compose-nginx-server.yaml
 │   │   ├── docker-compose-override-dev.yaml
@@ -27,13 +86,18 @@
 │   │       ├── Dockerfile.nginx
 │   │       ├── local
 │   │       │   ├── certs
+│   │       │   │   ├── .DS_Store
 │   │       │   │   ├── dev
+│   │       │   │   │   ├── .DS_Store
+│   │       │   │   │   ├── .gitkeep
 │   │       │   │   │   ├── dev.jorgeportfolio.local.crt
 │   │       │   │   │   └── dev.jorgeportfolio.local.key
 │   │       │   │   ├── main
+│   │       │   │   │   ├── .gitkeep
 │   │       │   │   │   ├── jorgeportfolio.local.crt
 │   │       │   │   │   └── jorgeportfolio.local.key
 │   │       │   │   └── qa
+│   │       │   │       ├── .gitkeep
 │   │       │   │       ├── qa.jorgeportfolio.local.crt
 │   │       │   │       └── qa.jorgeportfolio.local.key
 │   │       │   └── config
@@ -41,6 +105,7 @@
 │   │       │       ├── nginx.main.local.conf
 │   │       │       └── nginx.qa.local.conf
 │   │       └── server
+│   │           ├── .DS_Store
 │   │           ├── certs
 │   │           │   ├── dev.jorgeportfolio.com.chain.crt
 │   │           │   ├── dev.jorgeportfolio.com.crt
@@ -56,6 +121,7 @@
 │   │   ├── project-structure.md
 │   │   └── workflow-guide.md
 │   ├── env
+│   │   ├── .DS_Store
 │   │   ├── dev
 │   │   │   ├── cd.env
 │   │   │   ├── cd.env.example
@@ -82,6 +148,7 @@
 │   │       ├── ci.env.example
 │   │       ├── local.env
 │   │       └── local.env.example
+│   ├── frontend-tree.txt
 │   ├── jest.config.js
 │   ├── jsconfig.json
 │   ├── Makefile
@@ -91,8 +158,8 @@
 │   ├── package-lock.json
 │   ├── package.json
 │   ├── playwright.config.js
-│   ├── project.txt
 │   ├── public
+│   │   └── .DS_Store
 │   ├── README.md
 │   ├── src
 │   │   ├── app
@@ -175,10 +242,15 @@
 │   │       └── light
 │   │           └── index.js
 │   ├── test-results
+│   │   └── .last-run.json
 │   └── utils
 │       ├── launch.sh
 │       └── switch.sh
 ├── jorge-portfolio-tree.txt
-└── project.txt
+├── Makefile
+├── README.md
+└── utils
+    ├── launch.sh
+    └── switch.sh
 
-57 directories, 125 files
+83 directories, 171 files

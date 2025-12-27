@@ -1,10 +1,6 @@
 #!/usr/bin/env bash
 set -e
 
-# Detecta la raíz del repo
-REPO_ROOT=$(git rev-parse --show-toplevel)
-cd "$REPO_ROOT" || exit
-
 # Colors
 COLOR_GREEN='\033[1;32m'
 COLOR_YELLOW='\033[1;33m'

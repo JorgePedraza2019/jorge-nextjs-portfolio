@@ -1,0 +1,19 @@
+# frontend/docker/docker-compose-override-feature.yaml
+services:
+  frontend:  # Define the service for the Next.js frontend application
+
+    ports:
+      - 3000:3000  # Maps host:container ports if USE_PORTS is defined; ignored if empty
+
+    volumes:
+      - ../frontend:/usr/src/app
+      - /usr/src/app/node_modules
+
+  backend:
+
+    ports:
+      - 3001:3001  # Maps host:container ports if USE_PORTS is defined; ignored if empty
+
+    volumes:
+    - ../backend:/usr/src/app
+    - /usr/src/app/node_modules

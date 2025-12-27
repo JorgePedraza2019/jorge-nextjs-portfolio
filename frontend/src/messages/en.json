@@ -480,9 +480,25 @@
     "highlight": "AMAZING",
     "description": "I’m open to collaborations, freelance opportunities, and full‑time roles. Drop me a message — I’ll get back to you soon.",
     "form": {
+      "firstNameLabel": "First Name",
+      "firstNameMin": "First name must be at least 2 characters",
+      "firstNameRequired": "First name is required",
+      "lastNameLabel": "Last Name",
+      "lastNameMin": "Last name must be at least 2 characters",
       "emailLabel": "Your email",
+      "emailRequired": "Email is required",
+      "emailInvalid": "Email is invalid",
+      "linkedinLabel": "LinkedIn Profile",
+      "linkedinUrlInvalid": "LinkedIn URL is invalid",
+      "companyLabel": "Company",
+      "positionLabel": "Position / Role",
       "messageLabel": "Message",
-      "submit": "Send Message"
+      "messageMin": "Message must be at least 10 characters",
+      "messageRequired": "Message is required",
+      "submit": "Send Message",
+      "submitSuccess": "Email sent successfully!",
+      "submitError": "An error occurred while sending your message.",
+      "submitUnexpected": "An unexpected error occurred."
     }
   },
   "navbar": {
@@ -491,7 +507,14 @@
     "about": "About",
     "projects": "Projects",
     "skills": "Skills",
-    "contact": "Contact"
+    "contact": "Contact",
+    "aiButton": "AI"
+  },
+  "ai": {
+    "placeholder1": "Ask about my experience and skills",
+    "placeholder2": "Inquire about my projects",
+    "placeholder3": "Ask me about Front-End technologies",
+    "placeholder4": "Ask about my cloud and backend expertise"
   },
   "footer": {
     "home": "Home",

@@ -1,10 +1,11 @@
 "use client";
 
 import { IconButton, Typography } from "@mui/material";
-import SmartToyIcon from "@mui/icons-material/SmartToy";
 import { motion } from "framer-motion";
+import { useTranslations } from "next-intl";
 
 export default function AIIconButton(props) {
+  const t = useTranslations("navbar");
   const gradientColors = [
     "#5ee7df",
     "#b490ca",
@@ -54,7 +55,9 @@ export default function AIIconButton(props) {
         aria-label="AI Icon Button"
       >
         {/* <SmartToyIcon fontSize="small" /> */}
-        <Typography sx={{ fontWeight: "bold", fontSize: 14 }}>AI</Typography>
+        <Typography sx={{ fontWeight: "bold", fontSize: 14 }}>
+          {t("aiButton")}
+        </Typography>
       </IconButton>
     </motion.div>
   );

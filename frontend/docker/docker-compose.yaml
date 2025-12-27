@@ -1,3 +1,4 @@
+# frontend/docker/docker-compose.yaml
 services:
   frontend:  # Define the service for the Next.js frontend application
     container_name: ${NEXT_CONTAINER_NAME}  # Assign a custom container name from the NEXT_CONTAINER_NAME environment variable

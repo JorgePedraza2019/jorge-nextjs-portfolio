@@ -27,6 +27,20 @@ const nextConfig = {
       },
     ],
   },
+
+  /**
+   * 🔁 Proxy interno para backend (SOLO Docker / feature)
+   * El browser llama a /api/*
+   * Next.js reenvía internamente a http://backend:3001
+   */
+  async rewrites() {
+    return [
+      {
+        source: "/api/:path*",
+        destination: "http://backend:3001/:path*",
+      },
+    ];
+  },
 };
 
 // Export the Next.js configuration wrapped with the NextIntl plugin

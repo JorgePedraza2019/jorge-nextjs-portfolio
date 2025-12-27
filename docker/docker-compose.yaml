@@ -1,0 +1,37 @@
+# docker-compose.yaml to start both frontend and backend services in local development mode in a single network
+services:
+  frontend:
+    build:
+      context: ../frontend
+      dockerfile: Dockerfile.nextjs
+    container_name: jorge-portfolio-frontend-full-local
+    env_file:
+      - ../frontend/env/feature/local.env
+    environment:
+      - NODE_ENV=development
+    command: npm run dev
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    networks:
+      - jorge-network
+
+  backend:
+    build:
+      context: ../backend
+      dockerfile: Dockerfile.nestjs
+    container_name: jorge-portfolio-backend-full-local
+    env_file:
+      - ../backend/env/feature/local.env
+    environment:
+      - NODE_ENV=development
+    command: npm run start:dev
+    ports:
+      - "3001:3001"
+    networks:
+      - jorge-network
+
+networks:
+  jorge-network:
+    driver: bridge

@@ -480,9 +480,25 @@
     "highlight": "INCREÍBLE",
     "description": "Estoy abierto a colaboraciones, oportunidades freelance y posiciones de tiempo completo. Escríbeme un mensaje y me pondré en contacto contigo pronto.",
     "form": {
+      "firstNameLabel": "Nombre",
+      "firstNameMin": "El nombre debe tener al menos 2 caracteres",
+      "firstNameRequired": "El nombre es obligatorio",
+      "lastNameLabel": "Apellido",
+      "lastNameMin": "El apellido debe tener al menos 2 caracteres",
       "emailLabel": "Tu correo electrónico",
+      "emailRequired": "El correo electrónico es obligatorio",
+      "emailInvalid": "El correo electrónico no es válido",
+      "linkedinLabel": "Perfil de LinkedIn",
+      "linkedinUrlInvalid": "La URL de LinkedIn no es válida",
+      "companyLabel": "Empresa",
+      "positionLabel": "Posición / Rol",
       "messageLabel": "Mensaje",
-      "submit": "Enviar mensaje"
+      "messageRequired": "El mensaje es obligatorio",
+      "messageMin": "El mensaje debe tener al menos 10 caracteres",
+      "submit": "Enviar mensaje",
+      "submitSuccess": "¡Correo enviado correctamente!",
+      "submitError": "Ocurrió un error al enviar el correo.",
+      "submitUnexpected": "Ocurrió un error inesperado."
     }
   },
   "navbar": {
@@ -491,7 +507,14 @@
     "about": "Acerca de",
     "projects": "Proyectos",
     "skills": "Habilidades",
-    "contact": "Contacto"
+    "contact": "Contacto",
+    "aiButton": "IA"
+  },
+  "ai": {
+    "placeholder1": "Pregunta sobre mi experiencia y habilidades",
+    "placeholder2": "Consulta sobre mis proyectos",
+    "placeholder3": "Pregúntame sobre tecnologías Front-End",
+    "placeholder4": "Pregunta sobre mi experiencia en cloud y backend"
   },
   "footer": {
     "home": "Inicio",

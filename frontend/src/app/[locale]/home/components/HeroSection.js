@@ -6,7 +6,7 @@ import { useTranslations } from "next-intl";
 import { motion, useScroll, useTransform } from "framer-motion";
 import Link from "next/link";
 import { useSelector } from "react-redux";
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 export default function HeroSection({ locale }) {
   const t = useTranslations("home.hero");
@@ -14,6 +14,50 @@ export default function HeroSection({ locale }) {
   const { darkMode } = useSelector((state) => state.theme);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm")); // Detecta móviles
+
+  // Typing effect for title (Front-End Developer → Back-End Developer → Full-Stack Developer)
+  const roles = [
+    "Front-End",
+    "Back-End",
+    "Full-Stack Developer",
+  ];
+  const [roleIndex, setRoleIndex] = useState(0);
+  const [displayText, setDisplayText] = useState("");
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  useEffect(() => {
+    const currentRole = roles[roleIndex];
+    const typingSpeed = isDeleting ? 50 : 90;
+    const pauseAfterTyping = 1200;
+
+    let timeout;
+
+    // If we reached the last role and finished typing it, stop completely
+    if (
+      roleIndex === roles.length - 1 &&
+      displayText === currentRole &&
+      !isDeleting
+    ) {
+      return;
+    }
+
+    if (!isDeleting && displayText === currentRole) {
+      timeout = setTimeout(() => setIsDeleting(true), pauseAfterTyping);
+    } else if (isDeleting && displayText === "") {
+      setIsDeleting(false);
+      setRoleIndex((prev) => prev + 1);
+    } else {
+      timeout = setTimeout(() => {
+        setDisplayText((prev) =>
+          isDeleting
+            ? prev.slice(0, -1)
+            : currentRole.slice(0, prev.length + 1)
+        );
+      }, typingSpeed);
+    }
+
+    return () => clearTimeout(timeout);
+  }, [displayText, isDeleting, roleIndex]);
 
   // Parallax suave al hacer scroll
   const videoScale = useTransform(
@@ -39,6 +83,10 @@ export default function HeroSection({ locale }) {
         justifyContent: "center",
         alignItems: "center",
         px: { xs: 2, sm: 3 },
+        "@keyframes blink": {
+          "0%, 50%": { opacity: 1 },
+          "51%, 100%": { opacity: 0 },
+        },
       }}
     >
       {/* VIDEO ENTRADA + PARALLAX */}
@@ -137,7 +185,18 @@ export default function HeroSection({ locale }) {
             {t("heading")}
             <br />
             <span style={{ color: "var(--mui-palette-primary-main)" }}>
-              {t("title")}
+              {displayText}
+              <span
+                style={{
+                  display: "inline-block",
+                  width: "0.6ch",
+                  marginLeft: 2,
+                  opacity: 0.8,
+                  animation: "blink 1s infinite",
+                }}
+              >
+                |
+              </span>
             </span>
           </Typography>
         </motion.div>

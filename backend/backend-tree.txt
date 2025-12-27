@@ -1,20 +1,115 @@
 .
 ├── backend-tree.txt
+├── dist
+│   ├── app.controller.d.ts
+│   ├── app.controller.js
+│   ├── app.controller.js.map
+│   ├── app.module.d.ts
+│   ├── app.module.js
+│   ├── app.module.js.map
+│   ├── app.service.d.ts
+│   ├── app.service.js
+│   ├── app.service.js.map
+│   ├── main.d.ts
+│   ├── main.js
+│   ├── main.js.map
+│   ├── modules
+│   │   ├── email
+│   │   │   ├── controllers
+│   │   │   │   ├── email.controller.d.ts
+│   │   │   │   ├── email.controller.js
+│   │   │   │   └── email.controller.js.map
+│   │   │   ├── dto
+│   │   │   │   ├── send-email.dto.d.ts
+│   │   │   │   ├── send-email.dto.js
+│   │   │   │   └── send-email.dto.js.map
+│   │   │   ├── email.controller.d.ts
+│   │   │   ├── email.controller.js
+│   │   │   ├── email.controller.js.map
+│   │   │   ├── email.module.d.ts
+│   │   │   ├── email.module.js
+│   │   │   ├── email.module.js.map
+│   │   │   ├── email.service.d.ts
+│   │   │   ├── email.service.js
+│   │   │   ├── email.service.js.map
+│   │   │   └── services
+│   │   │       ├── email.service.d.ts
+│   │   │       ├── email.service.js
+│   │   │       └── email.service.js.map
+│   │   └── rag
+│   │       ├── controllers
+│   │       │   ├── rag.controller.d.ts
+│   │       │   ├── rag.controller.js
+│   │       │   └── rag.controller.js.map
+│   │       ├── dto
+│   │       │   ├── query-prompt.dto.d.ts
+│   │       │   ├── query-prompt.dto.js
+│   │       │   └── query-prompt.dto.js.map
+│   │       ├── rag.controller.d.ts
+│   │       ├── rag.controller.js
+│   │       ├── rag.controller.js.map
+│   │       ├── rag.module.d.ts
+│   │       ├── rag.module.js
+│   │       ├── rag.module.js.map
+│   │       ├── rag.service.d.ts
+│   │       ├── rag.service.js
+│   │       ├── rag.service.js.map
+│   │       └── services
+│   │           ├── rag.service.d.ts
+│   │           ├── rag.service.js
+│   │           └── rag.service.js.map
+│   └── tsconfig.build.tsbuildinfo
+├── docker
+│   ├── docker-compose-override-feature.yaml
+│   └── docker-compose.yaml
+├── Dockerfile.nestjs
+├── env
+│   ├── dev
+│   ├── feature
+│   │   └── local.env
+│   ├── main
+│   └── qa
 ├── eslint.config.mjs
+├── Makefile
 ├── nest-cli.json
 ├── package-lock.json
 ├── package.json
 ├── README.md
 ├── src
-│   ├── app.controller.spec.ts
-│   ├── app.controller.ts
 │   ├── app.module.ts
-│   ├── app.service.ts
-│   └── main.ts
-├── test
-│   ├── app.e2e-spec.ts
-│   └── jest-e2e.json
+│   ├── config
+│   ├── main.ts
+│   └── modules
+│       ├── email
+│       │   ├── __tests__
+│       │   │   ├── email.controller.e2e-spec.ts
+│       │   │   └── email.service.e2e-spec.ts
+│       │   ├── controllers
+│       │   │   ├── email.controller.spec.ts
+│       │   │   └── email.controller.ts
+│       │   ├── dto
+│       │   │   └── send-email.dto.ts
+│       │   ├── email.module.ts
+│       │   └── services
+│       │       ├── email.service.spec.ts
+│       │       └── email.service.ts
+│       └── rag
+│           ├── __tests__
+│           │   ├── rag.controller.e2e-spec.ts
+│           │   └── rag.service.e2e-spec.ts
+│           ├── controllers
+│           │   ├── rag.controller.spec.ts
+│           │   └── rag.controller.ts
+│           ├── dto
+│           │   └── query-prompt.dto.ts
+│           ├── rag.module.ts
+│           └── services
+│               ├── rag.service.spec.ts
+│               └── rag.service.ts
 ├── tsconfig.build.json
-└── tsconfig.json
+├── tsconfig.json
+└── utils
+    ├── launch.sh
+    └── switch.sh
 
-3 directories, 15 files
+31 directories, 82 files
