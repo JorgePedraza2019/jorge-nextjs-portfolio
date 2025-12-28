@@ -1,11 +1,67 @@
 .
-├── .DS_Store
-├── .github
-│   └── workflows
 ├── backend
-│   ├── .gitignore
-│   ├── .prettierrc
 │   ├── backend-tree.txt
+│   ├── dist
+│   │   ├── app.module.d.ts
+│   │   ├── app.module.js
+│   │   ├── app.module.js.map
+│   │   ├── guards
+│   │   │   ├── internal-auth.guard.d.ts
+│   │   │   ├── internal-auth.guard.js
+│   │   │   └── internal-auth.guard.js.map
+│   │   ├── lib
+│   │   │   ├── pinecone.client.d.ts
+│   │   │   ├── pinecone.client.js
+│   │   │   └── pinecone.client.js.map
+│   │   ├── main.d.ts
+│   │   ├── main.js
+│   │   ├── main.js.map
+│   │   ├── modules
+│   │   │   ├── captcha
+│   │   │   │   ├── captcha.module.d.ts
+│   │   │   │   ├── captcha.module.js
+│   │   │   │   ├── captcha.module.js.map
+│   │   │   │   └── services
+│   │   │   │       ├── captcha.service.d.ts
+│   │   │   │       ├── captcha.service.js
+│   │   │   │       └── captcha.service.js.map
+│   │   │   ├── email
+│   │   │   │   ├── controllers
+│   │   │   │   │   ├── email.controller.d.ts
+│   │   │   │   │   ├── email.controller.js
+│   │   │   │   │   └── email.controller.js.map
+│   │   │   │   ├── dto
+│   │   │   │   │   ├── send-email.dto.d.ts
+│   │   │   │   │   ├── send-email.dto.js
+│   │   │   │   │   └── send-email.dto.js.map
+│   │   │   │   ├── email.module.d.ts
+│   │   │   │   ├── email.module.js
+│   │   │   │   ├── email.module.js.map
+│   │   │   │   └── services
+│   │   │   │       ├── email.service.d.ts
+│   │   │   │       ├── email.service.js
+│   │   │   │       └── email.service.js.map
+│   │   │   └── rag
+│   │   │       ├── controllers
+│   │   │       │   ├── rag.controller.d.ts
+│   │   │       │   ├── rag.controller.js
+│   │   │       │   └── rag.controller.js.map
+│   │   │       ├── dto
+│   │   │       │   ├── query-prompt.dto.d.ts
+│   │   │       │   ├── query-prompt.dto.js
+│   │   │       │   └── query-prompt.dto.js.map
+│   │   │       ├── rag.module.d.ts
+│   │   │       ├── rag.module.js
+│   │   │       ├── rag.module.js.map
+│   │   │       └── services
+│   │   │           ├── rag.service.d.ts
+│   │   │           ├── rag.service.js
+│   │   │           └── rag.service.js.map
+│   │   ├── scripts
+│   │   │   ├── ingest-portfolio.d.ts
+│   │   │   ├── ingest-portfolio.js
+│   │   │   └── ingest-portfolio.js.map
+│   │   └── tsconfig.build.tsbuildinfo
 │   ├── docker
 │   │   ├── docker-compose-override-feature.yaml
 │   │   └── docker-compose.yaml
@@ -25,58 +81,56 @@
 │   ├── src
 │   │   ├── app.module.ts
 │   │   ├── config
+│   │   ├── guards
+│   │   │   └── internal-auth.guard.ts
+│   │   ├── lib
+│   │   │   └── pinecone.client.ts
 │   │   ├── main.ts
-│   │   └── modules
-│   │       ├── email
-│   │       │   ├── __tests__
-│   │       │   │   ├── email.controller.e2e-spec.ts
-│   │       │   │   └── email.service.e2e-spec.ts
-│   │       │   ├── controllers
-│   │       │   │   ├── email.controller.spec.ts
-│   │       │   │   └── email.controller.ts
-│   │       │   ├── dto
-│   │       │   │   └── send-email.dto.ts
-│   │       │   ├── email.module.ts
-│   │       │   └── services
-│   │       │       ├── email.service.spec.ts
-│   │       │       └── email.service.ts
-│   │       └── rag
-│   │           ├── __tests__
-│   │           │   ├── rag.controller.e2e-spec.ts
-│   │           │   └── rag.service.e2e-spec.ts
-│   │           ├── controllers
-│   │           │   ├── rag.controller.spec.ts
-│   │           │   └── rag.controller.ts
-│   │           ├── dto
-│   │           │   └── query-prompt.dto.ts
-│   │           ├── rag.module.ts
-│   │           └── services
-│   │               ├── rag.service.spec.ts
-│   │               └── rag.service.ts
+│   │   ├── modules
+│   │   │   ├── captcha
+│   │   │   │   ├── captcha.module.ts
+│   │   │   │   └── services
+│   │   │   │       └── captcha.service.ts
+│   │   │   ├── email
+│   │   │   │   ├── __tests__
+│   │   │   │   │   ├── email.controller.e2e-spec.ts
+│   │   │   │   │   └── email.service.e2e-spec.ts
+│   │   │   │   ├── controllers
+│   │   │   │   │   ├── email.controller.spec.ts
+│   │   │   │   │   └── email.controller.ts
+│   │   │   │   ├── dto
+│   │   │   │   │   └── send-email.dto.ts
+│   │   │   │   ├── email.module.ts
+│   │   │   │   └── services
+│   │   │   │       ├── email.service.spec.ts
+│   │   │   │       └── email.service.ts
+│   │   │   └── rag
+│   │   │       ├── __tests__
+│   │   │       │   ├── rag.controller.e2e-spec.ts
+│   │   │       │   └── rag.service.e2e-spec.ts
+│   │   │       ├── controllers
+│   │   │       │   ├── rag.controller.spec.ts
+│   │   │       │   └── rag.controller.ts
+│   │   │       ├── dto
+│   │   │       │   └── query-prompt.dto.ts
+│   │   │       ├── rag.module.ts
+│   │   │       └── services
+│   │   │           ├── rag.service.spec.ts
+│   │   │           └── rag.service.ts
+│   │   └── scripts
+│   │       └── ingest-portfolio.ts
 │   ├── tsconfig.build.json
 │   ├── tsconfig.json
 │   └── utils
 │       ├── launch.sh
 │       └── switch.sh
-├── docker-compose.yaml
+├── docker
+│   ├── backend
+│   ├── docker-compose-override-feature.yaml
+│   ├── docker-compose.yaml
+│   └── frontend
 ├── frontend
-│   ├── .DS_Store
-│   ├── .eslintrc.json
-│   ├── .github
-│   │   └── workflows
-│   │       ├── cd.yaml
-│   │       ├── ci-cd.yaml
-│   │       └── ci.yaml
-│   ├── .gitignore
-│   ├── .husky
-│   │   ├── _
-│   │   │   ├── .gitignore
-│   │   │   └── husky.sh
-│   │   └── pre-push
-│   ├── .vscode
-│   │   └── settings.json
 │   ├── docker
-│   │   ├── .DS_Store
 │   │   ├── docker-compose-nginx-local.yaml
 │   │   ├── docker-compose-nginx-server.yaml
 │   │   ├── docker-compose-override-dev.yaml
@@ -86,18 +140,13 @@
 │   │       ├── Dockerfile.nginx
 │   │       ├── local
 │   │       │   ├── certs
-│   │       │   │   ├── .DS_Store
 │   │       │   │   ├── dev
-│   │       │   │   │   ├── .DS_Store
-│   │       │   │   │   ├── .gitkeep
 │   │       │   │   │   ├── dev.jorgeportfolio.local.crt
 │   │       │   │   │   └── dev.jorgeportfolio.local.key
 │   │       │   │   ├── main
-│   │       │   │   │   ├── .gitkeep
 │   │       │   │   │   ├── jorgeportfolio.local.crt
 │   │       │   │   │   └── jorgeportfolio.local.key
 │   │       │   │   └── qa
-│   │       │   │       ├── .gitkeep
 │   │       │   │       ├── qa.jorgeportfolio.local.crt
 │   │       │   │       └── qa.jorgeportfolio.local.key
 │   │       │   └── config
@@ -105,7 +154,6 @@
 │   │       │       ├── nginx.main.local.conf
 │   │       │       └── nginx.qa.local.conf
 │   │       └── server
-│   │           ├── .DS_Store
 │   │           ├── certs
 │   │           │   ├── dev.jorgeportfolio.com.chain.crt
 │   │           │   ├── dev.jorgeportfolio.com.crt
@@ -121,7 +169,6 @@
 │   │   ├── project-structure.md
 │   │   └── workflow-guide.md
 │   ├── env
-│   │   ├── .DS_Store
 │   │   ├── dev
 │   │   │   ├── cd.env
 │   │   │   ├── cd.env.example
@@ -159,7 +206,6 @@
 │   ├── package.json
 │   ├── playwright.config.js
 │   ├── public
-│   │   └── .DS_Store
 │   ├── README.md
 │   ├── src
 │   │   ├── app
@@ -170,6 +216,11 @@
 │   │   │   │   │   │   └── Timeline.js
 │   │   │   │   │   └── page.js
 │   │   │   │   ├── contact
+│   │   │   │   │   ├── components
+│   │   │   │   │   │   ├── ContactForm.js
+│   │   │   │   │   │   └── HeroSection.js
+│   │   │   │   │   ├── layout.js
+│   │   │   │   │   ├── originalPage.js
 │   │   │   │   │   └── page.js
 │   │   │   │   ├── home
 │   │   │   │   │   ├── components
@@ -242,7 +293,6 @@
 │   │       └── light
 │   │           └── index.js
 │   ├── test-results
-│   │   └── .last-run.json
 │   └── utils
 │       ├── launch.sh
 │       └── switch.sh
@@ -253,4 +303,4 @@
     ├── launch.sh
     └── switch.sh
 
-83 directories, 171 files
+100 directories, 204 files

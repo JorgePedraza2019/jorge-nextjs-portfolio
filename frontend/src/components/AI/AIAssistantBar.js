@@ -5,7 +5,7 @@ import { Box, InputBase, useTheme, Typography } from "@mui/material";
 import { motion, AnimatePresence, useAnimation } from "framer-motion";
 import CloseIcon from "@mui/icons-material/Close";
 import IconButton from "@mui/material/IconButton";
-import axios from "axios";
+import { queryRag } from "@/services/chatApi";
 import { useTranslations } from "next-intl";
 
 const MotionBox = motion(Box);
@@ -189,11 +189,10 @@ export default function AIAssistantBar() {
 
     setQuery("");
 
-    const res = await axios.post("http://localhost:3001/rag/query", {
+    const data = await queryRag({
       prompt: userMessage,
     });
 
-    const data = res.data;
     const fullText = data.answer;
     const sources = data.sources;
 

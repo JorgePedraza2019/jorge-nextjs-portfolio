@@ -7,6 +7,17 @@ const api = axios.create({
   timeout: 10000, // opcional, 10s
 });
 
+// Interceptor para agregar Bearer interno a todas las requests
+api.interceptors.request.use((config) => {
+  const token = process.env.NEXT_PUBLIC_INTERNAL_API_KEY;
+
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+
+  return config;
+});
+
 // Interceptor de errores
 api.interceptors.response.use(
   (response) => response,

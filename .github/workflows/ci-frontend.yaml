@@ -21,6 +21,10 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    defaults:
+      run:
+        working-directory: frontend
+
     steps:
       - name: Check out code
         # Clone the repository into the runner to access source code

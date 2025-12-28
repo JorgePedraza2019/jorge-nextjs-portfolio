@@ -1,6 +1,7 @@
+// src/services/chatApi.js
 import api from "./httpClient";
 
-export async function sendMessageToChat(message) {
-  const res = await api.post("/chat", { message });
-  return res.data;
-}
+export const queryRag = async (payload) => {
+  const response = await api.post("/rag/query", payload);
+  return response.data;
+};

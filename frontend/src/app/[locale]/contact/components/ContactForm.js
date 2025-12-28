@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 import { useFormik } from "formik";
 import toast from "react-hot-toast";
 import * as Yup from "yup";
-import axios from "axios";
+import { sendContactEmail } from "@/services/emailApi";
 
 export default function ContactForm({ t, isMobile, theme }) {
   const validationSchema = Yup.object({
@@ -62,7 +62,7 @@ export default function ContactForm({ t, isMobile, theme }) {
           action: "submit",
         });
         const payload = { ...values, captchaToken };
-        const { data } = await axios.post("/api/email/send", payload);
+        const data = await sendContactEmail(payload);
         if (data.success) {
           toast.success(t("form.submitSuccess"));
           resetForm();

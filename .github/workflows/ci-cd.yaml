@@ -12,7 +12,7 @@ on:
 jobs:
   # Job for running the Continuous Integration pipeline
   call-ci:
-    uses: ./.github/workflows/ci.yaml   # Reuse CI workflow defined in a separate file
+    uses: ./.github/workflows/ci-frontend.yaml   # Reuse CI workflow defined in a separate file
     secrets:
       # Environment variables and secrets for feature branches
       ENV_VARS_FEATURE_CI: ${{ secrets.ENV_VARS_FEATURE_CI }}
