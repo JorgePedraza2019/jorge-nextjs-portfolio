@@ -1,7 +1,10 @@
+# utils/launch.sh
 #!/usr/bin/env bash
 set -e
 
-# Colors
+# =========================
+# 🎨 Colors
+# =========================
 COLOR_GREEN='\033[1;32m'
 COLOR_YELLOW='\033[1;33m'
 COLOR_RED='\033[1;31m'
@@ -13,8 +16,10 @@ COLOR_AUTHOR='\033[1;32m'
 COLOR_FILES='\033[1;35m'
 COLOR_BRANCH='\033[1;34m'
 
-# Config
-PROJECT_NAME="jorge-portfolio-frontend"
+# =========================
+# ⚙️ Config
+# =========================
+PROJECT_NAME="jorge-portfolio"
 CURRENT_BRANCH=$(git symbolic-ref --short HEAD 2>/dev/null || printf "")
 SANITIZED_BRANCH="${CURRENT_BRANCH//\//-}"
 
@@ -23,60 +28,39 @@ if [ -z "$CURRENT_BRANCH" ]; then
   exit 1
 fi
 
-printf "${COLOR_BLUE}🚀 Launching current branch: '$CURRENT_BRANCH'${COLOR_RESET}\n"
+printf "${COLOR_BLUE}🚀 Launching stack for branch: '${CURRENT_BRANCH}'${COLOR_RESET}\n"
 
-# Define container name based on branch
-container_exists() {
-  case "$CURRENT_BRANCH" in
-    feature/*)
-      docker ps -a --format '{{.Names}}' | grep -q "${PROJECT_NAME}-app-feature-local-container"
-      ;;
-    *)
-      docker ps -a --format '{{.Names}}' | grep -q "${PROJECT_NAME}-app-${SANITIZED_BRANCH}-local-container"
-      ;;
-  esac
-}
-
-# Define merge source
+# =========================
+# 🔀 Define merge source
+# =========================
 case "$CURRENT_BRANCH" in
-  dev) FROM_PATTERN="origin/feature/" ;;
-  qa) FROM_PATTERN="origin/dev" ;;
-  main) FROM_PATTERN="origin/qa" ;;
+  dev)
+    FROM_PATTERN="origin/feature/"
+    ;;
+  qa)
+    FROM_PATTERN="origin/dev"
+    ;;
+  main)
+    FROM_PATTERN="origin/qa"
+    ;;
   feature/*)
-    printf "${COLOR_YELLOW}🧪 Feature branch detected: '$CURRENT_BRANCH'. Launching without merge logic...${COLOR_RESET}\n"
-    if container_exists; then
-      make "feature-local-up"
-    else
-      make "feature-local-build-up"
-    fi
+    printf "${COLOR_YELLOW}🧪 Feature branch detected. Skipping merge logic.${COLOR_RESET}\n"
+    make "feature-local-build-up"
     exit 0
     ;;
   *)
-    printf "${COLOR_YELLOW}ℹ️  No merge source defined for '$CURRENT_BRANCH'. Running containers directly...${COLOR_RESET}\n"
-    if container_exists; then
-      make "${SANITIZED_BRANCH}-local-up"
-    else
-      make "${SANITIZED_BRANCH}-local-build-up"
-    fi
+    printf "${COLOR_YELLOW}ℹ️  No merge source defined. Launching stack directly.${COLOR_RESET}\n"
+    make "${SANITIZED_BRANCH}-local-build-up"
     exit 0
     ;;
 esac
 
-if [ -z "$FROM_PATTERN" ]; then
-  printf "${COLOR_YELLOW}ℹ️  No merge source defined for '$CURRENT_BRANCH'. Running containers directly...${COLOR_RESET}\n"
-  if container_exists; then
-    make "${SANITIZED_BRANCH}-local-up"
-  else
-    make "${SANITIZED_BRANCH}-local-build-up"
-  fi
-  exit 0
-fi
-
-# Fetch updates
+# =========================
+# 🌍 Fetch updates
+# =========================
 git fetch origin
 
-# Look for merge candidates
-printf "\n${COLOR_GREEN}🔍 Looking for updates not yet merged into '$CURRENT_BRANCH'...${COLOR_RESET}\n"
+printf "\n${COLOR_GREEN}🔍 Checking for branches with new commits to merge into '${CURRENT_BRANCH}'...${COLOR_RESET}\n"
 
 MERGE_CANDIDATES=()
 CANDIDATE_LABELS=()
@@ -90,30 +74,40 @@ while read -r remote_branch; do
     COMMIT_MSG=$(git log -1 --pretty=format:"%s" "$remote_branch" | cut -c1-60)
     COMMIT_AUTHOR=$(git log -1 --pretty=format:"%an" "$remote_branch")
     COMMIT_DATE=$(git log -1 --pretty=format:"%cd" --date=format:"%Y-%m-%d %H:%M")
-    FILES=$(git diff-tree --no-commit-id --name-only -r "$COMMIT_HASH" | head -3 | tr '\n' ', ' | sed 's/, $//')
+
+    FILES=$(git diff-tree --no-commit-id --name-only -r "$COMMIT_HASH" | head -3 | tr '\n' ', ')
     FILE_COUNT=$(git diff-tree --no-commit-id --name-only -r "$COMMIT_HASH" | wc -l | tr -d ' ')
     if [ "$FILE_COUNT" -gt 3 ]; then
       FILES="$FILES... (+$((FILE_COUNT - 3)) more)"
     fi
 
     MERGE_CANDIDATES+=("$LOCAL_BRANCH")
-    CANDIDATE_LABELS+=("${COLOR_BRANCH}${LOCAL_BRANCH}${COLOR_RESET} — ${COLOR_HASH}${COMMIT_HASH}${COLOR_RESET} — ${COLOR_MSG}${COMMIT_MSG}${COLOR_RESET} — ${COLOR_AUTHOR}${COMMIT_AUTHOR}${COLOR_RESET} — ${COLOR_HASH}${COMMIT_DATE}${COLOR_RESET} — ${COLOR_FILES}${FILES}${COLOR_RESET}")
+    CANDIDATE_LABELS+=(
+      "${COLOR_BRANCH}${LOCAL_BRANCH}${COLOR_RESET} — \
+${COLOR_HASH}${COMMIT_HASH}${COLOR_RESET} — \
+${COLOR_MSG}${COMMIT_MSG}${COLOR_RESET} — \
+${COLOR_AUTHOR}${COMMIT_AUTHOR}${COLOR_RESET} — \
+${COLOR_HASH}${COMMIT_DATE}${COLOR_RESET} — \
+${COLOR_FILES}${FILES}${COLOR_RESET}"
+    )
   fi
 done < <(git branch -r --sort=-committerdate | grep "$FROM_PATTERN")
 
+# =========================
+# 🟡 No merges available
+# =========================
 if [ "${#MERGE_CANDIDATES[@]}" -eq 0 ]; then
-  printf "${COLOR_YELLOW}ℹ️  No branches with new commits to merge into '$CURRENT_BRANCH'.${COLOR_RESET}\n\n"
-  if container_exists; then
-    make "${SANITIZED_BRANCH}-local-up"
-  else
-    make "${SANITIZED_BRANCH}-local-build-up"
-  fi
+  printf "${COLOR_YELLOW}ℹ️  No new branches to merge. Launching stack.${COLOR_RESET}\n"
+  make "${SANITIZED_BRANCH}-local-build-up"
   exit 0
 fi
 
-# Ask for merge
+# =========================
+# 🧩 Ask user
+# =========================
 CANDIDATE_LABELS+=("Continue without merging")
-printf "${COLOR_YELLOW}🧩 Select a branch to merge into local '$CURRENT_BRANCH':${COLOR_RESET}\n"
+
+printf "${COLOR_YELLOW}🧩 Select a branch to merge into '${CURRENT_BRANCH}':${COLOR_RESET}\n"
 for i in "${!CANDIDATE_LABELS[@]}"; do
   printf "     %s) %b\n" "$((i + 1))" "${CANDIDATE_LABELS[$i]}"
 done
@@ -121,7 +115,9 @@ done
 echo ""
 read -p "$(printf "     ${COLOR_YELLOW}#? ${COLOR_RESET}")" USER_CHOICE
 
-if ! [[ "$USER_CHOICE" =~ ^[0-9]+$ ]] || [ "$USER_CHOICE" -lt 1 ] || [ "$USER_CHOICE" -gt "${#CANDIDATE_LABELS[@]}" ]; then
+if ! [[ "$USER_CHOICE" =~ ^[0-9]+$ ]] || \
+   [ "$USER_CHOICE" -lt 1 ] || \
+   [ "$USER_CHOICE" -gt "${#CANDIDATE_LABELS[@]}" ]; then
   printf "${COLOR_RED}❌ Invalid selection. Exiting.${COLOR_RESET}\n"
   exit 1
 fi
@@ -129,25 +125,21 @@ fi
 SELECTED_INDEX=$((USER_CHOICE - 1))
 SELECTED_BRANCH="${MERGE_CANDIDATES[$SELECTED_INDEX]}"
 
-if [ -z "$SELECTED_BRANCH" ]; then
-  printf "${COLOR_YELLOW}➡️  Continuing without merging...${COLOR_RESET}\n"
-else
-  printf "${COLOR_GREEN}🔀 Merging '$SELECTED_BRANCH' into '$CURRENT_BRANCH'...${COLOR_RESET}\n"
+# =========================
+# 🔀 Perform merge
+# =========================
+if [ -n "$SELECTED_BRANCH" ]; then
+  printf "${COLOR_GREEN}🔀 Merging '${SELECTED_BRANCH}' into '${CURRENT_BRANCH}'...${COLOR_RESET}\n"
   if ! git merge origin/"$SELECTED_BRANCH" --no-edit; then
     printf "${COLOR_RED}❌ Merge conflict detected. Resolve manually.${COLOR_RESET}\n"
     exit 1
   fi
+else
+  printf "${COLOR_YELLOW}➡️  Continuing without merging.${COLOR_RESET}\n"
 fi
 
-# Decide whether to build
-if container_exists; then
-  if git diff --name-only HEAD^ HEAD | grep -q "package.json"; then
-    printf "${COLOR_GREEN}📦 Detected changes in package.json. Running build...${COLOR_RESET}\n"
-    make "${SANITIZED_BRANCH}-local-build-up"
-  else
-    printf "${COLOR_GREEN}✅ No package.json changes. Running standard container up...${COLOR_RESET}\n"
-    make "${SANITIZED_BRANCH}-local-up"
-  fi
-else
-  make "${SANITIZED_BRANCH}-local-build-up"
-fi
+# =========================
+# 🚀 Launch stack
+# =========================
+printf "${COLOR_GREEN}🚀 Starting full stack using Docker Compose...${COLOR_RESET}\n"
+make "${SANITIZED_BRANCH}-local-build-up"

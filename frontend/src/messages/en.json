@@ -1,0 +1,527 @@
+{
+  "home": {
+    "hero": {
+      "heading": "Hi, I'm Jorge —",
+      "title": "Front-End Developer",
+      "description": "I build modern, fast, clean, and animated web experiences using Next.js, React, and MUI.",
+      "buttonText": "View Projects"
+    },
+    "tabsSection": {
+      "tabs": [
+        {
+          "title": "+4 Years",
+          "subtitle": "Experience & Impact",
+          "description": "Full-Stack Software Developer with proven results in front-end engineering, cloud architecture, and data solutions. Strong expertise in React, Next.js, Node.js, AWS, SQL, and Power BI — delivering measurable improvements in performance, reliability, and UI/UX experience.",
+          "img": "https://images.unsplash.com/photo-1522199710521-72d69614c702?w=1200",
+          "extra": [
+            "Improved UI performance by 30% across multiple production systems.",
+            "Reduced API latency and load times by 20% through optimized architecture.",
+            "Delivered secure, scalable React/Next.js applications with clean component architecture.",
+            "AWS Engineering — EC2, S3, RDS, VPC with 10% less downtime and improved resilience.",
+            "Developed Power BI dashboards improving business decision-making by 20%.",
+            "Led and mentored teams in agile environments while conducting code reviews."
+          ]
+        },
+        {
+          "title": "+5 Projects",
+          "subtitle": "Delivered in Production",
+          "description": "End-to-end development of scalable, maintainable and production-ready applications across web, cloud and data environments. Strong ownership delivering business-focused solutions with measurable technical impact.",
+          "img": "https://images.unsplash.com/photo-1506765515384-028b60a970df?w=1200",
+          "extra": [
+            "ServiGO (Onibex): +30% performance optimization in UI components and state architecture.",
+            "Connect with Confluent: Kafka dashboards with real-time metrics and secure authentication.",
+            "BadBank (MIT xPRO): Full-stack banking app with authentication, validation and transaction logic.",
+            "Plug & Analyze: Business analytics dashboards cutting analysis time by 20–25%.",
+            "AWS Infrastructure Delivery: Secure, scalable deployments using EC2, S3, RDS, VPC, IAM.",
+            "Cross-platform responsive interfaces for web and mobile using React & modern CSS systems."
+          ]
+        }
+      ]
+    }
+  },
+  "about": {
+    "title": "About me",
+    "description": "I’m Jorge Pedraza — a Full-Stack Software Engineer focused on building fast, scalable, and modern web applications.\n\nOver the last 4+ years, I’ve delivered production systems across front-end engineering, cloud infrastructure, and data analytics. My core strengths include designing clean React/Next.js architectures, optimizing performance at scale, and building reliable AWS-based deployments.\n\nI combine strong UI engineering with cloud-level thinking: from reusable component systems and state-management patterns to secure API design, SQL modeling, and analytics pipelines with Power BI.\n\nI’m passionate about shipping high-quality products, improving user experience through motion & interaction, and solving real business problems with thoughtful engineering. I thrive in environments that value ownership, clarity, and attention to detail — and I’m always pushing for measurable impact.",
+    "buttonText": "Download Resume",
+    "timeline": {
+      "2026": {
+        "title": "Senior-Level Delivery & Portfolio Consolidation",
+        "point1Brief": "Delivered scalable, modern Next.js applications with animations.",
+        "point1Detail": "Delivered scalable Next.js applications featuring smooth animations and modern UI practices.",
+        "point2Brief": "Architected secure AWS deployments with industry best-practices.",
+        "point2Detail": "signed and implemented secure AWS deployment pipelines following industry best practices.",
+        "point3Brief": "Built a premium engineering portfolio aligned with U.S. hiring standards.",
+        "point3Detail": "Created a professional engineering portfolio aligned with U.S. hiring standards to showcase skills and projects."
+      },
+      "2025": {
+        "title": "Senior-Level Delivery & Portfolio Consolidation",
+        "point1Brief": "Delivered scalable, modern Next.js applications with animations.",
+        "point1Detail": "Delivered scalable Next.js applications featuring smooth animations and modern UI practices.",
+        "point2Brief": "Architected secure AWS deployments with industry best-practices.",
+        "point2Detail": "Designed and implemented secure AWS deployment pipelines following industry best practices.",
+        "point3Brief": "Built a premium engineering portfolio aligned with U.S. hiring standards.",
+        "point3Detail": "Created a professional engineering portfolio aligned with U.S. hiring standards to showcase skills and projects."
+      },
+      "2024": {
+        "title": "Advanced React, Next.js & System Design",
+        "point1Brief": "Built modular production-ready React/Next.js systems.",
+        "point1Detail": "Developed modular and reusable React and Next.js components for production-ready applications.",
+        "point2Brief": "Led UI/UX improvements with reusable component architecture.",
+        "point2Detail": "Led UI/UX enhancements by designing reusable component architectures that improved consistency and developer productivity.",
+        "point3Brief": "Reduced load times by 20–30% in high-traffic interfaces.",
+        "point3Detail": "Implemented performance optimizations that reduced load times significantly in high-traffic user interfaces."
+      },
+      "2023": {
+        "title": "Professional Development & Analytics Engineering",
+        "point1Brief": "Integrated Power BI dashboards improving decision-making by 20%.",
+        "point1Detail": "Built and integrated Power BI dashboards that enhanced business intelligence and improved decision-making efficiency by 20%.",
+        "point2Brief": "Designed maintainable cloud-ready architectures.",
+        "point2Detail": "Architected cloud-ready systems prioritizing maintainability, scalability, and security.",
+        "point3Brief": "Improved API response times and system reliability.",
+        "point3Detail": "Optimized backend APIs to reduce response times and increase overall system reliability."
+      },
+      "2022": {
+        "title": "Growth in Full-Stack & Cloud Engineering",
+        "point1Brief": "Developed scalable full-stack systems using Node.js and SQL.",
+        "point1Detail": "Implemented scalable backend systems with Node.js and SQL databases, focusing on performance and maintainability.",
+        "point2Brief": "Implemented UI performance improvements across multiple apps.",
+        "point2Detail": "Optimized UI responsiveness and load times through code-splitting, lazy loading, and efficient state management.",
+        "point3Brief": "Deployed solutions using EC2, S3, RDS and AWS networking.",
+        "point3Detail": "Deployed applications on AWS infrastructure, configuring EC2 instances, S3 storage, RDS databases, and networking components."
+      },
+      "2021": {
+        "title": "Advanced Front-End & MIT xPRO Certification",
+        "point1Brief": "Completed MIT xPRO Full-Stack Professional Certificate.",
+        "point1Detail": "Earned a professional certificate from MIT xPRO, covering advanced full-stack development concepts and best practices.",
+        "point2Brief": "Created BadBank full-stack app with authentication and transactions.",
+        "point2Detail": "Built a full-stack banking app featuring secure authentication and transaction management, demonstrating backend and frontend integration.",
+        "point3Brief": "Mastered React Hooks, component architecture, and API patterns.",
+        "point3Detail": "Deepened knowledge in React Hooks, component structuring, and designing efficient API communication patterns."
+      },
+      "2020": {
+        "title": "Foundations of Software Engineering",
+        "point1Brief": "Completed early CS fundamentals and full-stack training.",
+        "point1Detail": "During 2020, I completed foundational courses covering computer science basics and full-stack development. This included hands-on projects that introduced me to industry-standard tools and workflows.",
+        "point2Brief": "Built first production-like applications and internal tools.",
+        "point2Detail": "I developed initial production-like applications and internal tools, gaining experience in real-world software delivery and collaboration within teams.",
+        "point3Brief": "Gained strong proficiency in JavaScript and React foundations.",
+        "point3Detail": "Focused on mastering JavaScript fundamentals and React basics, enabling me to build responsive and interactive user interfaces."
+      }
+    }
+  },
+  "projects": {
+    "heroTitle": "My Projects",
+    "tabs": {
+      "company": "Company",
+      "academic": "Academic",
+      "personal": "Personal"
+    },
+    "cards": [
+      {
+        "slug": "servigo-onibex",
+        "category": "Company",
+        "title": "ServiGO (Onibex)",
+        "shortDescription": "UI performance optimization achieving +30% overall improvement.",
+        "summary": "Integrated shipment tracking system to improve visibility and efficiency in logistics management.",
+        "longDescription": [
+          "Developed an integrated solution for shipment tracking that enhances visibility and efficiency in logistics management.",
+          "Created a web application using React and Next.js with Material-UI to provide an intuitive and responsive user interface.",
+          "Developed APIs in Node.js for data management and client-server interaction, ensuring system efficiency and scalability.",
+          "Implemented stored procedures in MySQL and executed SELECT queries to optimize data access and improve database performance.",
+          "Implemented reusable components and optimized user experience, achieving smooth and efficient navigation.",
+          "Integrated APIs for real-time data collection, allowing users to accurately track shipments in a timely manner.",
+          "Collaborated with a multidisciplinary team to ensure project requirements were aligned and effective solutions were delivered.",
+          "Results: Improved customer satisfaction by 25% by reducing wait times and providing up-to-date information on shipment status."
+        ],
+        "chips": [
+          "React",
+          "UI Optimization",
+          "State Management"
+        ],
+        "year": "2020",
+        "videoLight": "/videos/projects/servigo/light/servigo-light.mp4",
+        "videoDark": "/videos/projects/servigo/dark/servigo-dark.mp4"
+      },
+      {
+        "slug": "connect-confluent",
+        "category": "Company",
+        "title": "Connect with Confluent",
+        "shortDescription": "Real-time Kafka monitoring dashboards.",
+        "summary": "Integrated shipment tracking system to improve visibility and efficiency in logistics management.",
+        "longDescription": [
+          "Developed an integrated solution for shipment tracking that enhances visibility and efficiency in logistics management.",
+          "Created a web application using React and Next.js with Material-UI to provide an intuitive and responsive user interface.",
+          "Developed APIs in Node.js for data management and client-server interaction, ensuring system efficiency and scalability.",
+          "Implemented stored procedures in MySQL and executed SELECT queries to optimize data access and improve database performance.",
+          "Implemented reusable components and optimized user experience, achieving smooth and efficient navigation.",
+          "Integrated APIs for real-time data collection, allowing users to accurately track shipments in a timely manner.",
+          "Collaborated with a multidisciplinary team to ensure project requirements were aligned and effective solutions were delivered.",
+          "Results: Improved customer satisfaction by 25% by reducing wait times and providing up-to-date information on shipment status."
+        ],
+        "chips": [
+          "React",
+          "Node.js",
+          "Kafka",
+          "Auth",
+          "Dashboards"
+        ],
+        "year": "2020",
+        "videoLight": "/videos/projects/servigo/light/servigo-light.mp4",
+        "videoDark": "/videos/projects/servigo/dark/servigo-dark.mp4"
+      },
+      {
+        "slug": "badbank-mit",
+        "category": "Academic",
+        "title": "BadBank (MIT xPRO)",
+        "shortDescription": "Full-stack banking app with authentication.",
+        "summary": "Integrated shipment tracking system to improve visibility and efficiency in logistics management.",
+        "longDescription": [
+          "Developed an integrated solution for shipment tracking that enhances visibility and efficiency in logistics management.",
+          "Created a web application using React and Next.js with Material-UI to provide an intuitive and responsive user interface.",
+          "Developed APIs in Node.js for data management and client-server interaction, ensuring system efficiency and scalability.",
+          "Implemented stored procedures in MySQL and executed SELECT queries to optimize data access and improve database performance.",
+          "Implemented reusable components and optimized user experience, achieving smooth and efficient navigation.",
+          "Integrated APIs for real-time data collection, allowing users to accurately track shipments in a timely manner.",
+          "Collaborated with a multidisciplinary team to ensure project requirements were aligned and effective solutions were delivered.",
+          "Results: Improved customer satisfaction by 25% by reducing wait times and providing up-to-date information on shipment status."
+        ],
+        "chips": [
+          "React",
+          "Node.js",
+          "MongoDB",
+          "Auth"
+        ],
+        "year": "2020",
+        "videoLight": "/videos/projects/servigo/light/servigo-light.mp4",
+        "videoDark": "/videos/projects/servigo/dark/servigo-dark.mp4"
+      },
+      {
+        "slug": "powerbi-analytics",
+        "category": "Company",
+        "title": "Plug & Analyze (Power BI)",
+        "shortDescription": "Business dashboards reducing analysis time by 20–25%.",
+        "summary": "Integrated shipment tracking system to improve visibility and efficiency in logistics management.",
+        "longDescription": [
+          "Developed an integrated solution for shipment tracking that enhances visibility and efficiency in logistics management.",
+          "Created a web application using React and Next.js with Material-UI to provide an intuitive and responsive user interface.",
+          "Developed APIs in Node.js for data management and client-server interaction, ensuring system efficiency and scalability.",
+          "Implemented stored procedures in MySQL and executed SELECT queries to optimize data access and improve database performance.",
+          "Implemented reusable components and optimized user experience, achieving smooth and efficient navigation.",
+          "Integrated APIs for real-time data collection, allowing users to accurately track shipments in a timely manner.",
+          "Collaborated with a multidisciplinary team to ensure project requirements were aligned and effective solutions were delivered.",
+          "Results: Improved customer satisfaction by 25% by reducing wait times and providing up-to-date information on shipment status."
+        ],
+        "chips": [
+          "Power BI",
+          "SQL",
+          "DAX",
+          "Data Modeling"
+        ],
+        "year": "2020",
+        "videoLight": "/videos/projects/servigo/light/servigo-light.mp4",
+        "videoDark": "/videos/projects/servigo/dark/servigo-dark.mp4"
+      },
+      {
+        "slug": "aws-infrastructure",
+        "category": "Company",
+        "title": "AWS Infrastructure Delivery",
+        "shortDescription": "Secure and scalable infrastructure with reduced downtime.",
+        "summary": "Integrated shipment tracking system to improve visibility and efficiency in logistics management.",
+        "longDescription": [
+          "Developed an integrated solution for shipment tracking that enhances visibility and efficiency in logistics management.",
+          "Created a web application using React and Next.js with Material-UI to provide an intuitive and responsive user interface.",
+          "Developed APIs in Node.js for data management and client-server interaction, ensuring system efficiency and scalability.",
+          "Implemented stored procedures in MySQL and executed SELECT queries to optimize data access and improve database performance.",
+          "Implemented reusable components and optimized user experience, achieving smooth and efficient navigation.",
+          "Integrated APIs for real-time data collection, allowing users to accurately track shipments in a timely manner.",
+          "Collaborated with a multidisciplinary team to ensure project requirements were aligned and effective solutions were delivered.",
+          "Results: Improved customer satisfaction by 25% by reducing wait times and providing up-to-date information on shipment status."
+        ],
+        "chips": [
+          "AWS",
+          "EC2",
+          "S3",
+          "RDS",
+          "VPC",
+          "IAM"
+        ],
+        "year": "2020",
+        "videoLight": "/videos/projects/servigo/light/servigo-light.mp4",
+        "videoDark": "/videos/projects/servigo/dark/servigo-dark.mp4"
+      },
+      {
+        "slug": "personal-portfolio",
+        "category": "Personal",
+        "title": "Personal Portfolio",
+        "shortDescription": "My personal portfolio with modern design.",
+        "summary": "Integrated shipment tracking system to improve visibility and efficiency in logistics management.",
+        "longDescription": [
+          "Developed an integrated solution for shipment tracking that enhances visibility and efficiency in logistics management.",
+          "Created a web application using React and Next.js with Material-UI to provide an intuitive and responsive user interface.",
+          "Developed APIs in Node.js for data management and client-server interaction, ensuring system efficiency and scalability.",
+          "Implemented stored procedures in MySQL and executed SELECT queries to optimize data access and improve database performance.",
+          "Implemented reusable components and optimized user experience, achieving smooth and efficient navigation.",
+          "Integrated APIs for real-time data collection, allowing users to accurately track shipments in a timely manner.",
+          "Collaborated with a multidisciplinary team to ensure project requirements were aligned and effective solutions were delivered.",
+          "Results: Improved customer satisfaction by 25% by reducing wait times and providing up-to-date information on shipment status."
+        ],
+        "chips": [
+          "Next.js",
+          "React",
+          "Framer Motion"
+        ],
+        "year": "2020",
+        "videoLight": "/videos/projects/servigo/light/servigo-light.mp4",
+        "videoDark": "/videos/projects/servigo/dark/servigo-dark.mp4"
+      }
+    ],
+    "viewCaseStudy": "View case study",
+    "projectOverview": "Project Overview",
+    "projectDetails": "Detalles del proyecto",
+    "closeButton": "Close"
+  },
+  "skills": {
+    "hero": {
+      "title": "Skills & Expertise",
+      "description": "A focused overview of the technologies, tools, and professional strengths I use to design, build, and deliver scalable, production-ready software.",
+      "chips": [
+        "Frontend",
+        "Backend",
+        "Cloud",
+        "Data",
+        "Soft Skills"
+      ]
+    },
+    "header": {
+      "hard": "Hard Skills",
+      "soft": "Soft Skills"
+    },
+    "techStack": [
+      "React",
+      "Next.js",
+      "TypeScript",
+      "Redux",
+      "Material UI",
+      "Framer Motion",
+      "Node.js",
+      "AWS",
+      "Postgres",
+      "MongoDB",
+      "Power BI",
+      "Docker"
+    ],
+    "softStack": [
+      "Communication",
+      "Leadership",
+      "Problem-Solving",
+      "Team Collaboration",
+      "Adaptability",
+      "Critical Thinking"
+    ],
+    "hardCards": {
+      "frontend": {
+        "title": "Front-End",
+        "description": "Designing high-performance, accessible, and animated user interfaces using React, Next.js, and modern UI patterns.",
+        "tags": [
+          "React",
+          "Next.js",
+          "UI Optimization",
+          "Accessibility",
+          "Framer Motion"
+        ]
+      },
+      "backend": {
+        "title": "Back-End",
+        "description": "Building secure, scalable APIs and services with Node.js, REST patterns, and database-driven architectures.",
+        "tags": [
+          "Node.js",
+          "Express",
+          "REST APIs",
+          "JWT",
+          "MongoDB",
+          "SQL"
+        ]
+      },
+      "cloud": {
+        "title": "Cloud & DevOps",
+        "description": "Designing and deploying cloud infrastructure on AWS with a focus on scalability, security, and reliability.",
+        "tags": [
+          "AWS EC2",
+          "S3",
+          "RDS",
+          "VPC",
+          "IAM"
+        ]
+      },
+      "data": {
+        "title": "Data & BI",
+        "description": "Transforming data into actionable insights using SQL, Power BI, and optimized data models.",
+        "tags": [
+          "Power BI",
+          "DAX",
+          "Data Modeling",
+          "SQL Performance"
+        ]
+      }
+    },
+    "softCards": {
+      "communication": {
+        "title": "Communication",
+        "description": "I communicate technical ideas clearly and effectively, aligning teams and stakeholders around shared goals.",
+        "tags": [
+          "Presentations",
+          "Clear Writing",
+          "Team Updates"
+        ]
+      },
+      "leadership": {
+        "title": "Leadership",
+        "description": "I take ownership of initiatives, guiding teams, making decisions, and ensuring high-quality delivery.",
+        "tags": [
+          "Mentoring",
+          "Ownership",
+          "Team Guidance"
+        ]
+      },
+      "problem-solving": {
+        "title": "Problem Solving",
+        "description": "I analyze complex problems with a calm, logical approach, prioritizing impact and sustainable solutions.",
+        "tags": [
+          "Analysis",
+          "Debugging",
+          "Critical Thinking"
+        ]
+      }
+    },
+    "highlightedTitle": {
+      "hard": "Highlighted Hard Skills",
+      "soft": "Highlighted Soft Skills",
+      "impact": "IMPACT"
+    },
+    "hardHighlights": [
+      {
+        "title": "UI Optimization",
+        "subtitle": "+30% render perf at Onibex",
+        "bullets": [
+          "Reduced re-renders using memoization & selective context",
+          "Critical path CSS & code-splitting improvements"
+        ]
+      },
+      {
+        "title": "Real-time Dashboards",
+        "subtitle": "Kafka + Dashboards",
+        "bullets": [
+          "Real-time metrics with WebSockets and optimized queries",
+          "Custom visualizations in Power BI for stakeholders"
+        ]
+      },
+      {
+        "title": "AWS Infrastructure",
+        "subtitle": "Secure & Scalable infra",
+        "bullets": [
+          "IaC templates, VPC design, secure IAM roles",
+          "Automated deployments and monitoring"
+        ]
+      }
+    ],
+    "softHighlights": [
+      {
+        "title": "Clear Communication",
+        "subtitle": "Stakeholder & team alignment",
+        "bullets": [
+          "Translated technical concepts for non‑technical stakeholders",
+          "Consistent async updates and documentation"
+        ]
+      },
+      {
+        "title": "Leadership & Ownership",
+        "subtitle": "Driving initiatives forward",
+        "bullets": [
+          "Led features end‑to‑end from planning to release",
+          "Mentored teammates and reviewed PRs"
+        ]
+      },
+      {
+        "title": "Problem Solving",
+        "subtitle": "Calm under pressure",
+        "bullets": [
+          "Root‑cause analysis on production issues",
+          "Balanced speed vs quality in decision‑making"
+        ]
+      }
+    ],
+    "radar": {
+      "title": {
+        "hard": "Hard Skill Radar",
+        "soft": "Soft Skill Radar"
+      },
+      "quickFacts": {
+        "hard": {
+          "title": "Quick Facts",
+          "chips": [
+            "Senior-level proficiency",
+            "Production experience",
+            "Continuous improvement"
+          ]
+        },
+        "soft": {
+          "title": "Quick Facts",
+          "chips": [
+            "Effective communication",
+            "Team collaboration",
+            "Proven leadership"
+          ]
+        }
+      }
+    }
+  },
+  "contact": {
+    "title": "LET’S BUILD SOMETHING AMAZING",
+    "highlight": "AMAZING",
+    "description": "I’m open to collaborations, freelance opportunities, and full‑time roles. Drop me a message — I’ll get back to you soon.",
+    "form": {
+      "firstNameLabel": "First Name",
+      "firstNameMin": "First name must be at least 2 characters",
+      "firstNameRequired": "First name is required",
+      "lastNameLabel": "Last Name",
+      "lastNameMin": "Last name must be at least 2 characters",
+      "emailLabel": "Your email",
+      "emailRequired": "Email is required",
+      "emailInvalid": "Email is invalid",
+      "linkedinLabel": "LinkedIn Profile",
+      "linkedinUrlInvalid": "LinkedIn URL is invalid",
+      "companyLabel": "Company",
+      "positionLabel": "Position / Role",
+      "messageLabel": "Message",
+      "messageMin": "Message must be at least 10 characters",
+      "messageRequired": "Message is required",
+      "submit": "Send Message",
+      "submitSuccess": "Email sent successfully!",
+      "submitError": "An error occurred while sending your message.",
+      "submitUnexpected": "An unexpected error occurred."
+    }
+  },
+  "navbar": {
+    "projectName": "JORGE PORTFOLIO",
+    "home": "Home",
+    "about": "About",
+    "projects": "Projects",
+    "skills": "Skills",
+    "contact": "Contact",
+    "aiButton": "AI"
+  },
+  "ai": {
+    "placeholder1": "Ask about my experience and skills",
+    "placeholder2": "Inquire about my projects",
+    "placeholder3": "Ask me about Front-End technologies",
+    "placeholder4": "Ask about my cloud and backend expertise"
+  },
+  "footer": {
+    "home": "Home",
+    "about": "About",
+    "projects": "Projects",
+    "skills": "Skills",
+    "contact": "Contact",
+    "rights": "All Rights Reserved"
+  }
+}

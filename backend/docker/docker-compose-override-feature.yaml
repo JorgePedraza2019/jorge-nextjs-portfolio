@@ -1,0 +1,10 @@
+# backend/docker/docker-compose-override-feature.yaml
+services:
+  backend:
+
+    ports:
+      - ${USE_PORTS}
+
+    volumes:
+      - ${USE_VOLUMES}
+      - ${USE_VOLUMES_NODE_MODULES}
