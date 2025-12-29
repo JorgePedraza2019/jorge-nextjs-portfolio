@@ -60,7 +60,7 @@ esac
 # =========================
 git fetch origin
 
-printf "\n${COLOR_GREEN}🔍 Checking for branches with new commits to merge into '${CURRENT_BRANCH}'...${COLOR_RESET}\n"
+printf "\n${COLOR_GREEN}🔍 Looking for updates not yet merged into '$CURRENT_BRANCH'...${COLOR_RESET}\n"
 
 MERGE_CANDIDATES=()
 CANDIDATE_LABELS=()
@@ -74,31 +74,24 @@ while read -r remote_branch; do
     COMMIT_MSG=$(git log -1 --pretty=format:"%s" "$remote_branch" | cut -c1-60)
     COMMIT_AUTHOR=$(git log -1 --pretty=format:"%an" "$remote_branch")
     COMMIT_DATE=$(git log -1 --pretty=format:"%cd" --date=format:"%Y-%m-%d %H:%M")
-
-    FILES=$(git diff-tree --no-commit-id --name-only -r "$COMMIT_HASH" | head -3 | tr '\n' ', ')
+    FILES=$(git diff-tree --no-commit-id --name-only -r "$COMMIT_HASH" | head -3 | tr '\n' ', ' | sed 's/, $//')
     FILE_COUNT=$(git diff-tree --no-commit-id --name-only -r "$COMMIT_HASH" | wc -l | tr -d ' ')
     if [ "$FILE_COUNT" -gt 3 ]; then
       FILES="$FILES... (+$((FILE_COUNT - 3)) more)"
     fi
 
     MERGE_CANDIDATES+=("$LOCAL_BRANCH")
-    CANDIDATE_LABELS+=(
-      "${COLOR_BRANCH}${LOCAL_BRANCH}${COLOR_RESET} — \
-${COLOR_HASH}${COMMIT_HASH}${COLOR_RESET} — \
-${COLOR_MSG}${COMMIT_MSG}${COLOR_RESET} — \
-${COLOR_AUTHOR}${COMMIT_AUTHOR}${COLOR_RESET} — \
-${COLOR_HASH}${COMMIT_DATE}${COLOR_RESET} — \
-${COLOR_FILES}${FILES}${COLOR_RESET}"
-    )
+    CANDIDATE_LABELS+=("${COLOR_BRANCH}${LOCAL_BRANCH}${COLOR_RESET} — ${COLOR_HASH}${COMMIT_HASH}${COLOR_RESET} — ${COLOR_MSG}${COMMIT_MSG}${COLOR_RESET} — ${COLOR_AUTHOR}${COMMIT_AUTHOR}${COLOR_RESET} — ${COLOR_HASH}${COMMIT_DATE}${COLOR_RESET} — ${COLOR_FILES}${FILES}${COLOR_RESET}")
   fi
 done < <(git branch -r --sort=-committerdate | grep "$FROM_PATTERN")
 
-# =========================
-# 🟡 No merges available
-# =========================
 if [ "${#MERGE_CANDIDATES[@]}" -eq 0 ]; then
-  printf "${COLOR_YELLOW}ℹ️  No new branches to merge. Launching stack.${COLOR_RESET}\n"
-  make "${SANITIZED_BRANCH}-local-build-up"
+  printf "${COLOR_YELLOW}ℹ️  No branches with new commits to merge into '$CURRENT_BRANCH'.${COLOR_RESET}\n\n"
+  if container_exists; then
+    make "${SANITIZED_BRANCH}-local-up"
+  else
+    make "${SANITIZED_BRANCH}-local-build-up"
+  fi
   exit 0
 fi
 

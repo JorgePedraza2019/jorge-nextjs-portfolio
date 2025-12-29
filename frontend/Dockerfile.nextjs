@@ -7,6 +7,7 @@ WORKDIR /usr/src/app
 # Accept environment variables and arguments
 ARG NODE_ENV                # Expected values: development | production
 ARG INSTALL_PLAYWRIGHT      # Set to "true" to install Playwright and system dependencies
+ARG BACKEND_URL
 # ARG INSTALL_DEV_LIBRARIES # (Optional) Uncomment if needed to include dev dependencies separately
 
 # Copy package definition files

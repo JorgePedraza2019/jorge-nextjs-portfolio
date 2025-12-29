@@ -6,32 +6,19 @@
         qa-local-up qa-local-down qa-cd-* qa-ci-* \
         main-local-up main-local-down main-cd-* main-ci-*
 
+SHELL := /usr/bin/env bash
+
+launch:
+	./utils/launch.sh
+    
 # ----------------------------------------
 # Project-level constants
 # ----------------------------------------
 
 PROJECT_NAME=jorge-portfolio
 
-# ENV_FEATURE_LOCAL = ./env/feature/local.env
-# ENV_FEATURE_CI    = ./env/feature/ci.env
-
-# ENV_DEV_LOCAL     = ./env/dev/local.env
-# SSL_DEV_CRT  = ./docker/nginx/local/certs/dev/dev.jorgeportfolio.local.crt
-# SSL_DEV_KEY  = ./docker/nginx/local/certs/dev/dev.jorgeportfolio.local.key
-# ENV_DEV_CI        = ./env/dev/ci.env
-# ENV_DEV_CD    = ./env/dev/cd.env
-
-# ENV_QA_LOCAL      = ./env/qa/local.env
-# SSL_QA_CRT   = ./docker/nginx/local/certs/qa/qa.jorgeportfolio.local.crt
-# SSL_QA_KEY   = ./docker/nginx/local/certs/qa/qa.jorgeportfolio.local.key
-# ENV_QA_CI         = ./env/qa/ci.env
-# ENV_QA_CD     = ./env/qa/cd.env
-
-# ENV_MAIN_LOCAL    = ./env/main/local.env
-# SSL_MAIN_CRT = ./docker/nginx/local/certs/main/jorgeportfolio.local.crt
-# SSL_MAIN_KEY = ./docker/nginx/local/certs/main/jorgeportfolio.local.key
-# ENV_MAIN_CI       = ./env/main/ci.env
-# ENV_MAIN_CD   = ./env/main/cd.env
+ENV_FEATURE_COMPOSE=./env/feature/compose.env
+ENV_DEV_COMPOSE=./env/dev/compose.env
 
 # ----------------------------------------
 # Colors (ANSI escape codes)
@@ -73,49 +60,28 @@ show-banner = \
 
 ## Local
 feature-local-build-up:
-# 	@sh -c '$(call check-env-file,$(ENV_FEATURE_LOCAL))'
-	@sh -c '$(call show-banner)'
+	@sh -c '$(call check-env-file,$(ENV_FEATURE_COMPOSE))'
 	@echo "$(COLOR_BLUE)🚀 Building and starting FEATURE container (with logs)...$(COLOR_RESET)"
-	@docker-compose -p $(PROJECT_NAME)-feature-local -f docker/docker-compose.yaml -f docker/docker-compose-override-feature.yaml up --build
-# 	@docker-compose --env-file ${ENV_FEATURE_LOCAL} -p $(PROJECT_NAME)-feature-local -f docker/docker-compose.yaml -f docker/docker-compose-override-feature.yaml up --build
+	@sh -c '$(call show-banner)'
+	@docker-compose --env-file ${ENV_FEATURE_COMPOSE} -p $(PROJECT_NAME)-feature-local -f docker/docker-compose.yaml -f docker/docker-compose-override-feature.yaml up --build
 
-# feature-local-up:
-# 	@sh -c '$(call check-env-file,$(ENV_FEATURE_LOCAL))'
-# 	@sh -c '$(call show-banner)'
-# 	@echo "$(COLOR_BLUE)🚀 Starting FEATURE container (with logs)...$(COLOR_RESET)"
-# 	@docker-compose --env-file ${ENV_FEATURE_LOCAL} -p $(PROJECT_NAME)-feature-local -f docker/docker-compose.yaml -f docker/docker-compose-override-feature.yaml up
 
-# feature-local-stop:
-# 	@echo "$(COLOR_YELLOW)⏹️  Stopping FEATURE container...$(COLOR_RESET)"
-# 	@docker-compose --env-file ${ENV_FEATURE_LOCAL} -p $(PROJECT_NAME)-feature-local -f docker/docker-compose.yaml stop
+## Local
+dev-local-build-up:
+	@sh -c '$(call check-env-file,$(ENV_DEV_COMPOSE))'
+	@echo "$(COLOR_BLUE)🚀 Building and starting DEV containers (with logs)...$(COLOR_RESET)"
+	@sh -c '$(call show-banner)'
+	@docker-compose --env-file ${ENV_DEV_COMPOSE} -p $(PROJECT_NAME)-dev-local -f docker/docker-compose.yaml -f docker/docker-compose-override-dev.yaml -f docker/docker-compose-nginx-local.yaml up --build
 
-# feature-local-down:
-# 	@echo "$(COLOR_YELLOW)🧹 Removing FEATURE container...$(COLOR_RESET)"
-# 	@docker-compose --env-file ${ENV_FEATURE_LOCAL} -p $(PROJECT_NAME)-feature-local -f docker/docker-compose.yaml down -v
 
-# feature-local-lint:
-# 	@docker-compose --env-file ${ENV_FEATURE_LOCAL} -p $(PROJECT_NAME)-feature-local -f docker/feature/docker-compose.feature.yaml exec -T frontend npm run lint
-
-# ## CI
-# feature-ci-build-up:
-# 	docker-compose --env-file ${ENV_FEATURE_CI} -p $(PROJECT_NAME)-feature-local -f docker/docker-compose.yaml -f docker/docker-compose-override-feature.yaml up -d --build
-
-# feature-ci-lint:
-# 	docker-compose --env-file ${ENV_FEATURE_CI} -p $(PROJECT_NAME)-feature-local -f docker/docker-compose.yaml exec -T frontend npm run lint
-
-# feature-ci-down:
-# 	docker-compose --env-file ${ENV_FEATURE_CI} -f docker/docker-compose.yaml down
-
-# # ----------------------------------------
-# # Development environment
-# # ----------------------------------------
-
-# ## Local
-# dev-local-build-up:
-# 	@sh -c '$(call check-env-file,$(ENV_DEV_LOCAL)); $(call check-ssl-files,$$1,$$2)' dummy "$(SSL_DEV_CRT)" "$(SSL_DEV_KEY)"
-# 	@sh -c '$(call show-banner)'
-# 	@echo "$(COLOR_BLUE)🚀 Building and starting DEV containers (with logs)...$(COLOR_RESET)"
-# 	@docker-compose --env-file ${ENV_DEV_LOCAL} -p $(PROJECT_NAME)-dev-local -f docker/docker-compose.yaml -f docker/docker-compose-override-dev.yaml -f docker/docker-compose-nginx-local.yaml up --build
+## Local
+qa-local-build-up:
+# 	@sh -c '$(call check-env-file,$(ENV_QA_COMPOSE)); $(call check-ssl-files,$$1,$$2)' dummy "$(SSL_QA_CRT)" "$(SSL_QA_KEY)"
+	@sh -c '$(call check-env-file,$(ENV_QA_COMPOSE));
+	@echo "$(COLOR_BLUE)🚀 Building and starting QA containers... Running without logs, use 'make qa-local-logs' to see output.$(COLOR_RESET)"
+	@sh -c '$(call show-banner)'
+	@docker-compose --env-file ${ENV_QA_COMPOSE} -p $(PROJECT_NAME)-qa-local -f docker/docker-compose.yaml -f docker/docker-compose-nginx-local.yaml up -d --build
+	@echo "$(COLOR_GREEN)✅ QA containers started successfully.$(COLOR_RESET)"
 
 # dev-local-up:
 # 	@sh -c '$(call check-env-file,$(ENV_DEV_LOCAL)); $(call check-ssl-files,$$1,$$2)' dummy "$(SSL_DEV_CRT)" "$(SSL_DEV_KEY)"

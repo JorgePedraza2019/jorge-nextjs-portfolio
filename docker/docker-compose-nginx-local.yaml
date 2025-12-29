@@ -1,0 +1,17 @@
+services:
+  nginx:  # Defines the NGINX reverse proxy service for handling HTTPS traffic in a local environment
+    container_name: ${NGINX_CONTAINER_NAME}  # Sets the container name using the value from the .env file (e.g., jorge-portfolio-frontend-nginx-dev-local-container)
+    build:
+      context: ../frontend  # Sets the build context to the parent directory to ensure access to the NGINX Dockerfile and all required resources
+      dockerfile: docker/nginx/Dockerfile.nginx  # Specifies the custom Dockerfile to build the NGINX image with environment-specific configuration and certificates
+      args:
+        ENV_TYPE: ${ENV_TYPE}  # Passes the current environment type (dev, qa, main) as a build argument
+        NGINX_CONF_DIR: ${NGINX_CONF_DIR}  # Provides the path to the local NGINX config file to copy into the image
+        NGINX_CERTS_DIR: ${NGINX_CERTS_DIR}  # Provides the path to the self-signed SSL certificates to copy into the image
+    image: ${NGINX_IMAGE_NAME}  # Tags the built image with the specified name from the .env file
+    ports:
+      - "${NGINX_PORT}:${NGINX_PORT}"  # Maps HTTPS port from the host to the container (typically 443)
+    depends_on:
+      - frontend  # Ensures that the frontend (Next.js application) is started before NGINX
+    networks:
+      - jorge-network
