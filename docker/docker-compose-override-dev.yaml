@@ -1,17 +1,11 @@
 # frontend/docker/docker-compose-override-feature.yaml
 services:
   frontend:  # Define the service for the Next.js frontend application
-    ports:
-      - ${FRONTEND_USE_PORTS:-}  # Maps host:container ports if USE_PORTS is defined; ignored if empty
-
     volumes:
       - ${FRONTEND_USE_VOLUMES}  # Mounts the project directory into the container (usually the source code)
       - ${FRONTEND_USE_VOLUMES_NODE_MODULES}  # Mounts node_modules as a persistent volume to avoid container reinstallations
 
   backend:
-    ports:
-      - ${BACKEND_USE_PORTS:-}  # Maps host:container ports if USE_PORTS is defined; ignored if empty
-
     volumes:
       - ${BACKEND_USE_VOLUMES}  # Mounts the project directory into the container (usually the source code)
       - ${BACKEND_USE_VOLUMES_NODE_MODULES}  # Mounts node_modules as a persistent volume to avoid container reinstallations

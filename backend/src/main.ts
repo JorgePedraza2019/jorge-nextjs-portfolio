@@ -5,6 +5,7 @@ import { InternalAuthGuard } from './guards/internal-auth.guard';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  const port = Number(process.env.BACKEND_PORT) || 0;
 
   // 🔐 Guard global (Bearer interno)
   app.useGlobalGuards(new InternalAuthGuard());
@@ -20,8 +21,13 @@ async function bootstrap() {
         'http://localhost:3000',
         'http://127.0.0.1:3000',
         'http://localhost:4000',
+        'http://127.0.0.1:4000',
+        'https://127.0.0.1:4000',
+        'http://127.0.0.1:443',
+        'https://127.0.0.1:443',
         'https://dev.jorgeportfolio.local',
         'http://localhost:8000',
+        'http://127.0.0.1:8000',
         'https://qa.jorgeportfolio.local',
         'http://localhost:443',
         'https://jorgeportfolio.local',
@@ -50,8 +56,7 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api/docs', app, document);
 
-  // await app.listen(process.env.PORT ?? 3000, '0.0.0.0');
-  await app.listen(3001, '0.0.0.0');
+  await app.listen(port, '0.0.0.0');
 }
 
 bootstrap().catch((err) => {

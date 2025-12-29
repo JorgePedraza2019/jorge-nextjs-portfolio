@@ -31,13 +31,20 @@ const nextConfig = {
   /**
    * 🔁 Proxy interno para backend (SOLO Docker / feature)
    * El browser llama a /api/*
-   * Next.js reenvía internamente a http://backend:3001
+   * Next.js reenvía internamente a http://backend:3001 en ramas feature
+   * Next.js reenvía internamente a http://backend:4001 en ramas dev
    */
   async rewrites() {
+    const backendUrl = process.env.BACKEND_URL;
+
+    if (!backendUrl) {
+      throw new Error("❌ BACKEND_URL is not defined");
+    }
+
     return [
       {
         source: "/api/:path*",
-        destination: "http://backend:3001/:path*",
+        destination: `${backendUrl}/:path*`,
       },
     ];
   },
