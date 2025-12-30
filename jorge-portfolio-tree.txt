@@ -68,10 +68,13 @@
 │   ├── Dockerfile.nestjs
 │   ├── env
 │   │   ├── dev
+│   │   │   └── local.env
 │   │   ├── feature
 │   │   │   └── local.env
 │   │   ├── main
+│   │   │   └── local.env
 │   │   └── qa
+│   │       └── local.env
 │   ├── eslint.config.mjs
 │   ├── Makefile
 │   ├── nest-cli.json
@@ -126,9 +129,20 @@
 │       └── switch.sh
 ├── docker
 │   ├── backend
+│   ├── docker-compose-nginx-local.yaml
+│   ├── docker-compose-override-dev.yaml
 │   ├── docker-compose-override-feature.yaml
 │   ├── docker-compose.yaml
 │   └── frontend
+├── env
+│   ├── dev
+│   │   └── compose.env
+│   ├── feature
+│   │   └── compose.env
+│   ├── main
+│   │   └── compose.env
+│   └── qa
+│       └── compose.env
 ├── frontend
 │   ├── docker
 │   │   ├── docker-compose-nginx-local.yaml
@@ -220,7 +234,6 @@
 │   │   │   │   │   │   ├── ContactForm.js
 │   │   │   │   │   │   └── HeroSection.js
 │   │   │   │   │   ├── layout.js
-│   │   │   │   │   ├── originalPage.js
 │   │   │   │   │   └── page.js
 │   │   │   │   ├── home
 │   │   │   │   │   ├── components
@@ -298,9 +311,13 @@
 │       └── switch.sh
 ├── jorge-portfolio-tree.txt
 ├── Makefile
+├── package-lock.json
+├── package.json
 ├── README.md
 └── utils
+    ├── down.sh
     ├── launch.sh
+    ├── stop.sh
     └── switch.sh
 
-100 directories, 204 files
+105 directories, 216 files
