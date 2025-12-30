@@ -64,6 +64,7 @@ jobs:
           fi
 
       - name: Start containers
+        working-directory: ${{ github.workspace }}  # raíz del repo
         run: |
           case "${{ github.ref }}" in
             refs/heads/dev)   make dev-ci-build-up ;;
