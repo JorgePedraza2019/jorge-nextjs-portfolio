@@ -122,7 +122,7 @@ feature-ci-down:
 
 ## Local
 dev-local-build-up:
-	@sh -c '$(call check-env-file,$(ENV_DEV_COMPOSE)); $(call check-ssl-files,$$1,$$2)' dummy "$(SSL_DEV_CRT)" "$(SSL_DEV_KEY)'
+	@sh -c '$(call check-env-file,$(ENV_DEV_COMPOSE)); $(call check-ssl-files,$$1,$$2)' dummy "$(SSL_DEV_CRT)" "$(SSL_DEV_KEY)"
 	@sh -c '$(call check-env-file,$(ENV_DEV_LOCAL))'
 	@sh -c '$(call show-banner)'
 	@printf "$(COLOR_BLUE)🚀 Building and starting DEV containers (with logs)...$(COLOR_RESET)"
