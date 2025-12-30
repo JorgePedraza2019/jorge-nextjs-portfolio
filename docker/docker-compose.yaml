@@ -16,6 +16,8 @@ services:
         NEXT_PUBLIC_INTERNAL_API_KEY: ${NEXT_PUBLIC_INTERNAL_API_KEY}
         BACKEND_URL: ${BACKEND_URL}
         NEXT_PUBLIC_ENABLE_ANALYTICS: ${NEXT_PUBLIC_ENABLE_ANALYTICS}
+        INSTALL_PLAYWRIGHT: ${INSTALL_PLAYWRIGHT}
+        INSTALL_DEV_LIBRARIES: ${INSTALL_DEV_LIBRARIES}
     environment:
       - NODE_ENV=${NODE_ENV}  # Set the environment variable inside the container (used by Next.js)
       - BACKEND_URL=${BACKEND_URL}
