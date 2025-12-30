@@ -20,7 +20,7 @@ PROJECT_NAME=jorge-portfolio
 ENV_FEATURE_COMPOSE	=./env/feature/compose.env
 ENV_FEATURE_LOCAL 	= ./frontend/env/feature/local.env
 # ENV_FEATURE_CI    	= ./env/feature/ci.env
-ENV_FEATURE_CI 			= $(shell pwd)/docker/feature/ci.env
+ENV_FEATURE_CI = $(shell pwd)/env/feature/ci.env
 
 ENV_DEV_COMPOSE			=./env/dev/compose.env
 ENV_DEV_LOCAL     	= ./frontend/env/dev/local.env
