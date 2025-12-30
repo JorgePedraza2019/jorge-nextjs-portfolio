@@ -136,12 +136,26 @@
 │   └── frontend
 ├── env
 │   ├── dev
+│   │   ├── cd.env
+│   │   ├── cd.env.example
+│   │   ├── ci.env
+│   │   ├── ci.env.example
 │   │   └── compose.env
 │   ├── feature
+│   │   ├── ci.env
+│   │   ├── ci.env.example
 │   │   └── compose.env
 │   ├── main
+│   │   ├── cd.env
+│   │   ├── cd.env.example
+│   │   ├── ci.env
+│   │   ├── ci.env.example
 │   │   └── compose.env
 │   └── qa
+│       ├── cd.env
+│       ├── cd.env.example
+│       ├── ci.env
+│       ├── ci.env.example
 │       └── compose.env
 ├── frontend
 │   ├── docker
@@ -184,29 +198,15 @@
 │   │   └── workflow-guide.md
 │   ├── env
 │   │   ├── dev
-│   │   │   ├── cd.env
-│   │   │   ├── cd.env.example
-│   │   │   ├── ci.env
-│   │   │   ├── ci.env.example
 │   │   │   ├── local.env
 │   │   │   └── local.env.example
 │   │   ├── feature
-│   │   │   ├── ci.env
-│   │   │   ├── ci.env.example
 │   │   │   ├── local.env
 │   │   │   └── local.env.example
 │   │   ├── main
-│   │   │   ├── cd.env
-│   │   │   ├── cd.env.example
-│   │   │   ├── ci.env
-│   │   │   ├── ci.env.example
 │   │   │   ├── local.env
 │   │   │   └── local.env.example
 │   │   └── qa
-│   │       ├── cd.env
-│   │       ├── cd.env.example
-│   │       ├── ci.env
-│   │       ├── ci.env.example
 │   │       ├── local.env
 │   │       └── local.env.example
 │   ├── frontend-tree.txt

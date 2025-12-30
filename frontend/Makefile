@@ -13,25 +13,18 @@
 PROJECT_NAME=jorge-portfolio-frontend
 
 ENV_FEATURE_LOCAL = ./env/feature/local.env
-ENV_FEATURE_CI    = ./env/feature/ci.env
 
 ENV_DEV_LOCAL     = ./env/dev/local.env
 SSL_DEV_CRT  = ./docker/nginx/local/certs/dev/dev.jorgeportfolio.local.crt
 SSL_DEV_KEY  = ./docker/nginx/local/certs/dev/dev.jorgeportfolio.local.key
-ENV_DEV_CI        = ./env/dev/ci.env
-ENV_DEV_CD    = ./env/dev/cd.env
 
 ENV_QA_LOCAL      = ./env/qa/local.env
 SSL_QA_CRT   = ./docker/nginx/local/certs/qa/qa.jorgeportfolio.local.crt
 SSL_QA_KEY   = ./docker/nginx/local/certs/qa/qa.jorgeportfolio.local.key
-ENV_QA_CI         = ./env/qa/ci.env
-ENV_QA_CD     = ./env/qa/cd.env
 
 ENV_MAIN_LOCAL    = ./env/main/local.env
 SSL_MAIN_CRT = ./docker/nginx/local/certs/main/jorgeportfolio.local.crt
 SSL_MAIN_KEY = ./docker/nginx/local/certs/main/jorgeportfolio.local.key
-ENV_MAIN_CI       = ./env/main/ci.env
-ENV_MAIN_CD   = ./env/main/cd.env
 
 # ----------------------------------------
 # Colors (ANSI escape codes)
@@ -95,15 +88,6 @@ feature-local-down:
 feature-local-lint:
 	@docker-compose --env-file ${ENV_FEATURE_LOCAL} -p $(PROJECT_NAME)-feature-local -f docker/feature/docker-compose.feature.yaml exec -T frontend npm run lint
 
-## CI
-feature-ci-build-up:
-	docker-compose --env-file ${ENV_FEATURE_CI} -p $(PROJECT_NAME)-feature-local -f docker/docker-compose.yaml -f docker/docker-compose-override-feature.yaml up -d --build
-
-feature-ci-lint:
-	docker-compose --env-file ${ENV_FEATURE_CI} -p $(PROJECT_NAME)-feature-local -f docker/docker-compose.yaml exec -T frontend npm run lint
-
-feature-ci-down:
-	docker-compose --env-file ${ENV_FEATURE_CI} -f docker/docker-compose.yaml down
 
 # ----------------------------------------
 # Development environment
@@ -137,34 +121,6 @@ dev-local-lint:
 dev-local-test:
 	@docker-compose --env-file ${ENV_DEV_LOCAL} -p $(PROJECT_NAME)-dev-local -f docker/docker-compose.dev.yaml exec -T frontend npm test
 
-## CI
-dev-ci-build-up:
-	docker-compose --env-file ${ENV_DEV_CI} -p $(PROJECT_NAME)-dev-server -f docker/docker-compose.yaml up -d --build
-
-dev-ci-install-deps:
-	docker-compose --env-file ${ENV_DEV_CI} -p $(PROJECT_NAME)-dev-server -f docker/docker-compose.yaml exec -T frontend sh -c 'export NODE_ENV=development && npm install --only=dev --legacy-peer-deps'
-
-dev-ci-lint:
-	docker-compose --env-file ${ENV_DEV_CI} -p $(PROJECT_NAME)-dev-server -f docker/docker-compose.yaml exec -T frontend npm run lint
-
-dev-ci-jest:
-	docker-compose --env-file ${ENV_DEV_CI} -p $(PROJECT_NAME)-dev-server -f docker/docker-compose.yaml exec -T frontend npm test
-
-dev-ci-playwright:
-	docker-compose --env-file ${ENV_DEV_CI} -p $(PROJECT_NAME)-dev-server -f docker/docker-compose.yaml exec -T frontend npx playwright test
-
-dev-ci-down:
-	docker-compose --env-file ${ENV_DEV_CI} -f docker/docker-compose.yaml down
-
-## CD (remote server)
-dev-cd-build-up:
-	@docker-compose --env-file ${ENV_DEV_CD} -p $(PROJECT_NAME)-dev-server -f docker/docker-compose.yaml -f docker/docker-compose-nginx-server.yaml up --build -d
-
-dev-cd-up:
-	@docker-compose --env-file ${ENV_DEV_CD} -p $(PROJECT_NAME)-dev-server -f docker/docker-compose.yaml -f docker/docker-compose-nginx-server.yaml up
-
-dev-cd-down:
-	@docker-compose --env-file ${ENV_DEV_CD} -p $(PROJECT_NAME)-dev-server -f docker/docker-compose.yaml -f docker/docker-compose-nginx-server.yaml down -v
 
 # ----------------------------------------
 # QA environment
@@ -199,28 +155,6 @@ qa-local-down:
 qa-local-test:
 	@docker-compose --env-file ${ENV_QA_LOCAL} -p $(PROJECT_NAME)-qa-local -f docker/docker-compose.qa.yaml exec -T frontend npx playwright test
 
-## CI
-qa-ci-build-up:
-	docker-compose --env-file ${ENV_QA_CI} -p $(PROJECT_NAME)-qa-server -f docker/docker-compose.yaml up -d --build
-
-qa-ci-install-deps:
-	docker-compose --env-file ${ENV_QA_CI} -p $(PROJECT_NAME)-qa-server -f docker/docker-compose.yaml exec -T frontend sh -c 'export NODE_ENV=development && npm install --only=dev --legacy-peer-deps'
-
-qa-ci-playwright:
-	docker-compose --env-file ${ENV_QA_CI} -p $(PROJECT_NAME)-qa-server -f docker/docker-compose.yaml exec -T frontend npx playwright test
-
-qa-ci-down:
-	docker-compose --env-file ${ENV_QA_CI} -f docker/docker-compose.yaml down
-
-## CD
-qa-cd-build-up:
-	@docker-compose --env-file ${ENV_QA_CD} -p $(PROJECT_NAME)-qa-server -f docker/docker-compose.yaml -f docker/docker-compose-nginx-server.yaml up --build -d
-
-qa-cd-up:
-	@docker-compose --env-file ${ENV_QA_CD} -p $(PROJECT_NAME)-qa-server -f docker/docker-compose.yaml -f docker/docker-compose-nginx-server.yaml up
-
-qa-cd-down:
-	@docker-compose --env-file ${ENV_QA_CD} -p $(PROJECT_NAME)-qa-server -f docker/docker-compose.yaml -f docker/docker-compose-nginx-server.yaml down -v
 
 # ----------------------------------------
 # Production environment
@@ -249,20 +183,3 @@ main-local-logs:
 main-local-down:
 	@echo "$(COLOR_YELLOW)🧹 Removing PRODUCTION containers...$(COLOR_RESET)"
 	@docker-compose --env-file ${ENV_MAIN_LOCAL} -p $(PROJECT_NAME)-main-local -f docker/docker-compose.yaml -f docker/docker-compose-nginx-local.yaml down -v
-
-## CI
-main-ci-build-up:
-	docker-compose --env-file ${ENV_MAIN_CI} -p $(PROJECT_NAME)-main-server -f docker/docker-compose.yaml up -d --build
-
-main-ci-down:
-	docker-compose --env-file ${ENV_MAIN_CI} -f docker/docker-compose.yaml down
-
-## CD
-main-cd-build-up:
-	@docker-compose --env-file ${ENV_MAIN_CD} -p $(PROJECT_NAME)-main-server -f docker/docker-compose.yaml -f docker/docker-compose-nginx-server.yaml up --build -d
-
-main-cd-up:
-	@docker-compose --env-file ${ENV_MAIN_CD} -p $(PROJECT_NAME)-main-server -f docker/docker-compose.yaml -f docker/docker-compose-nginx-server.yaml up
-
-main-cd-down:
-	@docker-compose --env-file ${ENV_MAIN_CD} -p $(PROJECT_NAME)-main-server -f docker/docker-compose.yaml -f docker/docker-compose-nginx-server.yaml down -v

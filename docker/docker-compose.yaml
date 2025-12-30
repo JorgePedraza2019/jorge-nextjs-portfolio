@@ -2,18 +2,19 @@
 services:
   frontend:
     container_name: ${NEXT_CONTAINER_NAME}  # Assign a custom container name from the NEXT_CONTAINER_NAME environment variable
-    env_file:
-      - ${FRONTEND_ENV_FILE}  # Load additional environment variables from the specified .env file
+    # Usar env file solo para local
+    # env_file:
+    #   - ${FRONTEND_ENV_FILE}  # Load additional environment variables from the specified .env file
     build:
       context: ../frontend
       dockerfile: Dockerfile.nextjs
       args:
-        BACKEND_URL: ${BACKEND_URL}
         NEXT_PUBLIC_ASSETS_URL: ${NEXT_PUBLIC_ASSETS_URL}
-        NEXT_PUBLIC_INTERNAL_API_KEY: ${NEXT_PUBLIC_INTERNAL_API_KEY}
         NEXT_PUBLIC_RECAPTCHA_SITE_KEY: ${NEXT_PUBLIC_RECAPTCHA_SITE_KEY}
         NEXT_PUBLIC_RECAPTCHA_SECRET_KEY: ${NEXT_PUBLIC_RECAPTCHA_SECRET_KEY}
         NEXT_PUBLIC_GA_ID: ${NEXT_PUBLIC_GA_ID}
+        NEXT_PUBLIC_INTERNAL_API_KEY: ${NEXT_PUBLIC_INTERNAL_API_KEY}
+        BACKEND_URL: ${BACKEND_URL}
         NEXT_PUBLIC_ENABLE_ANALYTICS: ${NEXT_PUBLIC_ENABLE_ANALYTICS}
     environment:
       - NODE_ENV=${NODE_ENV}  # Set the environment variable inside the container (used by Next.js)
@@ -27,8 +28,9 @@ services:
 
   backend:
     container_name: ${NEST_CONTAINER_NAME}  # Assign a custom container name from the NEXT_CONTAINER_NAME environment variable
-    env_file:
-      - ${BACKEND_ENV_FILE}  # Load additional environment variables from the specified .env file
+    # Usar env file solo para local
+    # env_file:
+    #   - ${BACKEND_ENV_FILE}  # Load additional environment variables from the specified .env file
     build:
       context: ../backend
       dockerfile: Dockerfile.nestjs

@@ -1,3 +1,4 @@
+// ./frontend/src/app/[locale]/home/components/HeroSection.js
 "use client";
 
 import { Box, Typography, Button, useMediaQuery } from "@mui/material";
