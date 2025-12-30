@@ -1,3 +1,4 @@
+// ./frontend/src/app/[locale]/home/components/HeroSection.js
 "use client";
 
 import { Box, Typography, Button, useMediaQuery } from "@mui/material";
@@ -182,8 +183,8 @@ export default function HeroSection({ locale }) {
               lineHeight: 1.15,
             }}
           >
-            {t("heading")}
-            {/* Hello */}
+            {/* {t("heading")} */}
+            Hello
             <br />
             <span style={{ color: "var(--mui-palette-primary-main)" }}>
               {displayText}
