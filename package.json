@@ -1,0 +1,12 @@
+{
+  "name": "jorge-portfolio",
+  "private": true,
+  "scripts": {
+    "launch": "bash utils/launch.sh",
+    "stop": "bash utils/stop.sh",
+    "down": "bash utils/down.sh"
+  },
+  "devDependencies": {
+    "husky": "^9.1.7"
+  }
+}

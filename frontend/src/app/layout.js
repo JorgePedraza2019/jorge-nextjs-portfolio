@@ -27,8 +27,8 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <head>
-        {/* Google Analytics solo en producción */}
-        {process.env.NODE_ENV === "production" && (
+        {/* Google Analytics habilitado solo cuando NEXT_PUBLIC_ENABLE_ANALYTICS=true */}
+        {process.env.NEXT_PUBLIC_ENABLE_ANALYTICS === "true" && (
           <>
             <Script
               strategy="afterInteractive"

@@ -31,15 +31,31 @@ fi
 printf "${COLOR_BLUE}🚀 Launching stack for branch: '${CURRENT_BRANCH}'${COLOR_RESET}\n"
 
 # Define container name based on branch
+# container_exists() {
+#   case "$CURRENT_BRANCH" in
+#     feature/*)
+#       docker ps -a --format '{{.Names}}' | grep -q "${PROJECT_NAME}-app-feature-local-container"
+#       ;;
+#     *)
+#       docker ps -a --format '{{.Names}}' | grep -q "${PROJECT_NAME}-app-${SANITIZED_BRANCH}-local-container"
+#       ;;
+#   esac
+# }
+
 container_exists() {
+  local project
+
   case "$CURRENT_BRANCH" in
     feature/*)
-      docker ps -a --format '{{.Names}}' | grep -q "${PROJECT_NAME}-app-feature-local-container"
+      project="${PROJECT_NAME}-feature-local"
       ;;
     *)
-      docker ps -a --format '{{.Names}}' | grep -q "${PROJECT_NAME}-app-${SANITIZED_BRANCH}-local-container"
+      project="${PROJECT_NAME}-${SANITIZED_BRANCH}-local"
       ;;
   esac
+
+  # Revisa si hay algún contenedor creado, aunque esté detenido
+  docker compose -p "$project" ps -a -q | grep -q .
 }
 
 # =========================
