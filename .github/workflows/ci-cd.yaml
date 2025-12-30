@@ -12,7 +12,7 @@ on:
 jobs:
   # Job for running the Continuous Integration pipeline
   call-ci:
-    uses: ./.github/workflows/ci-frontend.yaml   # Reuse CI workflow defined in a separate file
+    uses: ./.github/workflows/ci-global.yaml   # Reuse CI workflow defined in a separate file
     secrets:
       # Environment variables and secrets for feature branches
       ENV_VARS_FEATURE_CI: ${{ secrets.ENV_VARS_FEATURE_CI }}
@@ -27,7 +27,7 @@ jobs:
   call-cd:
     needs: call-ci   # This job depends on the successful completion of 'call-ci'
     if: ${{ github.ref == 'refs/heads/dev' || github.ref == 'refs/heads/qa' || github.ref == 'refs/heads/main' }}  # Run only on dev, qa, or main branches
-    uses: ./.github/workflows/cd.yaml   # Reuse CD workflow defined in a separate file
+    uses: ./.github/workflows/cd-global.yaml   # Reuse CD workflow defined in a separate file
     with:
       deploy_branch: ${{ github.ref_name }}  # Pass the branch name to the CD workflow
     secrets:
