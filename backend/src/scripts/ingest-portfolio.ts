@@ -3,6 +3,9 @@
 // DOTENV_CONFIG_PATH=env/feature/local.env \
 // npx ts-node -r dotenv/config src/scripts/ingest-portfolio.ts
 
+// DOTENV_CONFIG_PATH=env/qa/local.env \
+// npx ts-node -r dotenv/config src/scripts/ingest-portfolio.ts
+
 import 'dotenv/config';
 import OpenAI from 'openai';
 import { pinecone } from '../lib/pinecone.client';

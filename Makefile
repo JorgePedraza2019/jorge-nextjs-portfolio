@@ -18,7 +18,10 @@ launch:
 PROJECT_NAME=jorge-portfolio
 
 ENV_FEATURE_COMPOSE=./env/feature/compose.env
+
 ENV_DEV_COMPOSE=./env/dev/compose.env
+
+ENV_QA_COMPOSE=./env/qa/compose.env
 
 # ----------------------------------------
 # Colors (ANSI escape codes)
@@ -65,6 +68,12 @@ feature-local-build-up:
 	@sh -c '$(call show-banner)'
 	@docker-compose --env-file ${ENV_FEATURE_COMPOSE} -p $(PROJECT_NAME)-feature-local -f docker/docker-compose.yaml -f docker/docker-compose-override-feature.yaml up --build
 
+feature-local-up:
+	@sh -c '$(call check-env-file,$(ENV_FEATURE_COMPOSE))'
+	@echo "$(COLOR_BLUE)🚀 Building and starting FEATURE container (with logs)...$(COLOR_RESET)"
+	@sh -c '$(call show-banner)'
+	@docker-compose --env-file ${ENV_FEATURE_COMPOSE} -p $(PROJECT_NAME)-feature-local -f docker/docker-compose.yaml -f docker/docker-compose-override-feature.yaml up
+
 
 ## Local
 dev-local-build-up:
@@ -73,15 +82,45 @@ dev-local-build-up:
 	@sh -c '$(call show-banner)'
 	@docker-compose --env-file ${ENV_DEV_COMPOSE} -p $(PROJECT_NAME)-dev-local -f docker/docker-compose.yaml -f docker/docker-compose-override-dev.yaml -f docker/docker-compose-nginx-local.yaml up --build
 
+dev-local-up:
+	@sh -c '$(call check-env-file,$(ENV_DEV_COMPOSE)); $(call check-ssl-files,$$1,$$2)' dummy "$(SSL_DEV_CRT)" "$(SSL_DEV_KEY)"
+	@sh -c '$(call show-banner)'
+	@echo "$(COLOR_BLUE)🚀 Starting DEV containers (with logs)...$(COLOR_RESET)"
+	@docker-compose --env-file ${ENV_DEV_COMPOSE} -p $(PROJECT_NAME)-dev-local -f docker/docker-compose.yaml -f docker/docker-compose-override-dev.yaml -f docker/docker-compose-nginx-local.yaml up
+
 
 ## Local
 qa-local-build-up:
 # 	@sh -c '$(call check-env-file,$(ENV_QA_COMPOSE)); $(call check-ssl-files,$$1,$$2)' dummy "$(SSL_QA_CRT)" "$(SSL_QA_KEY)"
-	@sh -c '$(call check-env-file,$(ENV_QA_COMPOSE));
+	@sh -c '$(call check-env-file,$(ENV_QA_COMPOSE))'
 	@echo "$(COLOR_BLUE)🚀 Building and starting QA containers... Running without logs, use 'make qa-local-logs' to see output.$(COLOR_RESET)"
 	@sh -c '$(call show-banner)'
 	@docker-compose --env-file ${ENV_QA_COMPOSE} -p $(PROJECT_NAME)-qa-local -f docker/docker-compose.yaml -f docker/docker-compose-nginx-local.yaml up -d --build
-	@echo "$(COLOR_GREEN)✅ QA containers started successfully.$(COLOR_RESET)"
+	@printf "$(COLOR_GREEN)✅ QA containers started successfully.$(COLOR_RESET)\n"
+
+qa-local-up:
+# 	@sh -c '$(call check-env-file,$(ENV_QA_COMPOSE)); $(call check-ssl-files,$$1,$$2)' dummy "$(SSL_QA_CRT)" "$(SSL_QA_KEY)"
+	@sh -c '$(call check-env-file,$(ENV_QA_COMPOSE))'
+	@echo "$(COLOR_BLUE)🚀 Building and starting QA containers... Running without logs, use 'make qa-local-logs' to see output.$(COLOR_RESET)"
+	@sh -c '$(call show-banner)'
+	@docker-compose --env-file ${ENV_QA_COMPOSE} -p $(PROJECT_NAME)-qa-local -f docker/docker-compose.yaml -f docker/docker-compose-nginx-local.yaml up
+	@printf "$(COLOR_GREEN)✅ QA containers started successfully.$(COLOR_RESET)\n"
+
+
+## Local
+main-local-build-up:
+# 	@sh -c '$(call check-env-file,$(ENV_MAIN_LOCAL)); $(call check-ssl-files,$$1,$$2)' dummy "$(SSL_MAIN_CRT)" "$(SSL_MAIN_KEY)"
+	@echo "$(COLOR_BLUE)🚀 Building and starting PRODUCTION containers... Running without logs, use 'make main-local-logs' to see output.$(COLOR_RESET)"
+	@sh -c '$(call show-banner)'
+	@docker-compose --env-file ${ENV_MAIN_COMPOSE} -p $(PROJECT_NAME)-main-local -f docker/docker-compose.yaml -f docker/docker-compose-nginx-local.yaml up -d --build
+	@echo "$(COLOR_GREEN)✅ PRODUCTION containers started successfully.$(COLOR_RESET)"
+
+main-local-up:
+# 	@sh -c '$(call check-env-file,$(ENV_MAIN_LOCAL)); $(call check-ssl-files,$$1,$$2)' dummy "$(SSL_MAIN_CRT)" "$(SSL_MAIN_KEY)"
+	@echo "$(COLOR_BLUE)🚀 Starting PRODUCTION containers... Running without logs, use 'make main-local-logs' to see output.$(COLOR_RESET)"
+	@docker-compose --env-file ${ENV_MAIN_COMPOSE} -p $(PROJECT_NAME)-main-local -f docker/docker-compose.yaml -f docker/docker-compose-nginx-local.yaml up -d
+	@echo "$(COLOR_GREEN)✅ PRODUCTION containers started successfully.$(COLOR_RESET)"
+
 
 # dev-local-up:
 # 	@sh -c '$(call check-env-file,$(ENV_DEV_LOCAL)); $(call check-ssl-files,$$1,$$2)' dummy "$(SSL_DEV_CRT)" "$(SSL_DEV_KEY)"

@@ -30,6 +30,18 @@ fi
 
 printf "${COLOR_BLUE}🚀 Launching stack for branch: '${CURRENT_BRANCH}'${COLOR_RESET}\n"
 
+# Define container name based on branch
+container_exists() {
+  case "$CURRENT_BRANCH" in
+    feature/*)
+      docker ps -a --format '{{.Names}}' | grep -q "${PROJECT_NAME}-app-feature-local-container"
+      ;;
+    *)
+      docker ps -a --format '{{.Names}}' | grep -q "${PROJECT_NAME}-app-${SANITIZED_BRANCH}-local-container"
+      ;;
+  esac
+}
+
 # =========================
 # 🔀 Define merge source
 # =========================
@@ -45,15 +57,33 @@ case "$CURRENT_BRANCH" in
     ;;
   feature/*)
     printf "${COLOR_YELLOW}🧪 Feature branch detected. Skipping merge logic.${COLOR_RESET}\n"
-    make "feature-local-build-up"
+    if container_exists; then
+      make "feature-local-up"
+    else
+      make "feature-local-build-up"
+    fi
     exit 0
     ;;
   *)
     printf "${COLOR_YELLOW}ℹ️  No merge source defined. Launching stack directly.${COLOR_RESET}\n"
-    make "${SANITIZED_BRANCH}-local-build-up"
+    if container_exists; then
+      make "${SANITIZED_BRANCH}-local-up"
+    else
+      make "${SANITIZED_BRANCH}-local-build-up"
+    fi
     exit 0
     ;;
 esac
+
+if [ -z "$FROM_PATTERN" ]; then
+  printf "${COLOR_YELLOW}ℹ️  No merge source defined for '$CURRENT_BRANCH'. Running containers directly...${COLOR_RESET}\n"
+  if container_exists; then
+    make "${SANITIZED_BRANCH}-local-up"
+  else
+    make "${SANITIZED_BRANCH}-local-build-up"
+  fi
+  exit 0
+fi
 
 # =========================
 # 🌍 Fetch updates
@@ -121,18 +151,25 @@ SELECTED_BRANCH="${MERGE_CANDIDATES[$SELECTED_INDEX]}"
 # =========================
 # 🔀 Perform merge
 # =========================
-if [ -n "$SELECTED_BRANCH" ]; then
-  printf "${COLOR_GREEN}🔀 Merging '${SELECTED_BRANCH}' into '${CURRENT_BRANCH}'...${COLOR_RESET}\n"
+if [ -z "$SELECTED_BRANCH" ]; then
+  printf "${COLOR_YELLOW}➡️  Continuing without merging...${COLOR_RESET}\n"
+else
+  printf "${COLOR_GREEN}🔀 Merging '$SELECTED_BRANCH' into '$CURRENT_BRANCH'...${COLOR_RESET}\n"
   if ! git merge origin/"$SELECTED_BRANCH" --no-edit; then
     printf "${COLOR_RED}❌ Merge conflict detected. Resolve manually.${COLOR_RESET}\n"
     exit 1
   fi
-else
-  printf "${COLOR_YELLOW}➡️  Continuing without merging.${COLOR_RESET}\n"
 fi
 
-# =========================
-# 🚀 Launch stack
-# =========================
-printf "${COLOR_GREEN}🚀 Starting full stack using Docker Compose...${COLOR_RESET}\n"
-make "${SANITIZED_BRANCH}-local-build-up"
+# Decide whether to build
+if container_exists; then
+  if git diff --name-only HEAD^ HEAD | grep -q "package.json"; then
+    printf "${COLOR_GREEN}📦 Detected changes in package.json. Running build...${COLOR_RESET}\n"
+    make "${SANITIZED_BRANCH}-local-build-up"
+  else
+    printf "${COLOR_GREEN}✅ No package.json changes. Running standard container up...${COLOR_RESET}\n"
+    make "${SANITIZED_BRANCH}-local-up"
+  fi
+else
+  make "${SANITIZED_BRANCH}-local-build-up"
+fi
