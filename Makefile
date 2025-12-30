@@ -28,8 +28,8 @@ SSL_DEV_CRT  				= ./frontend/docker/nginx/local/certs/dev/dev.jorgeportfolio.lo
 SSL_DEV_KEY  				= ./frontend/docker/nginx/local/certs/dev/dev.jorgeportfolio.local.key
 # ENV_DEV_CI        	= ./env/dev/ci.env
 # ENV_DEV_CD    			= ./env/dev/cd.env
-ENV_DEV_CI 					= $(shell pwd)/env/feature/ci.env
-ENV_DEV_CD 					= $(shell pwd)/env/feature/cd.env
+ENV_DEV_CI 					= $(shell pwd)/env/dev/ci.env
+ENV_DEV_CD 					= $(shell pwd)/env/dev/cd.env
 
 ENV_QA_COMPOSE			=./env/qa/compose.env
 ENV_QA_LOCAL      	= ./frontend/env/qa/local.env
