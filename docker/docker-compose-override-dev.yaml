@@ -1,6 +1,11 @@
+# frontend/docker/docker-compose-override-feature.yaml
 services:
   frontend:  # Define the service for the Next.js frontend application
-
     volumes:
-      - ${USE_VOLUMES}  # Mounts the project directory into the container (usually the source code)
-      - ${USE_VOLUMES_NODE_MODULES}  # Mounts node_modules as a persistent volume to avoid container reinstallations
+      - ${FRONTEND_USE_VOLUMES}  # Mounts the project directory into the container (usually the source code)
+      - ${FRONTEND_USE_VOLUMES_NODE_MODULES}  # Mounts node_modules as a persistent volume to avoid container reinstallations
+
+  backend:
+    volumes:
+      - ${BACKEND_USE_VOLUMES}  # Mounts the project directory into the container (usually the source code)
+      - ${BACKEND_USE_VOLUMES_NODE_MODULES}  # Mounts node_modules as a persistent volume to avoid container reinstallations

@@ -1,0 +1,4 @@
+import darkTheme from "./dark/index.js";
+import lightTheme from "./light/index.js";
+
+export { lightTheme, darkTheme };

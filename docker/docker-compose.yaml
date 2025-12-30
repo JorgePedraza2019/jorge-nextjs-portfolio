@@ -1,23 +1,43 @@
+# docker-compose.yaml to start both frontend and backend services in local development mode in a single network
 services:
-  frontend:  # Define the service for the Next.js frontend application
+  frontend:
     container_name: ${NEXT_CONTAINER_NAME}  # Assign a custom container name from the NEXT_CONTAINER_NAME environment variable
-
-    build:  # Configure how the Docker image should be built
-      context: ..  # Use the parent directory as the build context to include the entire project source
-      dockerfile: ./Dockerfile.nextjs  # Specify the Dockerfile to build the Next.js application
-
+    env_file:
+      - ${FRONTEND_ENV_FILE}  # Load additional environment variables from the specified .env file
+    build:
+      context: ../frontend
+      dockerfile: Dockerfile.nextjs
       args:
-        NODE_ENV: ${NODE_ENV}  # Provide the runtime environment (e.g., development or production) as a build argument
-        INSTALL_PLAYWRIGHT: ${INSTALL_PLAYWRIGHT}  # Specify whether to install Playwright and its dependencies
-        INSTALL_DEV_LIBRARIES: ${INSTALL_DEV_LIBRARIES}  # Specify whether to install development libraries
-
-    image: ${IMAGE_NAME}  # Tag and name of the Docker image to build or use
-
+        BACKEND_URL: ${BACKEND_URL}
+        NEXT_PUBLIC_ASSETS_URL: ${NEXT_PUBLIC_ASSETS_URL}
+        NEXT_PUBLIC_INTERNAL_API_KEY: ${NEXT_PUBLIC_INTERNAL_API_KEY}
+        NEXT_PUBLIC_RECAPTCHA_SITE_KEY: ${NEXT_PUBLIC_RECAPTCHA_SITE_KEY}
+        NEXT_PUBLIC_RECAPTCHA_SECRET_KEY: ${NEXT_PUBLIC_RECAPTCHA_SECRET_KEY}
+        NEXT_PUBLIC_GA_ID: ${NEXT_PUBLIC_GA_ID}
     environment:
       - NODE_ENV=${NODE_ENV}  # Set the environment variable inside the container (used by Next.js)
+      - BACKEND_URL=${BACKEND_URL}
       - PORT=${NEXT_PORT}  # Set the port Next.js will listen on inside the container
+    command: ${FRONTEND_START_COMMAND}  # Command to run the application (e.g., npm run dev or npm start)
+    depends_on:
+      - backend
+    networks:
+      - jorge-network
 
+  backend:
+    container_name: ${NEST_CONTAINER_NAME}  # Assign a custom container name from the NEXT_CONTAINER_NAME environment variable
     env_file:
-      - ../env/${ENV_FILE_NAME}  # Load additional environment variables from the specified .env file
+      - ${BACKEND_ENV_FILE}  # Load additional environment variables from the specified .env file
+    build:
+      context: ../backend
+      dockerfile: Dockerfile.nestjs
+    environment:
+      - NODE_ENV=${NODE_ENV}  # Set the environment variable inside the container (used by Next.js)
+      - PORT=${NEST_PORT}  # Set the port Next.js will listen on inside the container
+    command: ${BACKEND_START_COMMAND}  # Command to run the application (e.g., npm run dev or npm start)
+    networks:
+      - jorge-network
 
-    command: ${START_COMMAND}  # Command to run the application (e.g., npm run dev or npm start)
+networks:
+  jorge-network:
+    driver: bridge
