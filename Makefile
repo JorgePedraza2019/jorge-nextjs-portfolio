@@ -19,28 +19,28 @@ PROJECT_NAME=jorge-portfolio
 
 ENV_FEATURE_COMPOSE	=./env/feature/compose.env
 ENV_FEATURE_LOCAL 	= ./frontend/env/feature/local.env
-ENV_FEATURE_CI    	= ./frontend/env/feature/ci.env
+ENV_FEATURE_CI    	= ./env/feature/ci.env
 
 ENV_DEV_COMPOSE			=./env/dev/compose.env
 ENV_DEV_LOCAL     	= ./frontend/env/dev/local.env
 SSL_DEV_CRT  				= ./frontend/docker/nginx/local/certs/dev/dev.jorgeportfolio.local.crt
 SSL_DEV_KEY  				= ./frontend/docker/nginx/local/certs/dev/dev.jorgeportfolio.local.key
-ENV_DEV_CI        	= ./frontend/env/dev/ci.env
-ENV_DEV_CD    			= ./frontend/env/dev/cd.env
+ENV_DEV_CI        	= ./env/dev/ci.env
+ENV_DEV_CD    			= ./env/dev/cd.env
 
 ENV_QA_COMPOSE			=./env/qa/compose.env
 ENV_QA_LOCAL      	= ./frontend/env/qa/local.env
 SSL_QA_CRT   				= ./frontend/docker/nginx/local/certs/qa/qa.jorgeportfolio.local.crt
 SSL_QA_KEY   				= ./frontend/docker/nginx/local/certs/qa/qa.jorgeportfolio.local.key
-ENV_QA_CI         	= ./frontend/env/qa/ci.env
-ENV_QA_CD     			= ./frontend/env/qa/cd.env
+ENV_QA_CI         	= ./env/qa/ci.env
+ENV_QA_CD     			= ./env/qa/cd.env
 
 ENV_MAIN_COMPOSE		=./env/main/compose.env
 ENV_MAIN_LOCAL    	= ./frontend/env/main/local.env
 SSL_MAIN_CRT 				= ./docker/nginx/local/certs/main/jorgeportfolio.local.crt
 SSL_MAIN_KEY 				= ./docker/nginx/local/certs/main/jorgeportfolio.local.key
-ENV_MAIN_CI       	= ./frontend/env/main/ci.env
-ENV_MAIN_CD   			= ./frontend/env/main/cd.env
+ENV_MAIN_CI       	= ./env/main/ci.env
+ENV_MAIN_CD   			= ./env/main/cd.env
 
 # ----------------------------------------
 # Colors (ANSI escape codes)
@@ -171,6 +171,16 @@ qa-local-down:
 
 qa-local-test:
 	@docker-compose --env-file ${ENV_QA_COMPOSE} -p $(PROJECT_NAME)-qa-local -f docker/docker-compose.qa.yaml exec -T frontend npx playwright test
+
+## CI
+feature-ci-build-up:
+	docker-compose --env-file ${ENV_FEATURE_CI} -p $(PROJECT_NAME)-feature-local -f docker/docker-compose.yaml -f docker/docker-compose-override-feature.yaml up -d --build
+
+feature-ci-lint:
+	docker-compose --env-file ${ENV_FEATURE_CI} -p $(PROJECT_NAME)-feature-local -f docker/docker-compose.yaml exec -T frontend npm run lint
+
+feature-ci-down:
+	docker-compose --env-file ${ENV_FEATURE_CI} -f docker/docker-compose.yaml down
 
 
 ## Local
