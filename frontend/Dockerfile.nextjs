@@ -20,7 +20,8 @@ ARG NEXT_PUBLIC_GA_ID
 ENV NEXT_PUBLIC_GA_ID=${NEXT_PUBLIC_GA_ID}
 ARG NEXT_PUBLIC_ENABLE_ANALYTICS
 ENV NEXT_PUBLIC_ENABLE_ANALYTICS=${NEXT_PUBLIC_ENABLE_ANALYTICS}
-# ARG INSTALL_DEV_LIBRARIES # (Optional) Uncomment if needed to include dev dependencies separately
+ARG INSTALL_DEV_LIBRARIES # (Optional) Uncomment if needed to include dev dependencies separately
+ENV INSTALL_DEV_LIBRARIES=${INSTALL_DEV_LIBRARIES}
 
 # Copy package definition files
 COPY package*.json ./
