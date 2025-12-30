@@ -182,8 +182,8 @@ export default function HeroSection({ locale }) {
               lineHeight: 1.15,
             }}
           >
-            {/* {t("heading")} */}
-            Hello
+            {t("heading")}
+            {/* Hello */}
             <br />
             <span style={{ color: "var(--mui-palette-primary-main)" }}>
               {displayText}
