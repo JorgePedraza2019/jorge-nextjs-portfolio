@@ -19,7 +19,8 @@ PROJECT_NAME=jorge-portfolio
 
 ENV_FEATURE_COMPOSE	=./env/feature/compose.env
 ENV_FEATURE_LOCAL 	= ./frontend/env/feature/local.env
-ENV_FEATURE_CI    	= ./env/feature/ci.env
+# ENV_FEATURE_CI    	= ./env/feature/ci.env
+ENV_FEATURE_CI 			= $(shell pwd)/docker/feature/ci.env
 
 ENV_DEV_COMPOSE			=./env/dev/compose.env
 ENV_DEV_LOCAL     	= ./frontend/env/dev/local.env
@@ -174,10 +175,10 @@ qa-local-test:
 
 ## CI
 feature-ci-build-up:
-	docker-compose --env-file ${ENV_FEATURE_CI} -p $(PROJECT_NAME)-feature-local -f docker/docker-compose.yaml -f docker/docker-compose-override-feature.yaml up -d --build
+	docker-compose --env-file ${ENV_FEATURE_CI} -p $(PROJECT_NAME)-feature-server -f docker/docker-compose.yaml -f docker/docker-compose-override-feature.yaml up -d --build
 
 feature-ci-lint:
-	docker-compose --env-file ${ENV_FEATURE_CI} -p $(PROJECT_NAME)-feature-local -f docker/docker-compose.yaml exec -T frontend npm run lint
+	docker-compose --env-file ${ENV_FEATURE_CI} -p $(PROJECT_NAME)-feature-server -f docker/docker-compose.yaml exec -T frontend npm run lint
 
 feature-ci-down:
 	docker-compose --env-file ${ENV_FEATURE_CI} -f docker/docker-compose.yaml down
