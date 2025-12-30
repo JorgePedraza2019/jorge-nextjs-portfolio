@@ -7,6 +7,9 @@ export class EmailService {
   private sesClient = new SESClient({ region: process.env.AWS_REGION });
 
   async sendEmail(sendEmailDto: SendEmailDto) {
+    const appEnv = process.env.APP_ENV || 'dev';
+    const subjectPrefix = appEnv === 'prod' ? '' : `[${appEnv.toUpperCase()}] `;
+
     const { firstName, lastName, email, linkedin, company, position, message } =
       sendEmailDto;
     const sourceEmail = process.env.EMAIL_FROM;
@@ -24,7 +27,7 @@ export class EmailService {
       ReplyToAddresses: [email],
       Message: {
         Subject: {
-          Data: `Contacto desde portafolio: ${firstName}`,
+          Data: `${subjectPrefix}Contacto desde portafolio: ${firstName}`,
           Charset: 'UTF-8',
         },
         Body: {
