@@ -26,8 +26,10 @@ ENV_DEV_COMPOSE			=./env/dev/compose.env
 ENV_DEV_LOCAL     	= ./frontend/env/dev/local.env
 SSL_DEV_CRT  				= ./frontend/docker/nginx/local/certs/dev/dev.jorgeportfolio.local.crt
 SSL_DEV_KEY  				= ./frontend/docker/nginx/local/certs/dev/dev.jorgeportfolio.local.key
-ENV_DEV_CI        	= ./env/dev/ci.env
-ENV_DEV_CD    			= ./env/dev/cd.env
+# ENV_DEV_CI        	= ./env/dev/ci.env
+# ENV_DEV_CD    			= ./env/dev/cd.env
+ENV_DEV_CI 					= $(shell pwd)/env/feature/ci.env
+ENV_DEV_CD 					= $(shell pwd)/env/feature/cd.env
 
 ENV_QA_COMPOSE			=./env/qa/compose.env
 ENV_QA_LOCAL      	= ./frontend/env/qa/local.env
@@ -119,6 +121,9 @@ feature-ci-lint:
 feature-ci-down:
 	docker-compose --env-file ${ENV_FEATURE_CI} -f docker/docker-compose.yaml down
 
+# ----------------------------------------
+# Dev environment
+# ----------------------------------------
 
 ## Local
 dev-local-build-up:
@@ -151,6 +156,34 @@ dev-local-lint:
 dev-local-test:
 	@docker-compose --env-file ${ENV_DEV_COMPOSE} -p $(PROJECT_NAME)-dev-local -f docker/docker-compose.dev.yaml exec -T frontend npm test
 
+## CI
+dev-ci-build-up:
+	docker-compose --env-file ${ENV_DEV_CI} -p $(PROJECT_NAME)-dev-server -f docker/docker-compose.yaml up -d --build
+
+dev-ci-install-deps:
+	docker-compose --env-file ${ENV_DEV_CI} -p $(PROJECT_NAME)-dev-server -f docker/docker-compose.yaml exec -T frontend sh -c 'export NODE_ENV=development && npm install --only=dev --legacy-peer-deps'
+
+dev-ci-lint:
+	docker-compose --env-file ${ENV_DEV_CI} -p $(PROJECT_NAME)-dev-server -f docker/docker-compose.yaml exec -T frontend npm run lint
+
+dev-ci-jest:
+	docker-compose --env-file ${ENV_DEV_CI} -p $(PROJECT_NAME)-dev-server -f docker/docker-compose.yaml exec -T frontend npm test
+
+dev-ci-playwright:
+	docker-compose --env-file ${ENV_DEV_CI} -p $(PROJECT_NAME)-dev-server -f docker/docker-compose.yaml exec -T frontend npx playwright test
+
+dev-ci-down:
+	docker-compose --env-file ${ENV_DEV_CI} -f docker/docker-compose.yaml down
+
+## CD (remote server)
+dev-cd-build-up:
+	@docker-compose --env-file ${ENV_DEV_CD} -p $(PROJECT_NAME)-dev-server -f docker/docker-compose.yaml -f docker/docker-compose-nginx-server.yaml up --build -d
+
+dev-cd-up:
+	@docker-compose --env-file ${ENV_DEV_CD} -p $(PROJECT_NAME)-dev-server -f docker/docker-compose.yaml -f docker/docker-compose-nginx-server.yaml up
+
+dev-cd-down:
+	@docker-compose --env-file ${ENV_DEV_CD} -p $(PROJECT_NAME)-dev-server -f docker/docker-compose.yaml -f docker/docker-compose-nginx-server.yaml down -v
 
 ## Local
 qa-local-build-up:
@@ -223,34 +256,6 @@ main-local-down:
 
 
 
-# ## CI
-# dev-ci-build-up:
-# 	docker-compose --env-file ${ENV_DEV_CI} -p $(PROJECT_NAME)-dev-server -f docker/docker-compose.yaml up -d --build
-
-# dev-ci-install-deps:
-# 	docker-compose --env-file ${ENV_DEV_CI} -p $(PROJECT_NAME)-dev-server -f docker/docker-compose.yaml exec -T frontend sh -c 'export NODE_ENV=development && npm install --only=dev --legacy-peer-deps'
-
-# dev-ci-lint:
-# 	docker-compose --env-file ${ENV_DEV_CI} -p $(PROJECT_NAME)-dev-server -f docker/docker-compose.yaml exec -T frontend npm run lint
-
-# dev-ci-jest:
-# 	docker-compose --env-file ${ENV_DEV_CI} -p $(PROJECT_NAME)-dev-server -f docker/docker-compose.yaml exec -T frontend npm test
-
-# dev-ci-playwright:
-# 	docker-compose --env-file ${ENV_DEV_CI} -p $(PROJECT_NAME)-dev-server -f docker/docker-compose.yaml exec -T frontend npx playwright test
-
-# dev-ci-down:
-# 	docker-compose --env-file ${ENV_DEV_CI} -f docker/docker-compose.yaml down
-
-# ## CD (remote server)
-# dev-cd-build-up:
-# 	@docker-compose --env-file ${ENV_DEV_CD} -p $(PROJECT_NAME)-dev-server -f docker/docker-compose.yaml -f docker/docker-compose-nginx-server.yaml up --build -d
-
-# dev-cd-up:
-# 	@docker-compose --env-file ${ENV_DEV_CD} -p $(PROJECT_NAME)-dev-server -f docker/docker-compose.yaml -f docker/docker-compose-nginx-server.yaml up
-
-# dev-cd-down:
-# 	@docker-compose --env-file ${ENV_DEV_CD} -p $(PROJECT_NAME)-dev-server -f docker/docker-compose.yaml -f docker/docker-compose-nginx-server.yaml down -v
 
 # # ----------------------------------------
 # # QA environment
