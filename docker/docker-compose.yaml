@@ -2,8 +2,8 @@
 services:
   frontend:
     container_name: ${NEXT_CONTAINER_NAME}  # Assign a custom container name from the NEXT_CONTAINER_NAME environment variable
-    env_file:
-      - ${FRONTEND_ENV_FILE}  # Load additional environment variables from the specified .env file
+    # env_file:
+    #   - ${FRONTEND_ENV_FILE}  # Load additional environment variables from the specified .env file
     build:
       context: ../frontend
       dockerfile: Dockerfile.nextjs
@@ -27,8 +27,8 @@ services:
 
   backend:
     container_name: ${NEST_CONTAINER_NAME}  # Assign a custom container name from the NEXT_CONTAINER_NAME environment variable
-    env_file:
-      - ${BACKEND_ENV_FILE}  # Load additional environment variables from the specified .env file
+    # env_file:
+    #   - ${BACKEND_ENV_FILE}  # Load additional environment variables from the specified .env file
     build:
       context: ../backend
       dockerfile: Dockerfile.nestjs
