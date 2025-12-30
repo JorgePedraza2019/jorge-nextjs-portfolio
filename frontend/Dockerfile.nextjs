@@ -68,6 +68,9 @@ RUN if [ "${INSTALL_PLAYWRIGHT}" = "true" ]; then apt-get update && apt-get upgr
   libflite1 \
   libgles2-mesa \
   libmanette-0.2-0 \
+  libgtk-4-1 \
+  libgraphene-1.0-0 \
+  libavif15 \
   && apt-get clean \
   && rm -rf /var/lib/apt/lists/*; fi
 
