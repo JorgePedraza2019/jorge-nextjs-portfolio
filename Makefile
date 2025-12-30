@@ -86,7 +86,7 @@ feature-local-build-up:
 	@sh -c '$(call check-env-file,$(ENV_FEATURE_COMPOSE))'
 	@sh -c '$(call check-env-file,$(ENV_FEATURE_LOCAL))'
 	@sh -c '$(call show-banner)'
-	@echo "$(COLOR_BLUE)🚀 Building and starting FEATURE container (with logs)...$(COLOR_RESET)"
+	@printf "$(COLOR_BLUE)🚀 Building and starting FEATURE container (with logs)...$(COLOR_RESET)"
 	@docker-compose --env-file ${ENV_FEATURE_COMPOSE} -p $(PROJECT_NAME)-feature-local -f docker/docker-compose.yaml -f docker/docker-compose-override-feature.yaml up --build
 	@printf "$(COLOR_GREEN)✅ FEATURE containers started successfully.$(COLOR_RESET)"
 
@@ -94,16 +94,16 @@ feature-local-up:
 	@sh -c '$(call check-env-file,$(ENV_FEATURE_COMPOSE))'
 	@sh -c '$(call check-env-file,$(ENV_FEATURE_LOCAL))'
 	@sh -c '$(call show-banner)'
-	@echo "$(COLOR_BLUE)🚀 Starting FEATURE container (with logs)...$(COLOR_RESET)"
+	@printf "$(COLOR_BLUE)🚀 Starting FEATURE container (with logs)...$(COLOR_RESET)"
 	@docker-compose --env-file ${ENV_FEATURE_COMPOSE} -p $(PROJECT_NAME)-feature-local -f docker/docker-compose.yaml -f docker/docker-compose-override-feature.yaml up
 	@printf "$(COLOR_GREEN)✅ FEATURE containers started successfully.$(COLOR_RESET)"
 
 feature-local-stop:
-	@echo "$(COLOR_YELLOW)⏹️  Stopping FEATURE container...$(COLOR_RESET)"
+	@printf "$(COLOR_YELLOW)⏹️  Stopping FEATURE container...$(COLOR_RESET)"
 	@docker-compose --env-file ${ENV_FEATURE_COMPOSE} -p $(PROJECT_NAME)-feature-local -f docker/docker-compose.yaml stop
 
 feature-local-down:
-	@echo "$(COLOR_YELLOW)🧹 Removing FEATURE container...$(COLOR_RESET)"
+	@printf "$(COLOR_YELLOW)🧹 Removing FEATURE container...$(COLOR_RESET)"
 	@docker-compose --env-file ${ENV_FEATURE_COMPOSE} -p $(PROJECT_NAME)-feature-local -f docker/docker-compose.yaml down -v
 
 feature-local-lint:
@@ -125,7 +125,7 @@ dev-local-build-up:
 	@sh -c '$(call check-env-file,$(ENV_DEV_COMPOSE)); $(call check-ssl-files,$$1,$$2)' dummy "$(SSL_DEV_CRT)" "$(SSL_DEV_KEY)'
 	@sh -c '$(call check-env-file,$(ENV_DEV_LOCAL))'
 	@sh -c '$(call show-banner)'
-	@echo "$(COLOR_BLUE)🚀 Building and starting DEV containers (with logs)...$(COLOR_RESET)"
+	@printf "$(COLOR_BLUE)🚀 Building and starting DEV containers (with logs)...$(COLOR_RESET)"
 	@docker-compose --env-file ${ENV_DEV_COMPOSE} -p $(PROJECT_NAME)-dev-local -f docker/docker-compose.yaml -f docker/docker-compose-override-dev.yaml -f docker/docker-compose-nginx-local.yaml up --build
 	@printf "$(COLOR_GREEN)✅ DEV containers started successfully.$(COLOR_RESET)"
 
@@ -133,16 +133,16 @@ dev-local-up:
 	@sh -c '$(call check-env-file,$(ENV_DEV_COMPOSE)); $(call check-ssl-files,$$1,$$2)' dummy "$(SSL_DEV_CRT)" "$(SSL_DEV_KEY)"
 	@sh -c '$(call check-env-file,$(ENV_DEV_LOCAL))'
 	@sh -c '$(call show-banner)'
-	@echo "$(COLOR_BLUE)🚀 Starting DEV containers (with logs)...$(COLOR_RESET)"
+	@printf "$(COLOR_BLUE)🚀 Starting DEV containers (with logs)...$(COLOR_RESET)"
 	@docker-compose --env-file ${ENV_DEV_COMPOSE} -p $(PROJECT_NAME)-dev-local -f docker/docker-compose.yaml -f docker/docker-compose-override-dev.yaml -f docker/docker-compose-nginx-local.yaml up
 	@printf "$(COLOR_GREEN)✅ DEV containers started successfully.$(COLOR_RESET)"
 
 dev-local-stop:
-	@echo "$(COLOR_YELLOW)⏹️  Stopping DEV containers...$(COLOR_RESET)"
+	@printf "$(COLOR_YELLOW)⏹️  Stopping DEV containers...$(COLOR_RESET)"
 	@docker-compose --env-file ${ENV_DEV_COMPOSE} -p $(PROJECT_NAME)-dev-local -f docker/docker-compose.yaml -f docker/docker-compose-nginx-local.yaml stop
 
 dev-local-down:
-	@echo "$(COLOR_YELLOW)🧹 Removing DEV containers...$(COLOR_RESET)"
+	@printf "$(COLOR_YELLOW)🧹 Removing DEV containers...$(COLOR_RESET)"
 	@docker-compose --env-file ${ENV_DEV_COMPOSE} -p $(PROJECT_NAME)-dev-local -f docker/docker-compose.yaml -f docker/docker-compose-nginx-local.yaml down -v
 
 dev-local-lint:
@@ -157,7 +157,7 @@ qa-local-build-up:
 	@sh -c '$(call check-env-file,$(ENV_QA_COMPOSE)); $(call check-ssl-files,$$1,$$2)' dummy "$(SSL_QA_CRT)" "$(SSL_QA_KEY)"
 	@sh -c '$(call check-env-file,$(ENV_QA_LOCAL))'
 	@sh -c '$(call show-banner)'
-	@echo "$(COLOR_BLUE)🚀 Building and starting QA containers... Running without logs, use 'make qa-local-logs' to see output.$(COLOR_RESET)"
+	@printf "$(COLOR_BLUE)🚀 Building and starting QA containers... Running without logs, use 'make qa-local-logs' to see output.$(COLOR_RESET)"
 	@docker-compose --env-file ${ENV_QA_COMPOSE} -p $(PROJECT_NAME)-qa-local -f docker/docker-compose.yaml -f docker/docker-compose-nginx-local.yaml up -d --build
 	@printf "$(COLOR_GREEN)✅ QA containers started successfully.$(COLOR_RESET)"
 
@@ -165,19 +165,19 @@ qa-local-up:
 	@sh -c '$(call check-env-file,$(ENV_QA_COMPOSE)); $(call check-ssl-files,$$1,$$2)' dummy "$(SSL_QA_CRT)" "$(SSL_QA_KEY)"
 	@sh -c '$(call check-env-file,$(ENV_QA_LOCAL))'
 	@sh -c '$(call show-banner)'
-	@echo "$(COLOR_BLUE)🚀 Starting QA containers... Running without logs, use 'make qa-local-logs' to see output.$(COLOR_RESET)"
+	@printf "$(COLOR_BLUE)🚀 Starting QA containers... Running without logs, use 'make qa-local-logs' to see output.$(COLOR_RESET)"
 	@docker-compose --env-file ${ENV_QA_COMPOSE} -p $(PROJECT_NAME)-qa-local -f docker/docker-compose.yaml -f docker/docker-compose-nginx-local.yaml up
 	@printf "$(COLOR_GREEN)✅ QA containers started successfully.$(COLOR_RESET)"
 
 qa-local-stop:
-	@echo "$(COLOR_YELLOW)⏹️  Stopping QA containers...$(COLOR_RESET)"
+	@printf "$(COLOR_YELLOW)⏹️  Stopping QA containers...$(COLOR_RESET)"
 	@docker-compose --env-file ${ENV_QA_COMPOSE} -p $(PROJECT_NAME)-qa-local -f docker/docker-compose.yaml -f docker/docker-compose-nginx-local.yaml stop
 
 qa-local-logs:
 	@docker-compose -p $(PROJECT_NAME)-qa-local logs -f
 
 qa-local-down:
-	@echo "$(COLOR_YELLOW)🧹 Removing QA containers...$(COLOR_RESET)"
+	@printf "$(COLOR_YELLOW)🧹 Removing QA containers...$(COLOR_RESET)"
 	@docker-compose --env-file ${ENV_QA_COMPOSE} -p $(PROJECT_NAME)-qa-local -f docker/docker-compose.yaml -f docker/docker-compose-nginx-local.yaml down -v
 
 qa-local-test:
@@ -189,7 +189,7 @@ main-local-build-up:
 	@sh -c '$(call check-env-file,$(ENV_MAIN_COMPOSE)); $(call check-ssl-files,$$1,$$2)' dummy "$(SSL_MAIN_CRT)" "$(SSL_MAIN_KEY)"
 	@sh -c '$(call check-env-file,$(ENV_MAIN_LOCAL))'
 	@sh -c '$(call show-banner)'
-	@echo "$(COLOR_BLUE)🚀 Building and starting PRODUCTION containers... Running without logs, use 'make main-local-logs' to see output.$(COLOR_RESET)"
+	@printf "$(COLOR_BLUE)🚀 Building and starting PRODUCTION containers... Running without logs, use 'make main-local-logs' to see output.$(COLOR_RESET)"
 	@docker-compose --env-file ${ENV_MAIN_COMPOSE} -p $(PROJECT_NAME)-main-local -f docker/docker-compose.yaml -f docker/docker-compose-nginx-local.yaml up -d --build
 	@printf "$(COLOR_GREEN)✅ PRODUCTION containers started successfully.$(COLOR_RESET)"
 
@@ -197,19 +197,19 @@ main-local-up:
 	@sh -c '$(call check-env-file,$(ENV_MAIN_COMPOSE)); $(call check-ssl-files,$$1,$$2)' dummy "$(SSL_MAIN_CRT)" "$(SSL_MAIN_KEY)"
 	@sh -c '$(call check-env-file,$(ENV_MAIN_LOCAL))'
 	@sh -c '$(call show-banner)'
-	@echo "$(COLOR_BLUE)🚀 Starting PRODUCTION containers... Running without logs, use 'make main-local-logs' to see output.$(COLOR_RESET)"
+	@printf "$(COLOR_BLUE)🚀 Starting PRODUCTION containers... Running without logs, use 'make main-local-logs' to see output.$(COLOR_RESET)"
 	@docker-compose --env-file ${ENV_MAIN_COMPOSE} -p $(PROJECT_NAME)-main-local -f docker/docker-compose.yaml -f docker/docker-compose-nginx-local.yaml up -d
 	@printf "$(COLOR_GREEN)✅ PRODUCTION containers started successfully.$(COLOR_RESET)"
 
 main-local-stop:
-	@echo "$(COLOR_YELLOW)⏹️  Stopping PRODUCTION containers...$(COLOR_RESET)"
+	@printf "$(COLOR_YELLOW)⏹️  Stopping PRODUCTION containers...$(COLOR_RESET)"
 	@docker-compose --env-file ${ENV_MAIN_COMPOSE} -p $(PROJECT_NAME)-main-local -f docker/docker-compose.yaml -f docker/docker-compose-nginx-local.yaml stop
 
 main-local-logs:
 	@docker-compose -p $(PROJECT_NAME)-main-local logs -f
 
 main-local-down:
-	@echo "$(COLOR_YELLOW)🧹 Removing PRODUCTION containers...$(COLOR_RESET)"
+	@printf "$(COLOR_YELLOW)🧹 Removing PRODUCTION containers...$(COLOR_RESET)"
 	@docker-compose --env-file ${ENV_MAIN_COMPOSE} -p $(PROJECT_NAME)-main-local -f docker/docker-compose.yaml -f docker/docker-compose-nginx-local.yaml down -v
 
 
