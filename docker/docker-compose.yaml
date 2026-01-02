@@ -25,8 +25,8 @@ services:
       - NODE_ENV=${NODE_ENV}  # Set the environment variable inside the container (used by Next.js)
       - PORT=${NEXT_PORT}  # Set the port Next.js will listen on inside the container
       - BACKEND_URL=${BACKEND_URL}
-    env_file:
-      - ../env/${ENV_FILE_NAME} # Load additional environment variables from the specified .env file
+    # env_file:
+    #   - ../env/${ENV_FILE_NAME} # Load additional environment variables from the specified .env file
     command: ${FRONTEND_START_COMMAND}  # Command to run the application (e.g., npm run dev or npm start)
     depends_on:
       - backend
@@ -36,8 +36,8 @@ services:
   backend:
     container_name: ${NEST_CONTAINER_NAME}  # Assign a custom container name from the NEXT_CONTAINER_NAME environment variable
     # Usar env file solo para local
-    env_file:
-      - ../env/${ENV_FILE_NAME}  # Load additional environment variables from the specified .env file
+    # env_file:
+    #   - ../env/${ENV_FILE_NAME}  # Load additional environment variables from the specified .env file
     build:
       context: ../backend
       dockerfile: Dockerfile.nestjs
