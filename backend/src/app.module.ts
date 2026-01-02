@@ -8,7 +8,7 @@ import { ThrottlerModule } from '@nestjs/throttler';
     ThrottlerModule.forRoot({
       throttlers: [
         {
-          ttl: 60,   // ventana de tiempo en segundos
+          ttl: 60, // ventana de tiempo en segundos
           limit: 30, // máximo 30 requests por IP
         },
       ],

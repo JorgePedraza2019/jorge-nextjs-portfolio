@@ -1,27 +1,32 @@
+# Docker compose orquestador ubicado en la raiz del proyecto.
 # docker-compose.yaml to start both frontend and backend services in local development mode in a single network
 services:
   frontend:
     container_name: ${NEXT_CONTAINER_NAME}  # Assign a custom container name from the NEXT_CONTAINER_NAME environment variable
     # Usar env file solo para local
-    # env_file:
-    #   - ${FRONTEND_ENV_FILE}  # Load additional environment variables from the specified .env file
     build:
       context: ../frontend
       dockerfile: Dockerfile.nextjs
       args:
+        # Required for production build mode
+        NODE_ENV: ${NODE_ENV}           # ✅ Ahora Dockerfile lo ve
+        INSTALL_PLAYWRIGHT: ${INSTALL_PLAYWRIGHT}
+        INSTALL_DEV_LIBRARIES: ${INSTALL_DEV_LIBRARIES}
+
+        BACKEND_URL: ${BACKEND_URL}
         NEXT_PUBLIC_ASSETS_URL: ${NEXT_PUBLIC_ASSETS_URL}
         NEXT_PUBLIC_RECAPTCHA_SITE_KEY: ${NEXT_PUBLIC_RECAPTCHA_SITE_KEY}
         NEXT_PUBLIC_RECAPTCHA_SECRET_KEY: ${NEXT_PUBLIC_RECAPTCHA_SECRET_KEY}
         NEXT_PUBLIC_GA_ID: ${NEXT_PUBLIC_GA_ID}
         NEXT_PUBLIC_INTERNAL_API_KEY: ${NEXT_PUBLIC_INTERNAL_API_KEY}
-        BACKEND_URL: ${BACKEND_URL}
         NEXT_PUBLIC_ENABLE_ANALYTICS: ${NEXT_PUBLIC_ENABLE_ANALYTICS}
-        INSTALL_PLAYWRIGHT: ${INSTALL_PLAYWRIGHT}
-        INSTALL_DEV_LIBRARIES: ${INSTALL_DEV_LIBRARIES}
+    image: ${FRONTEND_IMAGE_NAME}  # Tag and name of the Docker image to build or use
     environment:
       - NODE_ENV=${NODE_ENV}  # Set the environment variable inside the container (used by Next.js)
-      - BACKEND_URL=${BACKEND_URL}
       - PORT=${NEXT_PORT}  # Set the port Next.js will listen on inside the container
+      - BACKEND_URL=${BACKEND_URL}
+    env_file:
+      - ../env/${ENV_FILE_NAME} # Load additional environment variables from the specified .env file
     command: ${FRONTEND_START_COMMAND}  # Command to run the application (e.g., npm run dev or npm start)
     depends_on:
       - backend
@@ -31,11 +36,12 @@ services:
   backend:
     container_name: ${NEST_CONTAINER_NAME}  # Assign a custom container name from the NEXT_CONTAINER_NAME environment variable
     # Usar env file solo para local
-    # env_file:
-    #   - ${BACKEND_ENV_FILE}  # Load additional environment variables from the specified .env file
+    env_file:
+      - ../env/${ENV_FILE_NAME}  # Load additional environment variables from the specified .env file
     build:
       context: ../backend
       dockerfile: Dockerfile.nestjs
+    image: ${BACKEND_IMAGE_NAME}  # Tag and name of the Docker image to build or use
     environment:
       - NODE_ENV=${NODE_ENV}  # Set the environment variable inside the container (used by Next.js)
       - PORT=${NEST_PORT}  # Set the port Next.js will listen on inside the container

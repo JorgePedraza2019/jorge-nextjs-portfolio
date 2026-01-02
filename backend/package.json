@@ -1,8 +1,8 @@
 {
-  "name": "backend",
+  "name": "@jorge-portfolio/backend",
   "version": "0.0.1",
-  "description": "",
-  "author": "",
+  "description": "Backend Portfolio",
+  "author": "Jorge Pedraza",
   "private": true,
   "license": "UNLICENSED",
   "scripts": {

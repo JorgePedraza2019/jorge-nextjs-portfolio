@@ -31,17 +31,6 @@ fi
 printf "${COLOR_BLUE}🚀 Launching stack for branch: '${CURRENT_BRANCH}'${COLOR_RESET}\n"
 
 # Define container name based on branch
-# container_exists() {
-#   case "$CURRENT_BRANCH" in
-#     feature/*)
-#       docker ps -a --format '{{.Names}}' | grep -q "${PROJECT_NAME}-app-feature-local-container"
-#       ;;
-#     *)
-#       docker ps -a --format '{{.Names}}' | grep -q "${PROJECT_NAME}-app-${SANITIZED_BRANCH}-local-container"
-#       ;;
-#   esac
-# }
-
 container_exists() {
   local project
 
@@ -106,6 +95,7 @@ fi
 # =========================
 git fetch origin
 
+# Look for merge candidates
 printf "\n${COLOR_GREEN}🔍 Looking for updates not yet merged into '$CURRENT_BRANCH'...${COLOR_RESET}\n"
 
 MERGE_CANDIDATES=()

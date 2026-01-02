@@ -1,15 +1,18 @@
 {
-  "name": "jorge-nextjs-portfolio1",
-  "version": "0.1.0",
+  "name": "@jorge-portfolio/frontend",
+  "version": "0.1.7",
+  "description": "Frontend Portfolio",
+  "author": "Jorge Pedraza",
   "private": true,
   "type": "module",
+  "license": "UNLICENSED",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",
     "test": "jest",
-    "launch": "./utils/launch.sh",
+    "launch": "bash utils/launch.sh",
     "sw": "./utils/switch.sh"
   },
   "dependencies": {
