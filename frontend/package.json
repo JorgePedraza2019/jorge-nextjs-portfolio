@@ -13,6 +13,8 @@
     "lint": "eslint .",
     "test": "jest",
     "launch": "bash utils/launch.sh",
+    "stop": "bash utils/stop.sh",
+    "down": "bash utils/down.sh",
     "sw": "./utils/switch.sh"
   },
   "dependencies": {

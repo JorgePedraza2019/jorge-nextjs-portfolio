@@ -18,7 +18,10 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "launch": "./utils/launch.sh"
+    "launch": "./utils/launch.sh",
+    "stop": "bash utils/stop.sh",
+    "down": "bash utils/down.sh",
+    "sw": "./utils/switch.sh"
   },
   "dependencies": {
     "@aws-sdk/client-ses": "^3.958.0",
