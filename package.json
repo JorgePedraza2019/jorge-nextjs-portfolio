@@ -4,7 +4,8 @@
   "scripts": {
     "launch": "bash utils/launch.sh",
     "stop": "bash utils/stop.sh",
-    "down": "bash utils/down.sh"
+    "down": "bash utils/down.sh",
+    "sw": "bash utils/switch.sh"
   },
   "devDependencies": {
     "husky": "^9.1.7"

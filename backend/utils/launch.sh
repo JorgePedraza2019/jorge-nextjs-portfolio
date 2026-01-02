@@ -1,7 +1,10 @@
+# /backend/utils/launch.sh
 #!/usr/bin/env bash
 set -e
 
-# Colors
+# =========================
+# 🎨 Colors
+# =========================
 COLOR_GREEN='\033[1;32m'
 COLOR_YELLOW='\033[1;33m'
 COLOR_RED='\033[1;31m'
@@ -13,7 +16,9 @@ COLOR_AUTHOR='\033[1;32m'
 COLOR_FILES='\033[1;35m'
 COLOR_BRANCH='\033[1;34m'
 
-# Config
+# =========================
+# ⚙️ Config
+# =========================
 PROJECT_NAME="jorge-portfolio-backend"
 CURRENT_BRANCH=$(git symbolic-ref --short HEAD 2>/dev/null || printf "")
 SANITIZED_BRANCH="${CURRENT_BRANCH//\//-}"
@@ -27,23 +32,36 @@ printf "${COLOR_BLUE}🚀 Launching current branch: '$CURRENT_BRANCH'${COLOR_RES
 
 # Define container name based on branch
 container_exists() {
+  local project
+
   case "$CURRENT_BRANCH" in
     feature/*)
-      docker ps -a --format '{{.Names}}' | grep -q "${PROJECT_NAME}-app-feature-local-container"
+      project="${PROJECT_NAME}-backend-feature-local"
       ;;
     *)
-      docker ps -a --format '{{.Names}}' | grep -q "${PROJECT_NAME}-app-${SANITIZED_BRANCH}-local-container"
+      project="${PROJECT_NAME}-backend-${SANITIZED_BRANCH}-local"
       ;;
   esac
+
+  # Revisa si hay algún contenedor creado, aunque esté detenido
+  docker compose -p "$project" ps -a -q | grep -q .
 }
 
-# Define merge source
+# =========================
+# 🔀 Define merge source
+# =========================
 case "$CURRENT_BRANCH" in
-  dev) FROM_PATTERN="origin/feature/" ;;
-  qa) FROM_PATTERN="origin/dev" ;;
-  main) FROM_PATTERN="origin/qa" ;;
+  dev)
+    FROM_PATTERN="origin/feature/"
+    ;;
+  qa)
+    FROM_PATTERN="origin/dev"
+    ;;
+  main)
+    FROM_PATTERN="origin/qa"
+    ;;
   feature/*)
-    printf "${COLOR_YELLOW}🧪 Feature branch detected: '$CURRENT_BRANCH'. Launching without merge logic...${COLOR_RESET}\n"
+    printf "${COLOR_YELLOW}🧪 Feature branch detected. Skipping merge logic.${COLOR_RESET}\n"
     if container_exists; then
       make "feature-local-up"
     else
@@ -52,7 +70,7 @@ case "$CURRENT_BRANCH" in
     exit 0
     ;;
   *)
-    printf "${COLOR_YELLOW}ℹ️  No merge source defined for '$CURRENT_BRANCH'. Running containers directly...${COLOR_RESET}\n"
+    printf "${COLOR_YELLOW}ℹ️  No merge source defined. Launching stack directly.${COLOR_RESET}\n"
     if container_exists; then
       make "${SANITIZED_BRANCH}-local-up"
     else
@@ -72,7 +90,9 @@ if [ -z "$FROM_PATTERN" ]; then
   exit 0
 fi
 
-# Fetch updates
+# =========================
+# 🌍 Fetch updates
+# =========================
 git fetch origin
 
 # Look for merge candidates
@@ -111,8 +131,11 @@ if [ "${#MERGE_CANDIDATES[@]}" -eq 0 ]; then
   exit 0
 fi
 
-# Ask for merge
+# =========================
+# 🧩 Ask user
+# =========================
 CANDIDATE_LABELS+=("Continue without merging")
+
 printf "${COLOR_YELLOW}🧩 Select a branch to merge into local '$CURRENT_BRANCH':${COLOR_RESET}\n"
 for i in "${!CANDIDATE_LABELS[@]}"; do
   printf "     %s) %b\n" "$((i + 1))" "${CANDIDATE_LABELS[$i]}"
@@ -121,7 +144,9 @@ done
 echo ""
 read -p "$(printf "     ${COLOR_YELLOW}#? ${COLOR_RESET}")" USER_CHOICE
 
-if ! [[ "$USER_CHOICE" =~ ^[0-9]+$ ]] || [ "$USER_CHOICE" -lt 1 ] || [ "$USER_CHOICE" -gt "${#CANDIDATE_LABELS[@]}" ]; then
+if ! [[ "$USER_CHOICE" =~ ^[0-9]+$ ]] || \
+   [ "$USER_CHOICE" -lt 1 ] || \
+   [ "$USER_CHOICE" -gt "${#CANDIDATE_LABELS[@]}" ]; then
   printf "${COLOR_RED}❌ Invalid selection. Exiting.${COLOR_RESET}\n"
   exit 1
 fi
@@ -129,6 +154,9 @@ fi
 SELECTED_INDEX=$((USER_CHOICE - 1))
 SELECTED_BRANCH="${MERGE_CANDIDATES[$SELECTED_INDEX]}"
 
+# =========================
+# 🔀 Perform merge
+# =========================
 if [ -z "$SELECTED_BRANCH" ]; then
   printf "${COLOR_YELLOW}➡️  Continuing without merging...${COLOR_RESET}\n"
 else

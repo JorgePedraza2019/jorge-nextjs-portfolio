@@ -1,22 +1,18 @@
 # backend/docker/docker-compose.yaml
 services:
   backend:
-    container_name: ${BACKEND_CONTAINER_NAME}
-
+    container_name: ${CONTAINER_NAME}
     build:
       context: ..
       dockerfile: ./Dockerfile.nestjs
-
       args:
         NODE_ENV: ${NODE_ENV}
-
     image: ${IMAGE_NAME}
-
+    ports:
+      - ${USE_PORTS}
     environment:
       - NODE_ENV=${NODE_ENV}
       - PORT=${BACKEND_PORT}
-
     env_file:
       - ../env/${ENV_FILE_NAME}
-
     command: ${START_COMMAND}
