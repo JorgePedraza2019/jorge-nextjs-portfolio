@@ -53,7 +53,7 @@ jobs:
           script: |
             DEPLOY_BRANCH="${{ inputs.deploy_branch }}"
 
-            cd /var/www/jorge-nextjs-portfolio/
+            cd /var/www/jorge-portfolio/
             git fetch origin
             git reset --hard origin/$DEPLOY_BRANCH
 
@@ -75,7 +75,7 @@ jobs:
           port: 22
           script: |
             DEPLOY_BRANCH="${{ inputs.deploy_branch }}"
-            cd /var/www/jorge-nextjs-portfolio
+            cd /var/www/jorge-portfolio
 
             set -a
             source env/$DEPLOY_BRANCH/cd.env
