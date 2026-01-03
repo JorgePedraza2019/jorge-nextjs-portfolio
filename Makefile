@@ -262,12 +262,12 @@ dev-ci-down:
 # 		up --build -d
 
 dev-cd-build-push-backend:
-	docker build -t backend:$(SHA) ./backend
+	docker build -t backend:$(SHA) -f ./backend/Dockerfile.nestjs ./backend
 	docker tag backend:$(SHA) $(ECR_URI):$(SHA)
 	docker push $(ECR_URI):$(SHA)
 
 dev-cd-build-push-frontend:
-	docker build -t frontend:$(SHA) ./frontend
+	docker build -t frontend:$(SHA) -f ./frontend/Dockerfile.nextjs ./frontend
 	docker tag frontend:$(SHA) $(ECR_URI):$(SHA)
 	docker push $(ECR_URI):$(SHA)
 
