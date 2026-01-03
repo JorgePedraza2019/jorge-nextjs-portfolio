@@ -40,3 +40,6 @@ jobs:
       # Deployment secrets for MAIN environment
       SERVER_SSH_KEY_MAIN: ${{ secrets.SERVER_SSH_KEY_MAIN }}      # SSH private key for accessing the Production server
       ENV_VARS_MAIN_CD:    ${{ secrets.ENV_VARS_MAIN_CD }}         # .env content for container deployment in Production
+
+      AWS_ACCESS_KEY_ID:    ${{ secrets.AWS_ACCESS_KEY_ID }}         # .env content for container deployment in Production
+      AWS_SECRET_ACCESS_KEY:    ${{ secrets.AWS_SECRET_ACCESS_KEY }}         # .env content for container deployment in Production
