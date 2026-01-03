@@ -15,3 +15,6 @@ services:
 networks:
   jorge-network:
     external: true
+
+# CREATE EC2 NETWORK (run only once manually)
+# sudo docker network create jorge-network
