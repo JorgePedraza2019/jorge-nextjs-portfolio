@@ -295,7 +295,7 @@ dev-cd-up:
 		-p $(PROJECT_NAME)-dev-server \
 		-f docker/docker-compose-server.yaml \
 		-f docker/docker-compose-nginx-server.yaml \
-		up -d
+		up
 
 # dev-cd-down:
 # 	@docker-compose \
