@@ -11,21 +11,21 @@ on:
 
 jobs:
   # Job for running the Continuous Integration pipeline
-  call-ci:
-    uses: ./.github/workflows/ci-global.yaml   # Reuse CI workflow defined in a separate file
-    secrets:
-      # Environment variables and secrets for feature branches
-      ENV_VARS_FEATURE_CI: ${{ secrets.ENV_VARS_FEATURE_CI }}
-      # Environment variables and secrets for dev branch
-      ENV_VARS_DEV_CI: ${{ secrets.ENV_VARS_DEV_CI }}
-      # Environment variables and secrets for qa branch
-      ENV_VARS_QA_CI: ${{ secrets.ENV_VARS_QA_CI }}
-      # Environment variables and secrets for main branch
-      ENV_VARS_MAIN_CI: ${{ secrets.ENV_VARS_MAIN_CI }}
+  # call-ci:
+  #   uses: ./.github/workflows/ci-global.yaml   # Reuse CI workflow defined in a separate file
+  #   secrets:
+  #     # Environment variables and secrets for feature branches
+  #     ENV_VARS_FEATURE_CI: ${{ secrets.ENV_VARS_FEATURE_CI }}
+  #     # Environment variables and secrets for dev branch
+  #     ENV_VARS_DEV_CI: ${{ secrets.ENV_VARS_DEV_CI }}
+  #     # Environment variables and secrets for qa branch
+  #     ENV_VARS_QA_CI: ${{ secrets.ENV_VARS_QA_CI }}
+  #     # Environment variables and secrets for main branch
+  #     ENV_VARS_MAIN_CI: ${{ secrets.ENV_VARS_MAIN_CI }}
 
   # Job for running the Continuous Deployment pipeline
   call-cd:
-    needs: call-ci   # This job depends on the successful completion of 'call-ci'
+    # needs: call-ci   # This job depends on the successful completion of 'call-ci'
     if: ${{ github.ref == 'refs/heads/dev' || github.ref == 'refs/heads/qa' || github.ref == 'refs/heads/main' }}  # Run only on dev, qa, or main branches
     uses: ./.github/workflows/cd-global.yaml   # Reuse CD workflow defined in a separate file
     with:
