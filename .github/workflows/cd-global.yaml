@@ -104,15 +104,17 @@ jobs:
           script: |
             DEPLOY_BRANCH="${{ inputs.deploy_branch }}"
 
-            echo "Logging into ECR"
-            aws ecr get-login-password --region us-east-1 \
-            | docker login --username AWS --password-stdin $ECR_REGISTRY
-
             cd /var/www/jorge-portfolio
+            git fetch origin
+            git reset --hard origin/$DEPLOY_BRANCH
 
             set -a
             source env/$DEPLOY_BRANCH/cd.env
             set +a
+
+            echo "Logging into ECR"
+            aws ecr get-login-password --region us-east-1 \
+            | docker login --username AWS --password-stdin $ECR_REGISTRY
 
             echo "Pull latest images"
             docker-compose -f docker/docker-compose-server.yaml pull
