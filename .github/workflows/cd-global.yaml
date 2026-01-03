@@ -57,7 +57,7 @@ jobs:
       - name: Build & push backend image
         run: |
           TARGET_BACKEND="${{ env.DEPLOY_BRANCH }}-cd-build-push-backend"
-          make $TARGET_BACKEND SHA=${{ github.sha }} ECR_URI=$ECR_BACKEND_URI
+          make $TARGET_BACKEND SHA=${{ github.sha }} ECR_URI=$ECR_BACKEND_URI NODE_ENV=$NODE_ENV
 
       - name: Build & push frontend image
         run: |
