@@ -32,11 +32,8 @@ jobs:
       deploy_branch: ${{ github.ref_name }}  # Pass the branch name to the CD workflow
     secrets:
       # Deployment secrets for DEV environment
-      SERVER_SSH_KEY_DEV: ${{ secrets.SERVER_SSH_KEY_DEV }}        # SSH private key for accessing the Dev server
       ENV_VARS_DEV_CD:     ${{ secrets.ENV_VARS_DEV_CD }}          # .env content for container deployment in Dev
       # Deployment secrets for QA environment
-      SERVER_SSH_KEY_QA:  ${{ secrets.SERVER_SSH_KEY_QA }}         # SSH private key for accessing the QA server
       ENV_VARS_QA_CD:     ${{ secrets.ENV_VARS_QA_CD }}            # .env content for container deployment in QA
       # Deployment secrets for MAIN environment
-      SERVER_SSH_KEY_MAIN: ${{ secrets.SERVER_SSH_KEY_MAIN }}      # SSH private key for accessing the Production server
       ENV_VARS_MAIN_CD:    ${{ secrets.ENV_VARS_MAIN_CD }}         # .env content for container deployment in Production

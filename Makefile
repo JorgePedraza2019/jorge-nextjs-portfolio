@@ -253,30 +253,39 @@ dev-ci-down:
 		down
 
 ## CD (remote server)
-dev-cd-build-up:
-	@docker-compose \
-		--env-file ${ENV_DEV_CD} \
-		-p $(PROJECT_NAME)-dev-server \
-		-f docker/docker-compose.yaml \
-		-f docker/docker-compose-nginx-server.yaml \
-		up --build -d
+# dev-cd-build-up:
+# 	@docker-compose \
+# 		--env-file ${ENV_DEV_CD} \
+# 		-p $(PROJECT_NAME)-dev-server \
+# 		-f docker/docker-compose.yaml \
+# 		-f docker/docker-compose-nginx-server.yaml \
+# 		up --build -d
+
+dev-cd-build-push-backend:
+	docker build -t backend:$(SHA) ./backend
+	docker tag backend:$(SHA) $(ECR_URI):$(SHA)
+	docker push $(ECR_URI):$(SHA)
+
+dev-cd-build-push-frontend:
+	docker build -t frontend:$(SHA) ./frontend
+	docker tag frontend:$(SHA) $(ECR_URI):$(SHA)
+	docker push $(ECR_URI):$(SHA)
 
 dev-cd-up:
 	@docker-compose \
 		--env-file ${ENV_DEV_CD} \
 		-p $(PROJECT_NAME)-dev-server \
-		-f docker/docker-compose.yaml \
+		-f docker/docker-compose-server.yaml \
 		-f docker/docker-compose-nginx-server.yaml \
-		up
+		up -d
 
-dev-cd-down:
-	@docker-compose \
-		--env-file ${ENV_DEV_CD} \
-		-p $(PROJECT_NAME)-dev-server \
-		-f docker/docker-compose.yaml \
-		-f docker/docker-compose-nginx-server.yaml \
-		down -v
-
+# dev-cd-down:
+# 	@docker-compose \
+# 		--env-file ${ENV_DEV_CD} \
+# 		-p $(PROJECT_NAME)-dev-server \
+# 		-f docker/docker-compose.yaml \
+# 		-f docker/docker-compose-nginx-server.yaml \
+# 		down -v
 
 # ----------------------------------------
 # QA environment

@@ -1,6 +1,5 @@
 name: CD-Workflow
 
-# This CD (Continuous Deployment) workflow is triggered by another workflow using `workflow_call`.
 on:
   workflow_call:
     inputs:
@@ -9,76 +8,77 @@ on:
         type: string
     secrets:
       # DEV environment
-      SERVER_SSH_KEY_DEV:      { required: true }
       ENV_VARS_DEV_CD:         { required: true }
       # QA environment
-      SERVER_SSH_KEY_QA:       { required: true }
       ENV_VARS_QA_CD:          { required: true }
       # MAIN environment
-      SERVER_SSH_KEY_MAIN:     { required: true }
       ENV_VARS_MAIN_CD:        { required: true }
 
 jobs:
-  deploy:
+  build-and-push:
     runs-on: ubuntu-latest
-    steps:
-      - name: Set deployment branch variable
-        id: vars
-        run: echo "DEPLOY_BRANCH=${{ inputs.deploy_branch }}" >> $GITHUB_ENV
 
-      - name: Extract server connection info
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::051826703576:role/github-actions-ecr-jorge-portfolio
+          aws-region: us-east-1
+
+      - name: Login to Amazon ECR
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Set environment variables
         run: |
+          echo "DEPLOY_BRANCH=${{ inputs.deploy_branch }}" >> $GITHUB_ENV
+
           if [[ "${{ inputs.deploy_branch }}" == "dev" ]]; then
-            echo "${{ secrets.ENV_VARS_DEV_CD }}" > env.temp
+            echo -e "${{ secrets.ENV_VARS_DEV_CD }}" > cd.env
           elif [[ "${{ inputs.deploy_branch }}" == "qa" ]]; then
-            echo "${{ secrets.ENV_VARS_QA_CD }}" > env.temp
+            echo -e "${{ secrets.ENV_VARS_QA_CD }}" > cd.env
           elif [[ "${{ inputs.deploy_branch }}" == "main" ]]; then
-            echo "${{ secrets.ENV_VARS_MAIN_CD }}" > env.temp
+            echo -e "${{ secrets.ENV_VARS_MAIN_CD }}" > cd.env
           fi
 
-          # Obtain SERVER_IP y SERVER_USER y export as env
-          export $(grep -E '^(SERVER_IP|SERVER_USER)=' env.temp | xargs)
-          echo "SERVER_IP=$SERVER_IP" >> $GITHUB_ENV
-          echo "SERVER_USER=$SERVER_USER" >> $GITHUB_ENV
+          source cd.env
+          echo "ECR_BACKEND_URI=$ECR_BACKEND_URI" >> $GITHUB_ENV
+          echo "ECR_FRONTEND_URI=$ECR_FRONTEND_URI" >> $GITHUB_ENV
 
-      - name: Pull latest code and create .env file in remote server
+      - name: Build & push backend image
+        run: |
+          TARGET_BACKEND="${{ env.DEPLOY_BRANCH }}-cd-build-push-backend"
+          make $TARGET_BACKEND SHA=${{ github.sha }} ECR_URI=$ECR_BACKEND_URI
+
+      - name: Build & push frontend image
+        run: |
+          TARGET_FRONTEND="${{ env.DEPLOY_BRANCH }}-cd-build-push-frontend"
+          make $TARGET_FRONTEND SHA=${{ github.sha }} ECR_URI=$ECR_FRONTEND_URI
+
+      - name: Deploy to server
         uses: appleboy/ssh-action@v0.1.5
         with:
           host: ${{ env.SERVER_IP }}
           username: ${{ env.SERVER_USER }}
-          key: ${{ inputs.deploy_branch == 'dev' && secrets.SERVER_SSH_KEY_DEV || 
-                  inputs.deploy_branch == 'qa' && secrets.SERVER_SSH_KEY_QA || 
-                  inputs.deploy_branch == 'main' && secrets.SERVER_SSH_KEY_MAIN }}
+          key: ${{ secrets.SERVER_SSH_KEY_${{ env.DEPLOY_BRANCH | upper }} }}
           port: 22
           script: |
             DEPLOY_BRANCH="${{ inputs.deploy_branch }}"
 
-            cd /var/www/jorge-portfolio/
-            git fetch origin
-            git reset --hard origin/$DEPLOY_BRANCH
+            echo "Logging into ECR"
+            aws ecr get-login-password --region us-east-1 \
+            | docker login --username AWS --password-stdin $ECR_REGISTRY
 
-            mkdir -p env/$DEPLOY_BRANCH
-            echo -e "${{ 
-              inputs.deploy_branch == 'dev' && secrets.ENV_VARS_DEV_CD || 
-              inputs.deploy_branch == 'qa' && secrets.ENV_VARS_QA_CD || 
-              inputs.deploy_branch == 'main' && secrets.ENV_VARS_MAIN_CD 
-            }}" > env/$DEPLOY_BRANCH/cd.env
-
-      - name: Run Makefile to lift containers on remote
-        uses: appleboy/ssh-action@v0.1.5
-        with:
-          host: ${{ env.SERVER_IP }}
-          username: ${{ env.SERVER_USER }}
-          key: ${{ inputs.deploy_branch == 'dev' && secrets.SERVER_SSH_KEY_DEV || 
-                  inputs.deploy_branch == 'qa' && secrets.SERVER_SSH_KEY_QA || 
-                  inputs.deploy_branch == 'main' && secrets.SERVER_SSH_KEY_MAIN }}
-          port: 22
-          script: |
-            DEPLOY_BRANCH="${{ inputs.deploy_branch }}"
             cd /var/www/jorge-portfolio
 
             set -a
             source env/$DEPLOY_BRANCH/cd.env
             set +a
 
-            make ${DEPLOY_BRANCH}-cd-build-up
+            echo "Pull latest images"
+            docker-compose -f docker/docker-compose-server.yaml pull
+
+            echo "Start containers"
+            make ${DEPLOY_BRANCH}-cd-up
