@@ -266,7 +266,7 @@ dev-ci-down:
 # 	docker tag backend:$(SHA) $(ECR_URI):$(SHA)
 # 	docker push $(ECR_URI):$(SHA)
 
-	dev-cd-build-push-backend:
+dev-cd-build-push-backend:
 	docker build \
       -t backend:$(SHA) \
       -f ./backend/Dockerfile.nestjs \
