@@ -266,10 +266,10 @@ dev-cd-build-push-backend:
 	docker tag backend:$(SHA) $(ECR_URI):$(SHA)
 	docker push $(ECR_URI):$(SHA)
 
-dev-cd-build-push-frontend:
-	docker build -t frontend:$(SHA) -f ./frontend/Dockerfile.nextjs ./frontend
-	docker tag frontend:$(SHA) $(ECR_URI):$(SHA)
-	docker push $(ECR_URI):$(SHA)
+# dev-cd-build-push-frontend:
+# 	docker build -t frontend:$(SHA) -f ./frontend/Dockerfile.nextjs ./frontend
+# 	docker tag frontend:$(SHA) $(ECR_URI):$(SHA)
+# 	docker push $(ECR_URI):$(SHA)
 
 dev-cd-build-push-frontend:
 	docker build \
