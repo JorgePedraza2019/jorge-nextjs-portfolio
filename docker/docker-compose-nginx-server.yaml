@@ -9,3 +9,9 @@ services:
       - ${NGINX_CERTS_DIR}:/etc/nginx/certs/${ENV_TYPE}:ro   # Mounts the SSL certificates for the given environment (e.g., dev, qa, main) into the container as read-only
     depends_on:
       - frontend  # Ensures that the frontend (Next.js app) service starts before NGINX
+    networks:
+      - jorge-network
+
+networks:
+  jorge-network:
+    external: true

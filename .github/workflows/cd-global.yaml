@@ -135,3 +135,6 @@ jobs:
 
             echo "Start containers"
             make ${DEPLOY_BRANCH}-cd-up
+
+            echo "Cleaning old docker images"
+            docker image prune -f
