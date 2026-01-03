@@ -61,8 +61,21 @@ jobs:
 
       - name: Build & push frontend image
         run: |
-          TARGET_FRONTEND="${{ env.DEPLOY_BRANCH }}-cd-build-push-frontend"
-          make $TARGET_FRONTEND SHA=${{ github.sha }} ECR_URI=$ECR_FRONTEND_URI
+          set -a
+          source cd.env
+          set +a
+          TARGET_FRONTEND="${DEPLOY_BRANCH}-cd-build-push-frontend"
+          make $TARGET_FRONTEND SHA=${GITHUB_SHA} ECR_URI=$ECR_FRONTEND_URI \
+            BACKEND_URL=$BACKEND_URL \
+            NEXT_PUBLIC_ASSETS_URL=$NEXT_PUBLIC_ASSETS_URL \
+            NEXT_PUBLIC_RECAPTCHA_SITE_KEY=$NEXT_PUBLIC_RECAPTCHA_SITE_KEY \
+            NEXT_PUBLIC_RECAPTCHA_SECRET_KEY=$NEXT_PUBLIC_RECAPTCHA_SECRET_KEY \
+            NEXT_PUBLIC_GA_ID=$NEXT_PUBLIC_GA_ID \
+            NEXT_PUBLIC_INTERNAL_API_KEY=$NEXT_PUBLIC_INTERNAL_API_KEY \
+            NEXT_PUBLIC_ENABLE_ANALYTICS=$NEXT_PUBLIC_ENABLE_ANALYTICS \
+            NODE_ENV=$NODE_ENV \
+            INSTALL_PLAYWRIGHT=$INSTALL_PLAYWRIGHT \
+            INSTALL_DEV_LIBRARIES=$INSTALL_DEV_LIBRARIES
 
       - name: Deploy to server
         uses: appleboy/ssh-action@v0.1.5
