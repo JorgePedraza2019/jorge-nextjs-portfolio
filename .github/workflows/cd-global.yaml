@@ -41,6 +41,7 @@ jobs:
       - name: Set environment variables
         run: |
           echo "DEPLOY_BRANCH=${{ inputs.deploy_branch }}" >> $GITHUB_ENV
+          echo "IMAGE_TAG=${{ github.sha }}" >> $GITHUB_ENV
 
           if [[ "${{ inputs.deploy_branch }}" == "dev" ]]; then
             echo -e "${{ secrets.ENV_VARS_DEV_CD }}" > cd.env
@@ -69,7 +70,7 @@ jobs:
           source cd.env
           set +a
           TARGET_FRONTEND="${DEPLOY_BRANCH}-cd-build-push-frontend"
-          make $TARGET_FRONTEND SHA=${GITHUB_SHA} ECR_URI=$ECR_FRONTEND_URI \
+          make $TARGET_FRONTEND SHA=${{ github.sha }} ECR_URI=$ECR_FRONTEND_URI \
             BACKEND_URL=$BACKEND_URL \
             NEXT_PUBLIC_ASSETS_URL=$NEXT_PUBLIC_ASSETS_URL \
             NEXT_PUBLIC_RECAPTCHA_SITE_KEY=$NEXT_PUBLIC_RECAPTCHA_SITE_KEY \
@@ -125,6 +126,9 @@ jobs:
 
             echo "Logging into ECR"
             aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 051826703576.dkr.ecr.us-east-1.amazonaws.com
+
+            echo "Using image tag: $IMAGE_TAG"
+            export IMAGE_TAG=${{ github.sha }}
 
             echo "Pull latest images"
             docker-compose -f docker/docker-compose-server.yaml pull

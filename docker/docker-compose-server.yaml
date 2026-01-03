@@ -3,7 +3,7 @@
 services:
   frontend:
     container_name: ${NEXT_CONTAINER_NAME}  # Assign a custom container name from the NEXT_CONTAINER_NAME environment variable
-    image: ${ECR_FRONTEND_URI}:latest  # Tag and name of the Docker image to build or use
+    image: ${ECR_FRONTEND_URI}:${IMAGE_TAG}  # Tag and name of the Docker image to build or use
     environment:
       - NODE_ENV=${NODE_ENV}  # Set the environment variable inside the container (used by Next.js)
       - PORT=${NEXT_PORT}  # Set the port Next.js will listen on inside the container
@@ -20,7 +20,7 @@ services:
     container_name: ${NEST_CONTAINER_NAME}  # Assign a custom container name from the NEXT_CONTAINER_NAME environment variable
     env_file:
       - ../env/${ENV_FILE_NAME}  # Load additional environment variables from the specified .env file
-    image: ${ECR_BACKEND_URI}:latest  # Tag and name of the Docker image to build or use
+    image: ${ECR_BACKEND_URI}:${IMAGE_TAG}  # Tag and name of the Docker image to build or use
     environment:
       - NODE_ENV=${NODE_ENV}  # Set the environment variable inside the container (used by Next.js)
       - PORT=${NEST_PORT}  # Set the port Next.js will listen on inside the container
