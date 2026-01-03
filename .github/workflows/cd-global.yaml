@@ -77,6 +77,21 @@ jobs:
             INSTALL_PLAYWRIGHT=$INSTALL_PLAYWRIGHT \
             INSTALL_DEV_LIBRARIES=$INSTALL_DEV_LIBRARIES
 
+      - name: Extract server SSH info
+        run: |
+          if [[ "${{ inputs.deploy_branch }}" == "dev" ]]; then
+            echo "${{ secrets.ENV_VARS_DEV_CD }}" > env.temp
+          elif [[ "${{ inputs.deploy_branch }}" == "qa" ]]; then
+            echo "${{ secrets.ENV_VARS_QA_CD }}" > env.temp
+          elif [[ "${{ inputs.deploy_branch }}" == "main" ]]; then
+            echo "${{ secrets.ENV_VARS_MAIN_CD }}" > env.temp
+          fi
+
+          # Extrae SERVER_IP y SERVER_USER y los exporta para GH Actions
+          export $(grep -E '^(SERVER_IP|SERVER_USER)=' env.temp | xargs)
+          echo "SERVER_IP=$SERVER_IP" >> $GITHUB_ENV
+          echo "SERVER_USER=$SERVER_USER" >> $GITHUB_ENV
+
       - name: Deploy to server
         uses: appleboy/ssh-action@v0.1.5
         with:
