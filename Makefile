@@ -271,6 +271,24 @@ dev-cd-build-push-frontend:
 	docker tag frontend:$(SHA) $(ECR_URI):$(SHA)
 	docker push $(ECR_URI):$(SHA)
 
+dev-cd-build-push-frontend:
+	docker build \
+      -t frontend:$(SHA) \
+      -f ./frontend/Dockerfile.nextjs \
+      --build-arg NODE_ENV=$(NODE_ENV) \
+      --build-arg INSTALL_PLAYWRIGHT=$(INSTALL_PLAYWRIGHT) \
+      --build-arg INSTALL_DEV_LIBRARIES=$(INSTALL_DEV_LIBRARIES) \
+      --build-arg BACKEND_URL=$(BACKEND_URL) \
+      --build-arg NEXT_PUBLIC_ASSETS_URL=$(NEXT_PUBLIC_ASSETS_URL) \
+      --build-arg NEXT_PUBLIC_RECAPTCHA_SITE_KEY=$(NEXT_PUBLIC_RECAPTCHA_SITE_KEY) \
+      --build-arg NEXT_PUBLIC_RECAPTCHA_SECRET_KEY=$(NEXT_PUBLIC_RECAPTCHA_SECRET_KEY) \
+      --build-arg NEXT_PUBLIC_GA_ID=$(NEXT_PUBLIC_GA_ID) \
+      --build-arg NEXT_PUBLIC_INTERNAL_API_KEY=$(NEXT_PUBLIC_INTERNAL_API_KEY) \
+      --build-arg NEXT_PUBLIC_ENABLE_ANALYTICS=$(NEXT_PUBLIC_ENABLE_ANALYTICS) \
+      ./frontend
+	docker tag frontend:$(SHA) $(ECR_URI):$(SHA)
+	docker push $(ECR_URI):$(SHA)
+
 dev-cd-up:
 	@docker-compose \
 		--env-file ${ENV_DEV_CD} \
