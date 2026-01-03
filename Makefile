@@ -261,8 +261,17 @@ dev-ci-down:
 # 		-f docker/docker-compose-nginx-server.yaml \
 # 		up --build -d
 
-dev-cd-build-push-backend:
-	docker build -t backend:$(SHA) -f ./backend/Dockerfile.nestjs ./backend
+# dev-cd-build-push-backend:
+# 	docker build -t backend:$(SHA) -f ./backend/Dockerfile.nestjs ./backend
+# 	docker tag backend:$(SHA) $(ECR_URI):$(SHA)
+# 	docker push $(ECR_URI):$(SHA)
+
+	dev-cd-build-push-backend:
+	docker build \
+      -t backend:$(SHA) \
+      -f ./backend/Dockerfile.nestjs \
+      --build-arg NODE_ENV=$(NODE_ENV) \
+      ./backend
 	docker tag backend:$(SHA) $(ECR_URI):$(SHA)
 	docker push $(ECR_URI):$(SHA)
 
