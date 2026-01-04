@@ -60,32 +60,32 @@ jobs:
           echo "NEXT_PUBLIC_ENABLE_ANALYTICS=$NEXT_PUBLIC_ENABLE_ANALYTICS"
           echo "NEXT_PUBLIC_GA_ID=$NEXT_PUBLIC_GA_ID"
 
-      # - name: Build & push backend image
-      #   run: |
-      #     set -a
-      #     source cd.env
-      #     set +a
+      - name: Build & push backend image
+        run: |
+          set -a
+          source cd.env
+          set +a
 
-      #     TARGET_BACKEND="${{ env.DEPLOY_BRANCH }}-cd-build-push-backend"
-      #     make $TARGET_BACKEND SHA=${{ github.sha }} ECR_URI=$ECR_BACKEND_URI NODE_ENV=$NODE_ENV
+          TARGET_BACKEND="${{ env.DEPLOY_BRANCH }}-cd-build-push-backend"
+          make $TARGET_BACKEND SHA=${{ github.sha }} ECR_URI=$ECR_BACKEND_URI NODE_ENV=$NODE_ENV
 
-      # - name: Build & push frontend image
-      #   run: |
-      #     set -a
-      #     source cd.env
-      #     set +a
-      #     TARGET_FRONTEND="${DEPLOY_BRANCH}-cd-build-push-frontend"
-      #     make $TARGET_FRONTEND SHA=${{ github.sha }} ECR_URI=$ECR_FRONTEND_URI \
-      #       BACKEND_URL=$BACKEND_URL \
-      #       NEXT_PUBLIC_ASSETS_URL=$NEXT_PUBLIC_ASSETS_URL \
-      #       NEXT_PUBLIC_RECAPTCHA_SITE_KEY=$NEXT_PUBLIC_RECAPTCHA_SITE_KEY \
-      #       NEXT_PUBLIC_RECAPTCHA_SECRET_KEY=$NEXT_PUBLIC_RECAPTCHA_SECRET_KEY \
-      #       NEXT_PUBLIC_GA_ID=$NEXT_PUBLIC_GA_ID \
-      #       NEXT_PUBLIC_INTERNAL_API_KEY=$NEXT_PUBLIC_INTERNAL_API_KEY \
-      #       NEXT_PUBLIC_ENABLE_ANALYTICS=$NEXT_PUBLIC_ENABLE_ANALYTICS \
-      #       NODE_ENV=$NODE_ENV \
-      #       INSTALL_PLAYWRIGHT=$INSTALL_PLAYWRIGHT \
-      #       INSTALL_DEV_LIBRARIES=$INSTALL_DEV_LIBRARIES
+      - name: Build & push frontend image
+        run: |
+          set -a
+          source cd.env
+          set +a
+          TARGET_FRONTEND="${DEPLOY_BRANCH}-cd-build-push-frontend"
+          make $TARGET_FRONTEND SHA=${{ github.sha }} ECR_URI=$ECR_FRONTEND_URI \
+            BACKEND_URL=$BACKEND_URL \
+            NEXT_PUBLIC_ASSETS_URL=$NEXT_PUBLIC_ASSETS_URL \
+            NEXT_PUBLIC_RECAPTCHA_SITE_KEY=$NEXT_PUBLIC_RECAPTCHA_SITE_KEY \
+            NEXT_PUBLIC_RECAPTCHA_SECRET_KEY=$NEXT_PUBLIC_RECAPTCHA_SECRET_KEY \
+            NEXT_PUBLIC_GA_ID=$NEXT_PUBLIC_GA_ID \
+            NEXT_PUBLIC_INTERNAL_API_KEY=$NEXT_PUBLIC_INTERNAL_API_KEY \
+            NEXT_PUBLIC_ENABLE_ANALYTICS=$NEXT_PUBLIC_ENABLE_ANALYTICS \
+            NODE_ENV=$NODE_ENV \
+            INSTALL_PLAYWRIGHT=$INSTALL_PLAYWRIGHT \
+            INSTALL_DEV_LIBRARIES=$INSTALL_DEV_LIBRARIES
 
       - name: Extract server SSH info
         run: |
