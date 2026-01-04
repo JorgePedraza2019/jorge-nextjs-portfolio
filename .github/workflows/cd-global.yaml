@@ -136,7 +136,7 @@ jobs:
             export IMAGE_TAG=${{ github.sha }}
 
             echo "Pull latest images"
-            docker-compose -f docker/docker-compose-server.yaml pull
+            docker-compose -f docker/docker-compose-server.yaml up -d --force-recreate
 
             echo "Start containers"
             make ${DEPLOY_BRANCH}-cd-up
