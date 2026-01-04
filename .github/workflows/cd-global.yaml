@@ -158,48 +158,36 @@ jobs:
             export AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}
             export AWS_DEFAULT_REGION=us-east-1
 
-            echo "Cleaning expired ECR images"
+            echo "Cleaning old ECR images and keeping only the 5 most recent"
 
-            # Backend
-            echo "Preview lifecycle policy for backend"
-            aws ecr start-lifecycle-policy-preview \
-              --repository-name jorge-portfolio-backend \
-              --region $AWS_DEFAULT_REGION \
-              --query 'previewResults[].imageDigest' \
-              --output text > backend-to-delete.txt
+            # Función para borrar imágenes antiguas
+            cleanup_ecr() {
+              local REPO=$1
+              local KEEP=$2
 
-            if [ -s backend-to-delete.txt ]; then
-              echo "Deleting expired backend images..."
-              while read digest; do
-                if [ -n "$digest" ] && [ "$digest" != "None" ]; then
-                  aws ecr batch-delete-image \
-                    --repository-name jorge-portfolio-backend \
-                    --image-ids imageDigest=$digest \
-                    --region $AWS_DEFAULT_REGION
+              # Lista todas las imágenes ordenadas por fecha, tag opcional
+              IMAGE_DIGESTS=$(aws ecr describe-images \
+                --repository-name $REPO \
+                --region $AWS_DEFAULT_REGION \
+                --query 'sort_by(imageDetails,& imagePushedAt)[].imageDigest' \
+                --output text)
+
+              COUNT=0
+              for DIGEST in $IMAGE_DIGESTS; do
+                COUNT=$((COUNT + 1))
+                if [ $COUNT -le $KEEP ]; then
+                  # Saltamos las más recientes
+                  continue
                 fi
-              done < backend-to-delete.txt
-            else
-              echo "No backend images to delete"
-            fi
 
-            # Frontend
-            echo "Preview lifecycle policy for frontend"
-            aws ecr start-lifecycle-policy-preview \
-              --repository-name jorge-portfolio-frontend \
-              --region $AWS_DEFAULT_REGION \
-              --query 'previewResults[].imageDigest' \
-              --output text > frontend-to-delete.txt
+                echo "Deleting $REPO image $DIGEST..."
+                aws ecr batch-delete-image \
+                  --repository-name $REPO \
+                  --image-ids imageDigest=$DIGEST \
+                  --region $AWS_DEFAULT_REGION
+              done
+            }
 
-            if [ -s frontend-to-delete.txt ]; then
-              echo "Deleting expired frontend images..."
-              while read digest; do
-                if [ -n "$digest" ] && [ "$digest" != "None" ]; then
-                  aws ecr batch-delete-image \
-                    --repository-name jorge-portfolio-frontend \
-                    --image-ids imageDigest=$digest \
-                    --region $AWS_DEFAULT_REGION
-                fi
-              done < frontend-to-delete.txt
-            else
-              echo "No frontend images to delete"
-            fi
+            # Mantener solo 5 imágenes recientes
+            cleanup_ecr jorge-portfolio-backend 5
+            cleanup_ecr jorge-portfolio-frontend 5
