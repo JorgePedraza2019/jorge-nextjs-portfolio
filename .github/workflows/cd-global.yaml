@@ -154,17 +154,23 @@ jobs:
             # Borra networks no usados
             docker network prune -f
 
+            export AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}
+            export AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}
+            export AWS_DEFAULT_REGION=us-east-1
+
             echo "Cleaning expired ECR images"
             # Backend
             echo "Preview lifecycle policy for backend"
             aws ecr start-lifecycle-policy-preview \
               --repository-name jorge-portfolio-backend \
+              --region $AWS_DEFAULT_REGION \
               --query 'previewResults[].imageDigest' --output text > backend-to-delete.txt
 
             if [ -s backend-to-delete.txt ]; then
               echo "Deleting expired backend images..."
               xargs -a backend-to-delete.txt -n 1 aws ecr batch-delete-image \
                 --repository-name jorge-portfolio-backend \
+                --region $AWS_DEFAULT_REGION \
                 --image-ids imageDigest={}
             else
               echo "No backend images to delete"
@@ -174,12 +180,14 @@ jobs:
             echo "Preview lifecycle policy for frontend"
             aws ecr start-lifecycle-policy-preview \
               --repository-name jorge-portfolio-frontend \
+              --region $AWS_DEFAULT_REGION \
               --query 'previewResults[].imageDigest' --output text > frontend-to-delete.txt
 
             if [ -s frontend-to-delete.txt ]; then
               echo "Deleting expired frontend images..."
               xargs -a frontend-to-delete.txt -n 1 aws ecr batch-delete-image \
                 --repository-name jorge-portfolio-frontend \
+                --region $AWS_DEFAULT_REGION \
                 --image-ids imageDigest={}
             else
               echo "No frontend images to delete"
