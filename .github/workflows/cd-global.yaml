@@ -54,6 +54,12 @@ jobs:
           echo "ECR_BACKEND_URI=$ECR_BACKEND_URI" >> $GITHUB_ENV
           echo "ECR_FRONTEND_URI=$ECR_FRONTEND_URI" >> $GITHUB_ENV
 
+      - name: Debug build-args
+        run: |
+          source cd.env
+          echo "NEXT_PUBLIC_ENABLE_ANALYTICS=$NEXT_PUBLIC_ENABLE_ANALYTICS"
+          echo "NEXT_PUBLIC_GA_ID=$NEXT_PUBLIC_GA_ID"
+
       - name: Build & push backend image
         run: |
           set -a
