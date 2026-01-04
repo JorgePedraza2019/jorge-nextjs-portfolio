@@ -159,6 +159,7 @@ jobs:
             export AWS_DEFAULT_REGION=us-east-1
 
             echo "Cleaning expired ECR images"
+
             # Backend
             echo "Preview lifecycle policy for backend"
             aws ecr start-lifecycle-policy-preview \
@@ -168,10 +169,12 @@ jobs:
 
             if [ -s backend-to-delete.txt ]; then
               echo "Deleting expired backend images..."
-              xargs -a backend-to-delete.txt -n 1 aws ecr batch-delete-image \
-                --repository-name jorge-portfolio-backend \
-                --region $AWS_DEFAULT_REGION \
-                --image-ids imageDigest={}
+              while read digest; do
+                aws ecr batch-delete-image \
+                  --repository-name jorge-portfolio-backend \
+                  --image-ids imageDigest=$digest \
+                  --region $AWS_DEFAULT_REGION
+              done < backend-to-delete.txt
             else
               echo "No backend images to delete"
             fi
@@ -185,10 +188,12 @@ jobs:
 
             if [ -s frontend-to-delete.txt ]; then
               echo "Deleting expired frontend images..."
-              xargs -a frontend-to-delete.txt -n 1 aws ecr batch-delete-image \
-                --repository-name jorge-portfolio-frontend \
-                --region $AWS_DEFAULT_REGION \
-                --image-ids imageDigest={}
+              while read digest; do
+                aws ecr batch-delete-image \
+                  --repository-name jorge-portfolio-frontend \
+                  --image-ids imageDigest=$digest \
+                  --region $AWS_DEFAULT_REGION
+              done < frontend-to-delete.txt
             else
               echo "No frontend images to delete"
             fi
