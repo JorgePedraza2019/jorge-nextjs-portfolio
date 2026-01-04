@@ -60,32 +60,32 @@ jobs:
           echo "NEXT_PUBLIC_ENABLE_ANALYTICS=$NEXT_PUBLIC_ENABLE_ANALYTICS"
           echo "NEXT_PUBLIC_GA_ID=$NEXT_PUBLIC_GA_ID"
 
-      - name: Build & push backend image
-        run: |
-          set -a
-          source cd.env
-          set +a
+      # - name: Build & push backend image
+      #   run: |
+      #     set -a
+      #     source cd.env
+      #     set +a
 
-          TARGET_BACKEND="${{ env.DEPLOY_BRANCH }}-cd-build-push-backend"
-          make $TARGET_BACKEND SHA=${{ github.sha }} ECR_URI=$ECR_BACKEND_URI NODE_ENV=$NODE_ENV
+      #     TARGET_BACKEND="${{ env.DEPLOY_BRANCH }}-cd-build-push-backend"
+      #     make $TARGET_BACKEND SHA=${{ github.sha }} ECR_URI=$ECR_BACKEND_URI NODE_ENV=$NODE_ENV
 
-      - name: Build & push frontend image
-        run: |
-          set -a
-          source cd.env
-          set +a
-          TARGET_FRONTEND="${DEPLOY_BRANCH}-cd-build-push-frontend"
-          make $TARGET_FRONTEND SHA=${{ github.sha }} ECR_URI=$ECR_FRONTEND_URI \
-            BACKEND_URL=$BACKEND_URL \
-            NEXT_PUBLIC_ASSETS_URL=$NEXT_PUBLIC_ASSETS_URL \
-            NEXT_PUBLIC_RECAPTCHA_SITE_KEY=$NEXT_PUBLIC_RECAPTCHA_SITE_KEY \
-            NEXT_PUBLIC_RECAPTCHA_SECRET_KEY=$NEXT_PUBLIC_RECAPTCHA_SECRET_KEY \
-            NEXT_PUBLIC_GA_ID=$NEXT_PUBLIC_GA_ID \
-            NEXT_PUBLIC_INTERNAL_API_KEY=$NEXT_PUBLIC_INTERNAL_API_KEY \
-            NEXT_PUBLIC_ENABLE_ANALYTICS=$NEXT_PUBLIC_ENABLE_ANALYTICS \
-            NODE_ENV=$NODE_ENV \
-            INSTALL_PLAYWRIGHT=$INSTALL_PLAYWRIGHT \
-            INSTALL_DEV_LIBRARIES=$INSTALL_DEV_LIBRARIES
+      # - name: Build & push frontend image
+      #   run: |
+      #     set -a
+      #     source cd.env
+      #     set +a
+      #     TARGET_FRONTEND="${DEPLOY_BRANCH}-cd-build-push-frontend"
+      #     make $TARGET_FRONTEND SHA=${{ github.sha }} ECR_URI=$ECR_FRONTEND_URI \
+      #       BACKEND_URL=$BACKEND_URL \
+      #       NEXT_PUBLIC_ASSETS_URL=$NEXT_PUBLIC_ASSETS_URL \
+      #       NEXT_PUBLIC_RECAPTCHA_SITE_KEY=$NEXT_PUBLIC_RECAPTCHA_SITE_KEY \
+      #       NEXT_PUBLIC_RECAPTCHA_SECRET_KEY=$NEXT_PUBLIC_RECAPTCHA_SECRET_KEY \
+      #       NEXT_PUBLIC_GA_ID=$NEXT_PUBLIC_GA_ID \
+      #       NEXT_PUBLIC_INTERNAL_API_KEY=$NEXT_PUBLIC_INTERNAL_API_KEY \
+      #       NEXT_PUBLIC_ENABLE_ANALYTICS=$NEXT_PUBLIC_ENABLE_ANALYTICS \
+      #       NODE_ENV=$NODE_ENV \
+      #       INSTALL_PLAYWRIGHT=$INSTALL_PLAYWRIGHT \
+      #       INSTALL_DEV_LIBRARIES=$INSTALL_DEV_LIBRARIES
 
       - name: Extract server SSH info
         run: |
@@ -165,15 +165,18 @@ jobs:
             aws ecr start-lifecycle-policy-preview \
               --repository-name jorge-portfolio-backend \
               --region $AWS_DEFAULT_REGION \
-              --query 'previewResults[].imageDigest' --output text > backend-to-delete.txt
+              --query 'previewResults[].imageDigest' \
+              --output text > backend-to-delete.txt
 
             if [ -s backend-to-delete.txt ]; then
               echo "Deleting expired backend images..."
               while read digest; do
-                aws ecr batch-delete-image \
-                  --repository-name jorge-portfolio-backend \
-                  --image-ids imageDigest=$digest \
-                  --region $AWS_DEFAULT_REGION
+                if [ -n "$digest" ] && [ "$digest" != "None" ]; then
+                  aws ecr batch-delete-image \
+                    --repository-name jorge-portfolio-backend \
+                    --image-ids imageDigest=$digest \
+                    --region $AWS_DEFAULT_REGION
+                fi
               done < backend-to-delete.txt
             else
               echo "No backend images to delete"
@@ -184,15 +187,18 @@ jobs:
             aws ecr start-lifecycle-policy-preview \
               --repository-name jorge-portfolio-frontend \
               --region $AWS_DEFAULT_REGION \
-              --query 'previewResults[].imageDigest' --output text > frontend-to-delete.txt
+              --query 'previewResults[].imageDigest' \
+              --output text > frontend-to-delete.txt
 
             if [ -s frontend-to-delete.txt ]; then
               echo "Deleting expired frontend images..."
               while read digest; do
-                aws ecr batch-delete-image \
-                  --repository-name jorge-portfolio-frontend \
-                  --image-ids imageDigest=$digest \
-                  --region $AWS_DEFAULT_REGION
+                if [ -n "$digest" ] && [ "$digest" != "None" ]; then
+                  aws ecr batch-delete-image \
+                    --repository-name jorge-portfolio-frontend \
+                    --image-ids imageDigest=$digest \
+                    --region $AWS_DEFAULT_REGION
+                fi
               done < frontend-to-delete.txt
             else
               echo "No frontend images to delete"
