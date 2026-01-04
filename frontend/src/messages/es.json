@@ -139,8 +139,8 @@
           "Gestión de Estado"
         ],
         "year": "2020",
-        "videoLight": "/videos/projects/servigo/light/servigo-light.mp4",
-        "videoDark": "/videos/projects/servigo/dark/servigo-dark.mp4"
+        "videoLight": "videos/projects/servigo/light/servigo-light.mp4",
+        "videoDark": "videos/projects/servigo/dark/servigo-dark.mp4"
       },
       {
         "slug": "connect-confluent",
@@ -166,8 +166,8 @@
           "Dashboards"
         ],
         "year": "2020",
-        "videoLight": "/videos/projects/servigo/light/servigo-light.mp4",
-        "videoDark": "/videos/projects/servigo/dark/servigo-dark.mp4"
+        "videoLight": "videos/projects/servigo/light/servigo-light.mp4",
+        "videoDark": "videos/projects/servigo/dark/servigo-dark.mp4"
       },
       {
         "slug": "badbank-mit",
@@ -192,8 +192,8 @@
           "Autenticación"
         ],
         "year": "2020",
-        "videoLight": "/videos/projects/servigo/light/servigo-light.mp4",
-        "videoDark": "/videos/projects/servigo/dark/servigo-dark.mp4"
+        "videoLight": "videos/projects/servigo/light/servigo-light.mp4",
+        "videoDark": "videos/projects/servigo/dark/servigo-dark.mp4"
       },
       {
         "slug": "powerbi-analytics",
@@ -218,8 +218,8 @@
           "Modelado de Datos"
         ],
         "year": "2020",
-        "videoLight": "/videos/projects/servigo/light/servigo-light.mp4",
-        "videoDark": "/videos/projects/servigo/dark/servigo-dark.mp4"
+        "videoLight": "videos/projects/servigo/light/servigo-light.mp4",
+        "videoDark": "videos/projects/servigo/dark/servigo-dark.mp4"
       },
       {
         "slug": "aws-infrastructure",
@@ -246,8 +246,8 @@
           "IAM"
         ],
         "year": "2020",
-        "videoLight": "/videos/projects/servigo/light/servigo-light.mp4",
-        "videoDark": "/videos/projects/servigo/dark/servigo-dark.mp4"
+        "videoLight": "videos/projects/servigo/light/servigo-light.mp4",
+        "videoDark": "videos/projects/servigo/dark/servigo-dark.mp4"
       },
       {
         "slug": "personal-portfolio",
@@ -271,8 +271,8 @@
           "Framer Motion"
         ],
         "year": "2020",
-        "videoLight": "/videos/projects/servigo/light/servigo-light.mp4",
-        "videoDark": "/videos/projects/servigo/dark/servigo-dark.mp4"
+        "videoLight": "videos/projects/servigo/light/servigo-light.mp4",
+        "videoDark": "videos/projects/servigo/dark/servigo-dark.mp4"
       }
     ],
     "viewCaseStudy": "Ver caso de estudio",
