@@ -169,7 +169,7 @@ jobs:
               IMAGE_DIGESTS=$(aws ecr describe-images \
                 --repository-name $REPO \
                 --region $AWS_DEFAULT_REGION \
-                --query 'sort_by(imageDetails,& imagePushedAt)[].imageDigest' \
+                --query 'reverse(sort_by(imageDetails,& imagePushedAt))[].imageDigest' \
                 --output text)
 
               COUNT=0
